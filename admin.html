@@ -818,6 +818,8 @@ function addSermon() {
   setData(SERMONS_KEY, sermons);
   ['srmTitle','srmDate','srmSpeaker','srmDuration','srmSrc'].forEach(id => document.getElementById(id).value = '');
   renderSermons(); refreshDashboard();
+  // Notify index.html if open in another tab
+  window.dispatchEvent(new StorageEvent('storage', { key: SERMONS_KEY }));
   toast("Lallabi olkaa'ame!");
 }
 
