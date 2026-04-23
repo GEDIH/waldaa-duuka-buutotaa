@@ -149,10 +149,48 @@
 
     /* ── RESPONSIVE ── */
     @media(max-width:768px){
-      .sidebar{display:none;}
-      .form-row{grid-template-columns:1fr;}
-      .stats-grid{grid-template-columns:1fr 1fr;}
+      /* Sidebar hidden — replaced by bottom nav */
+      .sidebar { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .top-bar { padding: 0.8rem 1rem; }
+      .top-bar-left h1 { font-size: 0.95rem; }
+      .admin-badge { display: none; }
+      .main-content { padding: 1rem; }
+      .card { padding: 1.2rem; }
+      .page-title { font-size: 1.4rem; }
+      .table-wrap { font-size: 0.8rem; }
+      th, td { padding: 0.5rem 0.6rem; }
+      .preview-grid { grid-template-columns: 1fr 1fr; }
+      .login-box { padding: 2rem 1.5rem; margin: 1rem; }
+
+      /* Bottom nav for mobile */
+      .mobile-bottom-nav {
+        display: flex;
+        position: fixed; bottom: 0; left: 0; right: 0;
+        background: #1a3b5c; z-index: 200;
+        border-top: 1px solid rgba(255,255,255,0.1);
+      }
+      .mobile-bottom-nav button {
+        flex: 1; background: none; border: none; color: rgba(255,255,255,0.7);
+        padding: 0.7rem 0.3rem; font-size: 0.6rem; cursor: pointer;
+        display: flex; flex-direction: column; align-items: center; gap: 2px;
+        transition: color 0.2s;
+      }
+      .mobile-bottom-nav button span.icon { font-size: 1.2rem; }
+      .mobile-bottom-nav button.active { color: #d4af37; }
+      .admin-layout { padding-bottom: 60px; }
     }
+
+    @media(max-width:480px){
+      .stats-grid { grid-template-columns: 1fr; }
+      .preview-grid { grid-template-columns: 1fr; }
+      .top-bar-right { gap: 0.5rem; }
+      #sessionTime { display: none; }
+    }
+
+    /* Hide mobile nav on desktop */
+    .mobile-bottom-nav { display: none; }
   </style>
 </head>
 <body>
@@ -188,6 +226,25 @@
   </div>
 
   <div class="admin-layout">
+
+    <!-- Mobile Bottom Nav (visible on phones only) -->
+    <nav class="mobile-bottom-nav" id="mobileBottomNav">
+      <button onclick="showPage('dashboard',this)" class="active">
+        <span class="icon">📊</span>Dashboard
+      </button>
+      <button onclick="showPage('messages',this)">
+        <span class="icon">✉️</span>Ergaa
+      </button>
+      <button onclick="showPage('events',this)">
+        <span class="icon">📅</span>Taatee
+      </button>
+      <button onclick="showPage('upload',this)">
+        <span class="icon">📤</span>Ol Fe'i
+      </button>
+      <button onclick="showPage('settings',this)">
+        <span class="icon">⚙️</span>Sirna
+      </button>
+    </nav>
 
     <!-- Sidebar -->
     <div class="sidebar">
@@ -396,6 +453,34 @@
   </div><!-- /admin-layout -->
 </div><!-- /adminApp -->
 
+<!-- Logout Confirmation Modal -->
+<div id="logoutModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:20px;padding:2.5rem;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.4);animation:modalIn 0.3s ease;">
+    <div style="font-size:3rem;margin-bottom:1rem;">🚪</div>
+    <h3 style="color:#1a3b5c;font-size:1.4rem;margin-bottom:0.5rem;">Ba'uu barbaadduu?</h3>
+    <p style="color:#888;font-size:0.95rem;margin-bottom:2rem;">Admin panel irraa ba'uuf mirkaneessi. Session kee ni cufama.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;">
+      <button onclick="cancelLogout()" style="flex:1;padding:0.8rem;border:2px solid #e9ecef;background:white;border-radius:10px;font-size:1rem;cursor:pointer;font-weight:bold;color:#666;transition:all 0.2s;"
+        onmouseover="this.style.borderColor='#1a3b5c';this.style.color='#1a3b5c'"
+        onmouseout="this.style.borderColor='#e9ecef';this.style.color='#666'">
+        ✖ Dhiisi
+      </button>
+      <button onclick="confirmLogout()" style="flex:1;padding:0.8rem;background:linear-gradient(135deg,#e74c3c,#c0392b);color:white;border:none;border-radius:10px;font-size:1rem;cursor:pointer;font-weight:bold;transition:all 0.2s;"
+        onmouseover="this.style.opacity='0.85'"
+        onmouseout="this.style.opacity='1'">
+        🚪 Eeyyee, Ba'i
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes modalIn {
+  from { opacity:0; transform:scale(0.85) translateY(-20px); }
+  to   { opacity:1; transform:scale(1) translateY(0); }
+}
+</style>
+
 <div id="toast"></div>
 
 <script>
@@ -474,6 +559,23 @@ function showLoginError(msg) {
 }
 
 function doLogout() {
+  // Show confirmation modal instead of logging out directly
+  const modal = document.getElementById('logoutModal');
+  modal.style.display = 'flex';
+  // Close on backdrop click
+  modal.onclick = function(e) { if (e.target === modal) cancelLogout(); };
+  // Close on Escape key
+  document._logoutEsc = function(e) { if (e.key === 'Escape') cancelLogout(); };
+  document.addEventListener('keydown', document._logoutEsc);
+}
+
+function cancelLogout() {
+  document.getElementById('logoutModal').style.display = 'none';
+  document.removeEventListener('keydown', document._logoutEsc);
+}
+
+function confirmLogout() {
+  cancelLogout();
   localStorage.removeItem(SESSION_KEY);
   clearInterval(sessionInterval);
   document.getElementById('adminApp').style.display = 'none';
@@ -519,8 +621,13 @@ window.addEventListener('DOMContentLoaded', () => {
 function showPage(id, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.mobile-bottom-nav button').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
   if (el) el.classList.add('active');
+  // Sync mobile bottom nav
+  document.querySelectorAll('.mobile-bottom-nav button').forEach(b => {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${id}'`)) b.classList.add('active');
+  });
   const loaders = { dashboard: refreshDashboard, subscribers: renderSubscribers,
     messages: renderMessages, events: renderEvents, sermons: renderSermons, gallery: renderGallery };
   if (loaders[id]) loaders[id]();
