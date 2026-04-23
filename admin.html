@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bulchiinsa Waldaa - Admin Panel</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Georgia',serif;background:#f0f2f5;color:#333;min-height:100vh;}
+
+    /* ── LOGIN SCREEN ── */
+    #loginScreen{
+      position:fixed;inset:0;background:linear-gradient(135deg,#1a3b5c,#2c5282);
+      display:flex;align-items:center;justify-content:center;z-index:9999;
+    }
+    .login-box{
+      background:white;border-radius:20px;padding:3rem 2.5rem;width:100%;max-width:400px;
+      box-shadow:0 20px 60px rgba(0,0,0,0.4);text-align:center;
+    }
+    .login-box img{width:80px;height:80px;border-radius:50%;margin-bottom:1rem;object-fit:cover;}
+    .login-box h2{color:#1a3b5c;margin-bottom:0.3rem;font-size:1.5rem;}
+    .login-box p{color:#888;font-size:0.9rem;margin-bottom:2rem;}
+    .login-field{
+      width:100%;padding:0.9rem 1rem;border:2px solid #e9ecef;border-radius:10px;
+      font-size:1rem;margin-bottom:1rem;outline:none;transition:border-color 0.3s;
+    }
+    .login-field:focus{border-color:#d4af37;}
+    .login-btn{
+      width:100%;padding:1rem;background:linear-gradient(135deg,#d4af37,#b8941f);
+      color:#1a3b5c;border:none;border-radius:10px;font-size:1rem;font-weight:bold;
+      cursor:pointer;transition:all 0.3s;
+    }
+    .login-btn:hover{background:linear-gradient(135deg,#1a3b5c,#2c5282);color:white;}
+    .login-error{color:#e74c3c;font-size:0.85rem;margin-top:0.5rem;display:none;}
+    .login-attempts{color:#888;font-size:0.8rem;margin-top:1rem;}
+
+    /* ── ADMIN LAYOUT ── */
+    #adminApp{display:none;}
+    .top-bar{
+      background:#1a3b5c;color:white;padding:0.8rem 2rem;
+      display:flex;align-items:center;justify-content:space-between;
+      position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.2);
+    }
+    .top-bar-left{display:flex;align-items:center;gap:1rem;}
+    .top-bar-left img{width:36px;height:36px;border-radius:50%;object-fit:cover;}
+    .top-bar-left h1{font-size:1.1rem;}
+    .top-bar-right{display:flex;align-items:center;gap:1rem;}
+    .admin-badge{background:#d4af37;color:#1a3b5c;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.8rem;font-weight:bold;}
+    .logout-btn{background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);padding:0.4rem 1rem;border-radius:8px;cursor:pointer;font-size:0.85rem;transition:background 0.3s;}
+    .logout-btn:hover{background:rgba(255,255,255,0.25);}
+
+    .admin-layout{display:flex;min-height:calc(100vh - 56px);}
+
+    /* ── SIDEBAR ── */
+    .sidebar{
+      width:240px;background:#1a3b5c;color:white;padding:1.5rem 0;
+      flex-shrink:0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;
+    }
+    .sidebar-section{padding:0.5rem 1.5rem;font-size:0.75rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;margin-top:1rem;}
+    .nav-item{
+      display:flex;align-items:center;gap:0.8rem;padding:0.8rem 1.5rem;
+      cursor:pointer;transition:all 0.2s;color:rgba(255,255,255,0.8);font-size:0.95rem;
+      border-left:3px solid transparent;
+    }
+    .nav-item:hover{background:rgba(255,255,255,0.1);color:white;}
+    .nav-item.active{background:rgba(212,175,55,0.2);color:#d4af37;border-left-color:#d4af37;}
+    .nav-badge{background:#e74c3c;color:white;font-size:0.7rem;padding:0.1rem 0.5rem;border-radius:10px;margin-left:auto;}
+
+    /* ── MAIN CONTENT ── */
+    .main-content{flex:1;padding:2rem;overflow-y:auto;}
+    .page{display:none;}
+    .page.active{display:block;}
+    .page-title{color:#1a3b5c;font-size:1.8rem;margin-bottom:0.3rem;}
+    .page-sub{color:#888;font-size:0.9rem;margin-bottom:2rem;}
+
+    /* ── STAT CARDS ── */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-bottom:2rem;}
+    .stat-card{
+      background:white;border-radius:15px;padding:1.5rem;
+      box-shadow:0 3px 15px rgba(0,0,0,0.07);display:flex;align-items:center;gap:1rem;
+    }
+    .stat-icon{font-size:2.5rem;width:60px;height:60px;display:flex;align-items:center;justify-content:center;border-radius:12px;}
+    .stat-icon.blue{background:#e8f0fe;}
+    .stat-icon.gold{background:#fef9e7;}
+    .stat-icon.green{background:#e8f8f0;}
+    .stat-icon.red{background:#fde8e8;}
+    .stat-num{font-size:2rem;font-weight:bold;color:#1a3b5c;line-height:1;}
+    .stat-label{font-size:0.85rem;color:#888;margin-top:0.2rem;}
+
+    /* ── CARDS ── */
+    .card{background:white;border-radius:15px;padding:2rem;box-shadow:0 3px 15px rgba(0,0,0,0.07);margin-bottom:1.5rem;}
+    .card h3{color:#1a3b5c;margin-bottom:1.2rem;padding-bottom:0.8rem;border-bottom:2px solid #f0f2f5;display:flex;align-items:center;gap:0.5rem;}
+
+    /* ── BUTTONS ── */
+    .btn{padding:0.7rem 1.5rem;border:none;border-radius:8px;font-weight:bold;cursor:pointer;transition:all 0.3s;font-size:0.9rem;}
+    .btn-primary{background:linear-gradient(135deg,#d4af37,#b8941f);color:#1a3b5c;}
+    .btn-primary:hover{background:linear-gradient(135deg,#1a3b5c,#2c5282);color:white;transform:translateY(-1px);}
+    .btn-danger{background:#e74c3c;color:white;}
+    .btn-danger:hover{background:#c0392b;}
+    .btn-success{background:#28a745;color:white;}
+    .btn-sm{padding:0.4rem 0.9rem;font-size:0.8rem;}
+
+    /* ── FORMS ── */
+    .form-group{margin-bottom:1rem;}
+    .form-group label{display:block;font-weight:600;color:#1a3b5c;font-size:0.9rem;margin-bottom:0.4rem;}
+    .form-group input,.form-group textarea,.form-group select{
+      width:100%;padding:0.8rem 1rem;border:2px solid #e9ecef;border-radius:8px;
+      font-size:0.95rem;font-family:inherit;outline:none;transition:border-color 0.3s;
+    }
+    .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:#d4af37;}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+
+    /* ── UPLOAD ZONE ── */
+    .upload-zone{
+      border:3px dashed #d4af37;border-radius:15px;padding:3rem;text-align:center;
+      background:linear-gradient(135deg,#fafafa,#f0f8ff);cursor:pointer;transition:all 0.3s;
+    }
+    .upload-zone:hover,.upload-zone.dragover{background:linear-gradient(135deg,#e8f4f8,#d1ecf1);border-color:#1a3b5c;}
+    .upload-zone .icon{font-size:3.5rem;color:#d4af37;margin-bottom:1rem;}
+    .preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-top:1.5rem;}
+    .preview-card{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,0.15);}
+    .preview-card img{width:100%;height:140px;object-fit:cover;}
+    .preview-card .remove-btn{position:absolute;top:6px;right:6px;background:rgba(220,53,69,0.9);color:white;border:none;border-radius:50%;width:26px;height:26px;cursor:pointer;font-size:0.9rem;}
+    .preview-card .caption{padding:0.5rem;background:white;}
+    .preview-card .caption input{width:100%;border:1px solid #eee;border-radius:5px;padding:0.3rem 0.5rem;font-size:0.8rem;}
+    .progress-bar{width:100%;height:8px;background:#e9ecef;border-radius:4px;overflow:hidden;margin:1rem 0;display:none;}
+    .progress-fill{height:100%;background:linear-gradient(90deg,#d4af37,#28a745);width:0%;transition:width 0.3s;}
+
+    /* ── TABLE ── */
+    .table-wrap{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;font-size:0.9rem;}
+    th{background:#1a3b5c;color:white;padding:0.8rem 1rem;text-align:left;font-weight:600;}
+    td{padding:0.8rem 1rem;border-bottom:1px solid #f0f2f5;}
+    tr:hover td{background:#fafafa;}
+    .badge{padding:0.25rem 0.7rem;border-radius:20px;font-size:0.75rem;font-weight:bold;}
+    .badge-new{background:#d4edda;color:#155724;}
+    .badge-read{background:#e9ecef;color:#495057;}
+    .badge-pending{background:#fff3cd;color:#856404;}
+
+    /* ── TOAST ── */
+    #toast{
+      position:fixed;bottom:30px;right:30px;background:#1a3b5c;color:white;
+      padding:1rem 1.5rem;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.3);
+      transform:translateY(100px);opacity:0;transition:all 0.4s;z-index:9998;font-size:0.95rem;
+    }
+    #toast.show{transform:translateY(0);opacity:1;}
+    #toast.success{border-left:4px solid #28a745;}
+    #toast.error{border-left:4px solid #e74c3c;}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:768px){
+      .sidebar{display:none;}
+      .form-row{grid-template-columns:1fr;}
+      .stats-grid{grid-template-columns:1fr 1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ LOGIN SCREEN ══ -->
+<div id="loginScreen">
+  <div class="login-box">
+    <img src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo">
+    <h2>Waldaa Duuka Bu'ootaa</h2>
+    <p>Admin Panel — Seensa</p>
+    <input class="login-field" type="text" id="loginUser" placeholder="Fayyadamaa (username)" autocomplete="username">
+    <input class="login-field" type="password" id="loginPass" placeholder="Jecha darbii (password)" autocomplete="current-password">
+    <button class="login-btn" onclick="doLogin()">🔐 Seeni</button>
+    <div class="login-error" id="loginError">Fayyadamaa ykn jecha darbii dogoggoraa dha.</div>
+    <div class="login-attempts" id="loginAttempts"></div>
+  </div>
+</div>
+
+<!-- ══ ADMIN APP ══ -->
+<div id="adminApp">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <img src="images/WDB_LOGO_CIRCLE.png" alt="Logo">
+      <h1>Bulchiinsa Waldaa</h1>
+    </div>
+    <div class="top-bar-right">
+      <span class="admin-badge">👤 Admin</span>
+      <span id="sessionTime" style="color:rgba(255,255,255,0.6);font-size:0.8rem;"></span>
+      <button class="logout-btn" onclick="doLogout()">🚪 Ba'i</button>
+    </div>
+  </div>
+
+  <div class="admin-layout">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-section">Mana</div>
+      <div class="nav-item active" onclick="showPage('dashboard',this)">📊 Dashboard</div>
+
+      <div class="sidebar-section">Bulchiinsa</div>
+      <div class="nav-item" onclick="showPage('messages',this)">✉️ Ergaalee <span class="nav-badge" id="msgBadge">0</span></div>
+      <div class="nav-item" onclick="showPage('subscribers',this)">👥 Miseensota</div>
+      <div class="nav-item" onclick="showPage('events',this)">📅 Taateewwan</div>
+      <div class="nav-item" onclick="showPage('sermons',this)">🎵 Lallaba</div>
+
+      <div class="sidebar-section">Miidiyaa</div>
+      <div class="nav-item" onclick="showPage('gallery',this)">🖼️ Suura</div>
+      <div class="nav-item" onclick="showPage('upload',this)">📤 Ol Fe'i</div>
+
+      <div class="sidebar-section">Sirna</div>
+      <div class="nav-item" onclick="showPage('settings',this)">⚙️ Qindaa'ina</div>
+      <div class="nav-item" onclick="window.open('index.html','_blank')">🌐 Websaayitii Ilaali</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+      <!-- ── DASHBOARD ── -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-title">📊 Dashboard</div>
+        <div class="page-sub">Haala waldichaa guyyaa har'aa</div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon blue">👥</div>
+            <div><div class="stat-num" id="statSubscribers">0</div><div class="stat-label">Miseensota Galmaa'an</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon gold">✉️</div>
+            <div><div class="stat-num" id="statMessages">0</div><div class="stat-label">Ergaalee Haaraa</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green">📅</div>
+            <div><div class="stat-num" id="statEvents">0</div><div class="stat-label">Taateewwan</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon red">🎵</div>
+            <div><div class="stat-num" id="statSermons">0</div><div class="stat-label">Lallaba/Faarfannaa</div></div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+          <div class="card">
+            <h3>✉️ Ergaalee Haaraa</h3>
+            <div id="dashMessages"><p style="color:#888;font-size:0.9rem;">Ergaa hin jiru.</p></div>
+          </div>
+          <div class="card">
+            <h3>👥 Miseensota Haaraa</h3>
+            <div id="dashSubscribers"><p style="color:#888;font-size:0.9rem;">Miseensa hin jiru.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MESSAGES ── -->
+      <div class="page" id="page-messages">
+        <div class="page-title">✉️ Ergaalee</div>
+        <div class="page-sub">Ergaalee quunnamtii irraa dhufan</div>
+        <div class="card">
+          <div class="table-wrap">
+            <table id="messagesTable">
+              <thead><tr><th>Maqaa</th><th>Imeelii</th><th>Mata Duree</th><th>Guyyaa</th><th>Haala</th><th>Hojii</th></tr></thead>
+              <tbody id="messagesBody"><tr><td colspan="6" style="text-align:center;color:#888;padding:2rem;">Ergaa hin jiru.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SUBSCRIBERS ── -->
+      <div class="page" id="page-subscribers">
+        <div class="page-title">👥 Miseensota</div>
+        <div class="page-sub">Warri newsletter galmaa'an</div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+            <span id="subCount" style="color:#888;font-size:0.9rem;"></span>
+            <button class="btn btn-primary btn-sm" onclick="exportSubscribers()">📥 CSV Buufadhu</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>#</th><th>Imeelii</th><th>Guyyaa Galmaa'e</th><th>Hojii</th></tr></thead>
+              <tbody id="subscribersBody"><tr><td colspan="4" style="text-align:center;color:#888;padding:2rem;">Miseensa hin jiru.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── EVENTS ── -->
+      <div class="page" id="page-events">
+        <div class="page-title">📅 Taateewwan</div>
+        <div class="page-sub">Sagantaawwan fi taateewwan bulchi</div>
+        <div class="card">
+          <h3>➕ Taatee Haaraa Ida'i</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Maqaa Taatee</label><input type="text" id="evtTitle" placeholder="Maqaa..."></div>
+            <div class="form-group"><label>Guyyaa fi Sa'aatii</label><input type="datetime-local" id="evtDate"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Bakka</label><input type="text" id="evtLocation" placeholder="Bakka..."></div>
+            <div class="form-group"><label>Gosa</label>
+              <select id="evtType">
+                <option>Yaa'ii Ji'aa</option><option>Kadhannaa</option><option>Imala</option><option>Barnoota</option><option>Biroo</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group"><label>Ibsa</label><textarea id="evtDesc" rows="3" placeholder="Ibsa gabaabaa..."></textarea></div>
+          <button class="btn btn-primary" onclick="addEvent()">💾 Olkaa'i</button>
+        </div>
+        <div class="card">
+          <h3>📋 Taateewwan Jiran</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Maqaa</th><th>Guyyaa</th><th>Bakka</th><th>Gosa</th><th>Hojii</th></tr></thead>
+              <tbody id="eventsBody"><tr><td colspan="5" style="text-align:center;color:#888;padding:2rem;">Taatee hin jiru.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SERMONS ── -->
+      <div class="page" id="page-sermons">
+        <div class="page-title">🎵 Lallaba fi Faarfannaa</div>
+        <div class="page-sub">Sagantaa dhaggeeffannaa bulchi</div>
+        <div class="card">
+          <h3>➕ Lallaba Haaraa Ida'i</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Mata Duree</label><input type="text" id="srmTitle" placeholder="Mata duree..."></div>
+            <div class="form-group"><label>Guyyaa</label><input type="date" id="srmDate"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Lallabu / Faarfataa</label><input type="text" id="srmSpeaker" placeholder="Maqaa..."></div>
+            <div class="form-group"><label>Yeroo (daqiiqaa)</label><input type="number" id="srmDuration" placeholder="45"></div>
+          </div>
+          <div class="form-group"><label>Faayilii Audio (URL ykn path)</label><input type="text" id="srmSrc" placeholder="audio/lallaba.mp3"></div>
+          <button class="btn btn-primary" onclick="addSermon()">💾 Olkaa'i</button>
+        </div>
+        <div class="card">
+          <h3>📋 Lallabaalee Jiran</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Mata Duree</th><th>Lallabu</th><th>Guyyaa</th><th>Yeroo</th><th>Hojii</th></tr></thead>
+              <tbody id="sermonsBody"><tr><td colspan="5" style="text-align:center;color:#888;padding:2rem;">Lallaba hin jiru.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── GALLERY ── -->
+      <div class="page" id="page-gallery">
+        <div class="page-title">🖼️ Suura Bulchiinsa</div>
+        <div class="page-sub">Suuraawwan websaayitii irratti jiran</div>
+        <div class="card">
+          <h3>📸 Suuraawwan Jiran</h3>
+          <div class="preview-grid" id="galleryGrid"></div>
+        </div>
+      </div>
+
+      <!-- ── UPLOAD ── -->
+      <div class="page" id="page-upload">
+        <div class="page-title">📤 Suura Ol Fe'i</div>
+        <div class="page-sub">Suuraawwan haaraa ida'i</div>
+        <div class="card">
+          <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+            <div class="icon">📁</div>
+            <h3 style="color:#1a3b5c;margin-bottom:0.5rem;">Suuraawwan Filadhu</h3>
+            <p style="color:#888;">Tuqaa ykn suuraawwan as harkisaa</p>
+            <p style="color:#aaa;font-size:0.85rem;margin-top:0.5rem;">JPG, PNG, WebP — 10MB gadi</p>
+          </div>
+          <input type="file" id="fileInput" style="display:none;" multiple accept="image/*">
+          <div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+          <div id="uploadStatus"></div>
+          <div class="preview-grid" id="previewGrid"></div>
+          <div style="margin-top:1.5rem;display:flex;gap:1rem;" id="uploadActions" style="display:none;">
+            <button class="btn btn-primary" onclick="uploadImages()">📤 Ol Fe'i</button>
+            <button class="btn btn-danger" onclick="clearPreviews()">🗑️ Haqii</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SETTINGS ── -->
+      <div class="page" id="page-settings">
+        <div class="page-title">⚙️ Qindaa'ina</div>
+        <div class="page-sub">Sirna admin panel qindi</div>
+        <div class="card">
+          <h3>🔐 Jecha Darbii Jijjiiri</h3>
+          <div class="form-group"><label>Jecha Darbii Ammaa</label><input type="password" id="oldPass" placeholder="Jecha darbii ammaa"></div>
+          <div class="form-group"><label>Jecha Darbii Haaraa</label><input type="password" id="newPass" placeholder="Jecha darbii haaraa"></div>
+          <div class="form-group"><label>Mirkaneessi</label><input type="password" id="confirmPass" placeholder="Irra deebi'i barreessi"></div>
+          <button class="btn btn-primary" onclick="changePassword()">💾 Jijjiiri</button>
+        </div>
+        <div class="card">
+          <h3>🗑️ Deetaa Haquu</h3>
+          <p style="color:#888;margin-bottom:1rem;font-size:0.9rem;">Deetaa localStorage keessa jiru haquu dandeessa. Kun deebi'uu hin danda'u.</p>
+          <button class="btn btn-danger btn-sm" onclick="clearData('wdb_messages')">Ergaalee Haqii</button>
+          <button class="btn btn-danger btn-sm" style="margin-left:0.5rem;" onclick="clearData('wdb_events')">Taateewwan Haqii</button>
+          <button class="btn btn-danger btn-sm" style="margin-left:0.5rem;" onclick="clearData('wdb_sermons')">Lallabaalee Haqii</button>
+        </div>
+      </div>
+
+    </div><!-- /main-content -->
+  </div><!-- /admin-layout -->
+</div><!-- /adminApp -->
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+//  CONSTANTS
+// ══════════════════════════════════════════
+const ADMIN_CREDS_KEY = 'wdb_admin_creds';
+const MSGS_KEY        = 'wdb_messages';
+const SUBS_KEY        = 'wdb_subscribers';
+const EVENTS_KEY      = 'wdb_events';
+const SERMONS_KEY     = 'wdb_sermons';
+const SESSION_KEY     = 'wdb_admin_session';
+const DEFAULT_USER    = 'admin';
+const DEFAULT_PASS    = 'waldaa2026';
+
+let loginAttempts = 0;
+let sessionInterval;
+
+const getData = k => JSON.parse(localStorage.getItem(k) || '[]');
+const setData = (k,v) => localStorage.setItem(k, JSON.stringify(v));
+const getObj  = (k,d) => JSON.parse(localStorage.getItem(k) || JSON.stringify(d));
+
+function toast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.className = '', 3500);
+}
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('om-ET', {year:'numeric',month:'short',day:'numeric'});
+}
+function fmtDateTime(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleString('om-ET', {year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+
+// ══════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════
+function getCreds() {
+  return getObj(ADMIN_CREDS_KEY, { user: DEFAULT_USER, pass: DEFAULT_PASS });
+}
+
+function doLogin() {
+  if (loginAttempts >= 5) {
+    showLoginError('Seensa cufame. Daqiiqaa 1 booda yaali.');
+    return;
+  }
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const creds = getCreds();
+  if (u === creds.user && p === creds.pass) {
+    loginAttempts = 0;
+    setData(SESSION_KEY, { loggedIn: true, time: Date.now() });
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminApp').style.display = 'block';
+    startSession();
+    loadAll();
+  } else {
+    loginAttempts++;
+    const left = 5 - loginAttempts;
+    showLoginError('Fayyadamaa ykn jecha darbii dogoggoraa dha.');
+    document.getElementById('loginAttempts').textContent =
+      left > 0 ? `Yaaliiwwan ${left} hafan` : 'Seensa cufame!';
+    if (loginAttempts >= 5)
+      setTimeout(() => { loginAttempts = 0; document.getElementById('loginAttempts').textContent = ''; }, 60000);
+  }
+}
+
+function showLoginError(msg) {
+  const el = document.getElementById('loginError');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function doLogout() {
+  localStorage.removeItem(SESSION_KEY);
+  clearInterval(sessionInterval);
+  document.getElementById('adminApp').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').style.display = 'none';
+  document.getElementById('loginAttempts').textContent = '';
+}
+
+function startSession() {
+  const start = Date.now();
+  sessionInterval = setInterval(() => {
+    const mins = Math.floor((Date.now() - start) / 60000);
+    document.getElementById('sessionTime').textContent = `⏱ ${mins}m`;
+  }, 30000);
+}
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  const s = getObj(SESSION_KEY, {});
+  if (s.loggedIn && (Date.now() - s.time) < 3600000) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminApp').style.display = 'block';
+    startSession();
+    loadAll();
+  }
+  ['loginPass','loginUser'].forEach(id =>
+    document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); })
+  );
+  const zone = document.getElementById('uploadZone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('dragover'); handleFiles(e.dataTransfer.files); });
+  document.getElementById('fileInput').addEventListener('change', e => handleFiles(e.target.files));
+});
+
+// ══════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  const loaders = { dashboard: refreshDashboard, subscribers: renderSubscribers,
+    messages: renderMessages, events: renderEvents, sermons: renderSermons, gallery: renderGallery };
+  if (loaders[id]) loaders[id]();
+}
+
+function loadAll() { refreshDashboard(); updateBadges(); }
+
+function updateBadges() {
+  const unread = getData(MSGS_KEY).filter(m => m.status === 'new').length;
+  const badge = document.getElementById('msgBadge');
+  badge.textContent = unread;
+  badge.style.display = unread ? 'inline' : 'none';
+}
+
+// ══════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════
+function refreshDashboard() {
+  const subs    = getData(SUBS_KEY);
+  const msgs    = getData(MSGS_KEY);
+  const events  = getData(EVENTS_KEY);
+  const sermons = getData(SERMONS_KEY);
+
+  document.getElementById('statSubscribers').textContent = subs.length;
+  document.getElementById('statMessages').textContent    = msgs.filter(m => m.status === 'new').length;
+  document.getElementById('statEvents').textContent      = events.length;
+  document.getElementById('statSermons').textContent     = sermons.length;
+
+  const mBox = document.getElementById('dashMessages');
+  mBox.innerHTML = msgs.slice(-5).reverse().map(m => `
+    <div style="padding:0.7rem 0;border-bottom:1px solid #f0f2f5;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <strong style="color:#1a3b5c;">${m.name||'—'}</strong>
+        <span style="color:#888;font-size:0.8rem;margin-left:0.5rem;">${m.subject||''}</span>
+      </div>
+      <span class="badge badge-${m.status==='new'?'new':'read'}">${m.status==='new'?'Haaraa':'Dubbifame'}</span>
+    </div>`).join('') || '<p style="color:#888;font-size:0.9rem;">Ergaa hin jiru.</p>';
+
+  const sBox = document.getElementById('dashSubscribers');
+  sBox.innerHTML = subs.slice(-5).reverse().map(s => `
+    <div style="padding:0.6rem 0;border-bottom:1px solid #f0f2f5;font-size:0.9rem;">
+      📧 ${s.email} <span style="color:#aaa;font-size:0.8rem;float:right;">${fmtDate(s.date)}</span>
+    </div>`).join('') || '<p style="color:#888;font-size:0.9rem;">Miseensa hin jiru.</p>';
+}
+
+// ══════════════════════════════════════════
+//  MESSAGES
+// ══════════════════════════════════════════
+function renderMessages() {
+  const msgs = getData(MSGS_KEY);
+  const tbody = document.getElementById('messagesBody');
+  if (!msgs.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;padding:2rem;">Ergaa hin jiru.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = msgs.slice().reverse().map((m, i) => `
+    <tr>
+      <td><strong>${m.name||'—'}</strong></td>
+      <td><a href="mailto:${m.email}" style="color:#1a3b5c;">${m.email||'—'}</a></td>
+      <td>${m.subject||'—'}</td>
+      <td style="font-size:0.8rem;color:#888;">${fmtDateTime(m.date)}</td>
+      <td><span class="badge badge-${m.status==='new'?'new':'read'}">${m.status==='new'?'Haaraa':'Dubbifame'}</span></td>
+      <td>
+        <button class="btn btn-sm btn-primary" onclick="viewMessage(${msgs.length-1-i})">👁 Ilaali</button>
+        <button class="btn btn-sm btn-danger" style="margin-left:4px;" onclick="deleteMessage(${msgs.length-1-i})">🗑</button>
+      </td>
+    </tr>`).join('');
+  updateBadges();
+}
+
+function viewMessage(i) {
+  const msgs = getData(MSGS_KEY);
+  const m = msgs[i]; if (!m) return;
+  msgs[i].status = 'read';
+  setData(MSGS_KEY, msgs);
+  alert(`📧 Ergaa\n\nMaqaa: ${m.name}\nImeelii: ${m.email}\nBilbila: ${m.phone||'—'}\nMata Duree: ${m.subject}\nGuyyaa: ${fmtDateTime(m.date)}\n\n${m.message}`);
+  renderMessages();
+}
+
+function deleteMessage(i) {
+  if (!confirm('Ergaa kana haquuf mirkaneessi?')) return;
+  const msgs = getData(MSGS_KEY);
+  msgs.splice(i, 1);
+  setData(MSGS_KEY, msgs);
+  renderMessages();
+  toast('Ergaan haqame.');
+}
+
+// ══════════════════════════════════════════
+//  SUBSCRIBERS
+// ══════════════════════════════════════════
+function renderSubscribers() {
+  const subs = getData(SUBS_KEY);
+  document.getElementById('subCount').textContent = `Miseensota ${subs.length} galmaa'aniiru`;
+  const tbody = document.getElementById('subscribersBody');
+  tbody.innerHTML = subs.length ? subs.slice().reverse().map((s, i) => `
+    <tr>
+      <td style="color:#888;">${subs.length - i}</td>
+      <td>📧 ${s.email}</td>
+      <td style="font-size:0.85rem;color:#888;">${fmtDate(s.date)}</td>
+      <td><button class="btn btn-sm btn-danger" onclick="deleteSubscriber(${subs.length-1-i})">🗑</button></td>
+    </tr>`).join('')
+    : '<tr><td colspan="4" style="text-align:center;color:#888;padding:2rem;">Miseensa hin jiru.</td></tr>';
+}
+
+function deleteSubscriber(i) {
+  if (!confirm('Miseensa kana haquuf mirkaneessi?')) return;
+  const subs = getData(SUBS_KEY);
+  subs.splice(i, 1);
+  setData(SUBS_KEY, subs);
+  renderSubscribers();
+  refreshDashboard();
+  toast('Miseensi haqame.');
+}
+
+function exportSubscribers() {
+  const subs = getData(SUBS_KEY);
+  if (!subs.length) { toast('Miseensa hin jiru.', 'error'); return; }
+  const csv = 'Email,Guyyaa\n' + subs.map(s => `${s.email},${fmtDate(s.date)}`).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'miseensota.csv';
+  a.click();
+  toast('CSV buufatame!');
+}
+
+// ══════════════════════════════════════════
+//  EVENTS
+// ══════════════════════════════════════════
+function addEvent() {
+  const title    = document.getElementById('evtTitle').value.trim();
+  const date     = document.getElementById('evtDate').value;
+  const location = document.getElementById('evtLocation').value.trim();
+  const type     = document.getElementById('evtType').value;
+  const desc     = document.getElementById('evtDesc').value.trim();
+  if (!title || !date) { toast('Maqaa fi guyyaa barreessi.', 'error'); return; }
+  const events = getData(EVENTS_KEY);
+  events.push({ id: Date.now(), title, date, location, type, desc });
+  setData(EVENTS_KEY, events);
+  ['evtTitle','evtDate','evtLocation','evtDesc'].forEach(id => document.getElementById(id).value = '');
+  renderEvents(); refreshDashboard();
+  toast("Taatee olkaa'ame!");
+}
+
+function renderEvents() {
+  const events = getData(EVENTS_KEY);
+  const tbody = document.getElementById('eventsBody');
+  tbody.innerHTML = events.length ? events.slice().reverse().map(e => `
+    <tr>
+      <td><strong>${e.title}</strong></td>
+      <td style="font-size:0.85rem;">${fmtDateTime(e.date)}</td>
+      <td>${e.location||'—'}</td>
+      <td><span class="badge badge-pending">${e.type}</span></td>
+      <td><button class="btn btn-sm btn-danger" onclick="deleteEvent(${e.id})">🗑</button></td>
+    </tr>`).join('')
+    : '<tr><td colspan="5" style="text-align:center;color:#888;padding:2rem;">Taatee hin jiru.</td></tr>';
+}
+
+function deleteEvent(id) {
+  if (!confirm('Taatee kana haquuf mirkaneessi?')) return;
+  setData(EVENTS_KEY, getData(EVENTS_KEY).filter(e => e.id !== id));
+  renderEvents(); refreshDashboard();
+  toast('Taatee haqame.');
+}
+
+// ══════════════════════════════════════════
+//  SERMONS
+// ══════════════════════════════════════════
+function addSermon() {
+  const title    = document.getElementById('srmTitle').value.trim();
+  const date     = document.getElementById('srmDate').value;
+  const speaker  = document.getElementById('srmSpeaker').value.trim();
+  const duration = document.getElementById('srmDuration').value;
+  const src      = document.getElementById('srmSrc').value.trim();
+  if (!title) { toast('Mata duree barreessi.', 'error'); return; }
+  const sermons = getData(SERMONS_KEY);
+  sermons.push({ id: Date.now(), title, date, speaker, duration, src });
+  setData(SERMONS_KEY, sermons);
+  ['srmTitle','srmDate','srmSpeaker','srmDuration','srmSrc'].forEach(id => document.getElementById(id).value = '');
+  renderSermons(); refreshDashboard();
+  toast("Lallabi olkaa'ame!");
+}
+
+function renderSermons() {
+  const sermons = getData(SERMONS_KEY);
+  const tbody = document.getElementById('sermonsBody');
+  tbody.innerHTML = sermons.length ? sermons.slice().reverse().map(s => `
+    <tr>
+      <td><strong>${s.title}</strong></td>
+      <td>${s.speaker||'—'}</td>
+      <td style="font-size:0.85rem;">${fmtDate(s.date)}</td>
+      <td>${s.duration ? s.duration + ' min' : '—'}</td>
+      <td><button class="btn btn-sm btn-danger" onclick="deleteSermon(${s.id})">🗑</button></td>
+    </tr>`).join('')
+    : '<tr><td colspan="5" style="text-align:center;color:#888;padding:2rem;">Lallaba hin jiru.</td></tr>';
+}
+
+function deleteSermon(id) {
+  if (!confirm('Lallaba kana haquuf mirkaneessi?')) return;
+  setData(SERMONS_KEY, getData(SERMONS_KEY).filter(s => s.id !== id));
+  renderSermons(); refreshDashboard();
+  toast('Lallabi haqame.');
+}
+
+// ══════════════════════════════════════════
+//  GALLERY
+// ══════════════════════════════════════════
+const galleryImages = [
+  { src:'images/Abune-Matthias.webp', name:'Abune Matthias' },
+  { src:'images/images 2.jpg',        name:'Hawaasa Waldichaa' },
+  { src:'images/images.jpg',          name:'Sagantaa Waldichaa' },
+  { src:'images/mana.jpg',            name:'Mana Sagadaa' },
+  { src:'images/slide3.webp',         name:'Taateewwan Addaa' },
+  { src:'images/Kakuu_Haaraa.jpg',    name:'Kakuu Haaraa' },
+  { src:'images/kadhannaa.jpg',       name:'Kadhannaa' },
+  { src:'images/gamtaa.jpg',          name:'Gamtaa' },
+  { src:'images/duuka.jpg',           name:'Duuka' },
+  { src:'images/preaching.jpg',       name:'Preaching' },
+  { src:'images/imala 1.jpg',         name:'Imala' },
+  { src:'images/IMG_4569.png',        name:'Waldaa' },
+];
+
+function renderGallery() {
+  // Fetch from PHP backend
+  fetch('upload.php?action=gallery')
+    .then(r => r.json())
+    .then(data => {
+      if (data.success && data.images) {
+        const grid = document.getElementById('galleryGrid');
+        grid.innerHTML = data.images.map(img => `
+          <div class="preview-card">
+            <img src="images/gallery/${img.filename}" alt="${img.title || img.original_name}" onerror="this.parentElement.style.opacity='0.4'">
+            <div class="caption">
+              <input value="${img.title || img.original_name}" readonly style="background:#f8f9fa;">
+              <button class="btn btn-sm btn-danger" style="margin-top:0.3rem;width:100%;" onclick="deleteGalleryImage(${img.id})">🗑 Haqii</button>
+            </div>
+          </div>`).join('') || '<p style="color:#888;text-align:center;padding:2rem;">Suura hin jiru.</p>';
+      }
+    })
+    .catch(e => toast('Suura fe\'uu hin dandeenye.', 'error'));
+}
+
+function deleteGalleryImage(id) {
+  if (!confirm('Suura kana haquuf mirkaneessi?')) return;
+  const fd = new FormData();
+  fd.append('image_id', id);
+  fetch('upload.php?action=delete', { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) { toast('Suura haqame!'); renderGallery(); }
+      else toast(data.message || 'Dogoggora!', 'error');
+    })
+    .catch(() => toast('Haquu hin dandeenye.', 'error'));
+}
+
+// ══════════════════════════════════════════
+//  UPLOAD
+// ══════════════════════════════════════════
+let pendingFiles = [];
+
+function handleFiles(files) {
+  pendingFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+  const grid = document.getElementById('previewGrid');
+  const actions = document.getElementById('uploadActions');
+  grid.innerHTML = '';
+  if (!pendingFiles.length) return;
+  pendingFiles.forEach((file, i) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const card = document.createElement('div');
+      card.className = 'preview-card';
+      card.innerHTML = `
+        <img src="${e.target.result}" alt="${file.name}">
+        <button class="remove-btn" onclick="removePreview(${i})">×</button>
+        <div class="caption"><input placeholder="Ibsa..." value="${file.name.replace(/\.[^.]+$/,'')}"></div>`;
+      grid.appendChild(card);
+    };
+    reader.readAsDataURL(file);
+  });
+  actions.style.display = 'flex';
+}
+
+function removePreview(i) { pendingFiles.splice(i,1); handleFiles(pendingFiles); }
+
+function uploadImages() {
+  if (!pendingFiles.length) return;
+  const bar    = document.getElementById('progressBar');
+  const fill   = document.getElementById('progressFill');
+  const status = document.getElementById('uploadStatus');
+
+  // Build FormData for PHP
+  const fd = new FormData();
+  const captions = document.querySelectorAll('#previewGrid .caption input');
+  pendingFiles.forEach((file, i) => {
+    fd.append('photos[]', file);
+    fd.append('titles[]', captions[i] ? captions[i].value : '');
+    fd.append('descriptions[]', '');
+  });
+
+  bar.style.display = 'block';
+  fill.style.width = '10%';
+
+  fetch('upload.php?action=upload', { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(data => {
+      fill.style.width = '100%';
+      setTimeout(() => {
+        bar.style.display = 'none';
+        fill.style.width = '0%';
+        if (data.success) {
+          status.innerHTML = `<p style="color:#28a745;margin-top:1rem;">✅ Suuraawwan ${data.uploaded_count} ol fe'ame!</p>`;
+          toast(`Suuraawwan ${data.uploaded_count} ol fe'ame!`);
+          pendingFiles = [];
+          document.getElementById('previewGrid').innerHTML = '';
+          document.getElementById('uploadActions').style.display = 'none';
+          document.getElementById('fileInput').value = '';
+        } else {
+          const errs = data.errors ? data.errors.join('<br>') : data.message;
+          status.innerHTML = `<p style="color:#e74c3c;margin-top:1rem;">❌ ${errs}</p>`;
+          toast(data.message || 'Upload hin milkoofne.', 'error');
+        }
+      }, 300);
+    })
+    .catch(err => {
+      bar.style.display = 'none';
+      status.innerHTML = `<p style="color:#e74c3c;margin-top:1rem;">❌ Server waliin walqunnamuu hin dandeenye. PHP server irratti hojjechaa akka jiru mirkaneessi.</p>`;
+      toast('Server waliin walqunnamuu hin dandeenye.', 'error');
+    });
+}
+
+function clearPreviews() {
+  pendingFiles = [];
+  document.getElementById('previewGrid').innerHTML = '';
+  document.getElementById('uploadActions').style.display = 'none';
+  document.getElementById('uploadStatus').innerHTML = '';
+}
+
+// ══════════════════════════════════════════
+//  SETTINGS
+// ══════════════════════════════════════════
+function changePassword() {
+  const oldP = document.getElementById('oldPass').value;
+  const newP = document.getElementById('newPass').value;
+  const conP = document.getElementById('confirmPass').value;
+  const creds = getCreds();
+  if (oldP !== creds.pass) { toast("Jecha darbii ammaa dogoggoraa dha.", 'error'); return; }
+  if (newP.length < 6)     { toast("Jecha darbii haaraan qubee 6 ol ta'uu qaba.", 'error'); return; }
+  if (newP !== conP)        { toast("Jecha darbii haaraan wal hin simne.", 'error'); return; }
+  setData(ADMIN_CREDS_KEY, { user: creds.user, pass: newP });
+  ['oldPass','newPass','confirmPass'].forEach(id => document.getElementById(id).value = '');
+  toast('Jecha darbii jijjiirameera!');
+}
+
+function clearData(key) {
+  if (!confirm('Deetaa kana haquuf mirkaneessi?')) return;
+  localStorage.removeItem(key);
+  refreshDashboard(); updateBadges();
+  toast('Deetaan haqame.');
+}
+</script>
+</body>
+</html>

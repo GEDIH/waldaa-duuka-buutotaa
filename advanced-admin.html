@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bulchiinsa Waldaa - Advanced Admin</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: linear-gradient(135deg, #1a3b5c, #2c5282);
+      color: #333;
+      min-height: 100vh;
+    }
+
+    .admin-header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      color: white;
+      padding: 1.5rem 0;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .admin-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .admin-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .admin-card h2 {
+      color: #1a3b5c;
+      margin-bottom: 1.5rem;
+      border-bottom: 3px solid #d4af37;
+      padding-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .upload-zone {
+      border: 3px dashed #d4af37;
+      border-radius: 15px;
+      padding: 3rem;
+      text-align: center;
+      background: linear-gradient(135deg, #fafafa, #f0f8ff);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .upload-zone:hover {
+      background: linear-gradient(135deg, #e8f4f8, #d1ecf1);
+      border-color: #1a3b5c;
+      transform: translateY(-2px);
+    }
+
+    .upload-zone.dragover {
+      background: linear-gradient(135deg, #d4edda, #c3e6cb);
+      border-color: #28a745;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    .upload-icon {
+      font-size: 4rem;
+      color: #d4af37;
+      margin-bottom: 1rem;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #d4af37, #b8941f);
+      color: #1a3b5c;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 0.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, #1a3b5c, #2c5282);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(26, 59, 92, 0.4);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #dc3545, #c82333);
+      color: white;
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #28a745, #218838);
+      color: white;
+    }
+
+    .preview-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .preview-card {
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .preview-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .preview-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .preview-info {
+      padding: 1rem;
+      background: white;
+    }
+
+    .preview-info input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 2px solid #e9ecef;
+      border-radius: 5px;
+      margin-bottom: 0.5rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .preview-info input:focus {
+      outline: none;
+      border-color: #d4af37;
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(220, 53, 69, 0.9);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .remove-btn:hover {
+      background: #dc3545;
+      transform: scale(1.1);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #e9ecef;
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #d4af37, #28a745);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .status-message {
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .status-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .status-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .status-info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+
+    .current-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .gallery-item {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .gallery-placeholder {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6c757d;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    .gallery-controls {
+      padding: 1rem;
+    }
+
+    .gallery-controls input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .instructions-panel {
+      background: linear-gradient(135deg, #e8f4f8, #d1ecf1);
+      border-left: 5px solid #1a3b5c;
+      padding: 2rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+    }
+
+    .instructions-panel h3 {
+      color: #1a3b5c;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .step-list {
+      list-style: none;
+      counter-reset: step-counter;
+    }
+
+    .step-list li {
+      counter-increment: step-counter;
+      margin-bottom: 1rem;
+      padding-left: 3rem;
+      position: relative;
+    }
+
+    .step-list li::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: #d4af37;
+      color: #1a3b5c;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .upload-zone {
+        padding: 2rem 1rem;
+      }
+      
+      .upload-icon {
+        font-size: 3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="admin-header">
+  <h1>🔧 Bulchiinsa Waldaa - Advanced Photo Manager</h1>
+  <p>Suuraawwan Waldichaa Bulchuu fi Ramaduu</p>
+</div>
+
+<div class="admin-container">
+  
+  <div class="instructions-panel">
+    <h3>📋 Qajeelfama Suura Ol Fe'uu</h3>
+    <ol class="step-list">
+      <li><strong>Suura Filadhu:</strong> Upload zone keessatti tuqaa ykn suuraawwan harkisaa</li>
+      <li><strong>Maqaa fi Ibsa Kenni:</strong> Suura hundaaf maqaa fi ibsa barreessi</li>
+      <li><strong>Qorannoo:</strong> Suuraawwan preview keessatti ilaali</li>
+      <li><strong>Ramadi:</strong> "Suuraawwan Ramadi" tuqaa</li>
+      <li><strong>Mirkaneessi:</strong> Websaayitii keessatti mul'achuu isaa mirkaneessi</li>
+    </ol>
+  </div>
+
+  <div class="admin-grid">
+    <div class="admin-card">
+      <h2>📤 Suuraawwan Haaraa Ol Fe'uu</h2>
+      
+      <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-icon">📸</div>
+        <h3>Suuraawwan Filadhu</h3>
+        <p>Tuqaa ykn suuraawwan as harkisaa</p>
+        <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">
+          Bifa: JPG, PNG, GIF | Guddina: 10MB gadi
+        </p>
+      </div>
+      
+      <input type="file" id="fileInput" style="display: none;" multiple accept="image/*">
+      
+      <div class="progress-bar" id="progressBar" style="display: none;">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      
+      <div id="statusMessage"></div>
+      
+      <div id="previewGallery" class="preview-gallery"></div>
+      
+      <div style="text-align: center; margin-top: 2rem;">
+        <button class="btn btn-success" onclick="uploadImages()">📤 Suuraawwan Ramadi</button>
+        <button class="btn btn-danger" onclick="clearPreviews()">🗑️ Haqii</button>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <h2>🖼️ Suuraawwan Ammee Jiran</h2>
+      
+      <div class="status-message status-info">
+        <strong>💡 Hubannoo:</strong> Suuraawwan dhugaa ramaduu fi haquuf server programming barbaachisa.
+      </div>
+      
+      <div class="current-gallery">
+        <div class="gallery-item">
+          <div class="gallery-placeholder">
+            <div>
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏛️</div>
+              <div>Mana Sagadaa</div>
+            </div>
+          </div>
+          <div class="gallery-controls">
+            <input type="text" placeholder="Maqaa suura..." value="Mana Sagadaa Keenyaa">
+            <input type="text" placeholder="Ibsa..." value="Bakka qulqulluu kadhannaa">
+            <button class="btn btn-danger" style="width: 100%;">🗑️ Haqii</button>
+          </div>
+        </div>
+        
+        <div class="gallery-item">
+          <div class="gallery-placeholder">
+            <div>
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">👥</div>
+              <div>Hawaasa</div>
+            </div>
+          </div>
+          <div class="gallery-controls">
+            <input type="text" placeholder="Maqaa suura..." value="Hawaasa Waldichaa">
+            <input type="text" placeholder="Ibsa..." value="Miseensota waldaa waliin">
+            <button class="btn btn-danger" style="width: 100%;">🗑️ Haqii</button>
+          </div>
+        </div>
+        
+        <div class="gallery-item">
+          <div class="gallery-placeholder">
+            <div>
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎉</div>
+              <div>Taateewwan</div>
+            </div>
+          </div>
+          <div class="gallery-controls">
+            <input type="text" placeholder="Maqaa suura..." value="Sagantaa Addaa">
+            <input type="text" placeholder="Ibsa..." value="Ayyaana fi taateewwan">
+            <button class="btn btn-danger" style="width: 100%;">🗑️ Haqii</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-card">
+    <h2>⚙️ Mala Biroo - Alternative Methods</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+      <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #28a745;">
+        <h3 style="color: #28a745; margin-bottom: 1rem;">📁 File Manager</h3>
+        <p><strong>Hosting Provider:</strong></p>
+        <ul style="margin: 1rem 0;">
+          <li>cPanel File Manager</li>
+          <li>hPanel (Hostinger)</li>
+          <li>Site Tools (SiteGround)</li>
+        </ul>
+        <p><strong>Tarkaanfii:</strong> Login → File Manager → images/ folder → Upload</p>
+      </div>
+      
+      <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #007bff;">
+        <h3 style="color: #007bff; margin-bottom: 1rem;">🌐 Cloud Storage</h3>
+        <p><strong>Tajaajilaalee:</strong></p>
+        <ul style="margin: 1rem 0;">
+          <li>Google Drive</li>
+          <li>Imgur (Free)</li>
+          <li>Dropbox</li>
+        </ul>
+        <p><strong>Tarkaanfii:</strong> Upload → Get Link → Use in HTML</p>
+      </div>
+      
+      <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #6f42c1;">
+        <h3 style="color: #6f42c1; margin-bottom: 1rem;">💻 FTP Client</h3>
+        <p><strong>Software:</strong></p>
+        <ul style="margin: 1rem 0;">
+          <li>FileZilla (Free)</li>
+          <li>WinSCP</li>
+          <li>Cyberduck</li>
+        </ul>
+        <p><strong>Tarkaanfii:</strong> Connect → Navigate → Upload</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Enhanced file upload functionality
+let selectedFiles = [];
+
+document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+
+// Enhanced drag and drop
+const uploadZone = document.querySelector('.upload-zone');
+uploadZone.addEventListener('dragover', handleDragOver);
+uploadZone.addEventListener('drop', handleDrop);
+uploadZone.addEventListener('dragleave', handleDragLeave);
+
+function handleFileSelect(event) {
+  const files = Array.from(event.target.files);
+  processFiles(files);
+}
+
+function handleDragOver(event) {
+  event.preventDefault();
+  uploadZone.classList.add('dragover');
+}
+
+function handleDrop(event) {
+  event.preventDefault();
+  uploadZone.classList.remove('dragover');
+  const files = Array.from(event.dataTransfer.files);
+  processFiles(files);
+}
+
+function handleDragLeave(event) {
+  uploadZone.classList.remove('dragover');
+}
+
+function processFiles(files) {
+  const validFiles = files.filter(file => {
+    if (!file.type.startsWith('image/')) {
+      showStatus('⚠️ Suura qofa upload gochuu dandeessa!', 'error');
+      return false;
+    }
+    if (file.size > 10 * 1024 * 1024) { // 10MB
+      showStatus('⚠️ Suura guddaan 10MB gadi ta\'uu qaba!', 'error');
+      return false;
+    }
+    return true;
+  });
+
+  selectedFiles = [...selectedFiles, ...validFiles];
+  displayPreviews();
+  showStatus(`✅ Suura ${validFiles.length} filatame!`, 'success');
+}
+
+function displayPreviews() {
+  const gallery = document.getElementById('previewGallery');
+  gallery.innerHTML = '';
+  
+  selectedFiles.forEach((file, index) => {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const card = document.createElement('div');
+      card.className = 'preview-card';
+      card.innerHTML = `
+        <img src="${e.target.result}" alt="Preview">
+        <button class="remove-btn" onclick="removeFile(${index})">×</button>
+        <div class="preview-info">
+          <input type="text" placeholder="Maqaa suura..." id="name_${index}">
+          <input type="text" placeholder="Ibsa suura..." id="desc_${index}">
+        </div>
+      `;
+      gallery.appendChild(card);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function removeFile(index) {
+  selectedFiles.splice(index, 1);
+  displayPreviews();
+  showStatus('🗑️ Suura haqame!', 'info');
+}
+
+function uploadImages() {
+  if (selectedFiles.length === 0) {
+    showStatus('⚠️ Duraan suura filadhu!', 'error');
+    return;
+  }
+
+  // Simulate upload process
+  const progressBar = document.getElementById('progressBar');
+  const progressFill = document.getElementById('progressFill');
+  
+  progressBar.style.display = 'block';
+  
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += 10;
+    progressFill.style.width = progress + '%';
+    
+    if (progress >= 100) {
+      clearInterval(interval);
+      setTimeout(() => {
+        progressBar.style.display = 'none';
+        showStatus('🚧 Demo qofa! Suuraawwan dhugaa ramaduu fi haquuf server-side programming barbaachisa. Hosting provider keessan waliin dubbadhaatii CMS solution barbaadaa.', 'info');
+      }, 500);
+    }
+  }, 200);
+}
+
+function clearPreviews() {
+  selectedFiles = [];
+  document.getElementById('previewGallery').innerHTML = '';
+  document.getElementById('fileInput').value = '';
+  showStatus('🧹 Suuraawwan hunda haqame!', 'info');
+}
+
+function showStatus(message, type) {
+  const statusDiv = document.getElementById('statusMessage');
+  statusDiv.className = `status-message status-${type}`;
+  statusDiv.textContent = message;
+  statusDiv.style.display = 'block';
+  
+  setTimeout(() => {
+    statusDiv.style.display = 'none';
+  }, 5000);
+}
+
+// Initialize
+showStatus('📸 Suura upload system qophaa\'e!', 'success');
+</script>
+
+</body>
+</html>
