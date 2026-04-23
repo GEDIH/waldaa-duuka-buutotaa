@@ -836,6 +836,17 @@
   </div>
 </header>
 
+<!-- TikTok Live Notification Banner -->
+<div id="tiktokBanner" style="display:none;background:linear-gradient(135deg,#010101,#333);color:white;text-align:center;padding:0.8rem 1rem;position:relative;z-index:999;">
+  <span id="tiktokBannerText"></span>
+  <a href="https://www.tiktok.com/@tvsagaleedhugaa" target="_blank" rel="noopener"
+     style="background:#d4af37;color:#1a3b5c;padding:0.3rem 1rem;border-radius:20px;font-weight:bold;text-decoration:none;margin-left:1rem;font-size:0.85rem;">
+    ▶ Amma Ilaali
+  </a>
+  <button onclick="document.getElementById('tiktokBanner').style.display='none'"
+     style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;">×</button>
+</div>
+
 <section class="hero">
   <div class="hero-container">
     <div class="hero-content">
@@ -1117,10 +1128,16 @@
           <h3>Daawwannaa Qajeelfamaa</h3>
           <p>Dilbata hunda 10:00 & 14:00.</p>
         </div>
-        <div class="service-card">
+        <div class="service-card" id="tiktokCard">
           <h3>🎵 Sagantaa TikTok</h3>
-          <p>Torbanitti sagantaa haaraa ilaali.</p>
+          <p>Guyyaa Sanbata duraa galgala sa'aatii 2:00 irraa eegalee.</p>
+          <div id="tiktokCountdown" style="background:rgba(212,175,55,0.15);border-radius:8px;padding:0.6rem;margin:0.8rem 0;font-size:0.85rem;color:#d4af37;font-weight:bold;text-align:center;"></div>
           <a href="https://www.tiktok.com/@tvsagaleedhugaa" target="_blank" rel="noopener" style="color:#d4af37;font-weight:bold;">@tvsagaleedhugaa →</a>
+          <div style="margin-top:0.8rem;">
+            <button id="tiktokNotifyBtn" onclick="subscribeTikTokNotify()" style="background:#d4af37;color:#1a3b5c;border:none;padding:0.5rem 1rem;border-radius:20px;font-weight:bold;cursor:pointer;font-size:0.85rem;width:100%;">
+              🔔 Beeksisa Naaf Ergi
+            </button>
+          </div>
         </div>
       </div>
       <div style="text-align: center; margin-top: 3rem;">
@@ -1342,7 +1359,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2026 Waldaa Duuka Bu'ootaa. Mirgi isaa hundi seeraan kan eegamee.Hambisa Adamu <a href="admin.html" style="color:rgba(255,255,255,0.08);font-size:0.65rem;text-decoration:none;" title="">⚙</a></p>
+    <p>© 2026 Waldaa Duuka Bu'ootaa.Mirgi isaa seeraan kan eegamee. Hambisa Adamu <a href="admin.html" style="color:rgba(255,255,255,0.08);font-size:0.65rem;text-decoration:none;" title="">⚙</a></p>
   </div>
 </footer>
 
@@ -1366,7 +1383,7 @@
   <div class="chat-messages" id="chatMessages">
     <div class="message bot-message">
       <div class="message-content">
-        Akkam! Ani gargaaraa Waldaa Duuka Bu'ootaa ti. Maal si gargaaruu danda'a?
+        Akkam! Ani Koree Waldaa Duuka Bu'ootaa ti. Maal isin gargaaruu?
       </div>
       <div class="message-time">Amma</div>
     </div>
@@ -3765,6 +3782,191 @@ function startImalaAuto() {
 document.addEventListener('DOMContentLoaded', () => {
   startKadhannaaAuto();
   startImalaAuto();
+});
+</script>
+
+<script>
+// ── TikTok Sagantaa Countdown & Notification ──
+// Every Friday (Jimaata) evening at 8:00 PM (Ethiopian 2:00 = 8PM local)
+// Ethiopian clock: sa'a 2:00 galgala = 8:00 PM standard time
+
+const TIKTOK_URL   = 'https://www.tiktok.com/@tvsagaleedhugaa';
+const NOTIFY_KEY   = 'wdb_tiktok_notify';
+const NOTIFY_EMAIL_KEY = 'wdb_tiktok_email';
+
+function getNextFridayAt8PM() {
+  const now = new Date();
+  const day = now.getDay(); // 0=Sun,1=Mon,...,5=Fri,6=Sat
+  let daysUntilFriday = (5 - day + 7) % 7;
+  if (daysUntilFriday === 0 && now.getHours() >= 20) daysUntilFriday = 7; // past this week's
+  const next = new Date(now);
+  next.setDate(now.getDate() + daysUntilFriday);
+  next.setHours(20, 0, 0, 0); // 8:00 PM = Ethiopian sa'a 2:00 galgala
+  return next;
+}
+
+function formatCountdown(ms) {
+  if (ms <= 0) return null;
+  const totalSec = Math.floor(ms / 1000);
+  const days  = Math.floor(totalSec / 86400);
+  const hours = Math.floor((totalSec % 86400) / 3600);
+  const mins  = Math.floor((totalSec % 3600) / 60);
+  const secs  = totalSec % 60;
+  if (days > 0)  return `⏳ Guyyaa ${days}, sa'aatii ${hours}, daqiiqaa ${mins} booda`;
+  if (hours > 0) return `⏳ Sa'aatii ${hours}, daqiiqaa ${mins}, sekoondii ${secs} booda`;
+  return `⏳ Daqiiqaa ${mins}, sekoondii ${secs} booda`;
+}
+
+function updateTikTokCountdown() {
+  const el = document.getElementById('tiktokCountdown');
+  if (!el) return;
+  const next = getNextFridayAt8PM();
+  const diff = next - new Date();
+
+  if (diff <= 0) {
+    // It's live right now!
+    el.innerHTML = '🔴 AMMA LIVE — Tuqaa ilaaluu!';
+    el.style.background = 'rgba(255,0,0,0.2)';
+    el.style.color = '#ff4444';
+    showLiveBanner();
+  } else if (diff <= 3600000) {
+    // Within 1 hour — show warning banner
+    el.innerHTML = formatCountdown(diff);
+    showUpcomingBanner(diff);
+  } else {
+    el.innerHTML = formatCountdown(diff);
+    hideBanner();
+  }
+}
+
+function showLiveBanner() {
+  const banner = document.getElementById('tiktokBanner');
+  const text   = document.getElementById('tiktokBannerText');
+  text.innerHTML = '🔴 <strong>LIVE AMMA:</strong> Sagantaa TikTok amma taphachaa jira!';
+  banner.style.background = 'linear-gradient(135deg,#8b0000,#cc0000)';
+  banner.style.display = 'block';
+}
+
+function showUpcomingBanner(diff) {
+  const banner = document.getElementById('tiktokBanner');
+  const text   = document.getElementById('tiktokBannerText');
+  const mins   = Math.floor(diff / 60000);
+  text.innerHTML = `🎵 <strong>Sagantaa TikTok</strong> daqiiqaa ${mins} booda jalqaba — Jimaata galgala sa'a 2:00!`;
+  banner.style.background = 'linear-gradient(135deg,#010101,#333)';
+  banner.style.display = 'block';
+}
+
+function hideBanner() {
+  // Only hide if user hasn't manually dismissed
+}
+
+// Notify button
+function subscribeTikTokNotify() {
+  const btn = document.getElementById('tiktokNotifyBtn');
+
+  // Check if browser supports notifications
+  if (!('Notification' in window)) {
+    // Fallback: ask for email
+    askEmailNotify();
+    return;
+  }
+
+  if (Notification.permission === 'granted') {
+    saveNotifyPreference();
+    btn.textContent = '✅ Beeksifameera!';
+    btn.style.background = '#28a745';
+    btn.style.color = 'white';
+    btn.disabled = true;
+    showToastNotify('✅ Beeksisa argatta! Sagantaan Jimaata galgala sa\'a 2:00 jalqaba.');
+    scheduleNotification();
+  } else if (Notification.permission !== 'denied') {
+    Notification.requestPermission().then(perm => {
+      if (perm === 'granted') {
+        saveNotifyPreference();
+        btn.textContent = '✅ Beeksifameera!';
+        btn.style.background = '#28a745';
+        btn.style.color = 'white';
+        btn.disabled = true;
+        showToastNotify('✅ Beeksisa argatta! Sagantaan Jimaata galgala sa\'a 2:00 jalqaba.');
+        scheduleNotification();
+      } else {
+        askEmailNotify();
+      }
+    });
+  } else {
+    askEmailNotify();
+  }
+}
+
+function askEmailNotify() {
+  const email = prompt('Beeksisa imeeliidhaan argachuuf imeelii keessan galchaa:\n(Browser notification hin hayyamne)');
+  if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    const subs = JSON.parse(localStorage.getItem(NOTIFY_EMAIL_KEY) || '[]');
+    if (!subs.includes(email)) { subs.push(email); localStorage.setItem(NOTIFY_EMAIL_KEY, JSON.stringify(subs)); }
+    const btn = document.getElementById('tiktokNotifyBtn');
+    btn.textContent = '✅ Galmaa\'ameera!';
+    btn.style.background = '#28a745';
+    btn.style.color = 'white';
+    btn.disabled = true;
+    showToastNotify('✅ Imeeliin keessan galmaa\'ame. Sagantaa dura beeksifama.');
+  }
+}
+
+function saveNotifyPreference() {
+  localStorage.setItem(NOTIFY_KEY, JSON.stringify({ subscribed: true, date: new Date().toISOString() }));
+}
+
+function scheduleNotification() {
+  const next = getNextFridayAt8PM();
+  const oneHourBefore = new Date(next.getTime() - 3600000);
+  const msUntil = oneHourBefore - new Date();
+  if (msUntil > 0 && msUntil < 86400000 * 7) {
+    setTimeout(() => {
+      new Notification('🎵 Sagantaa TikTok — Sa\'a 1 booda!', {
+        body: 'Sagantaan TikTok Jimaata galgala sa\'a 2:00 jalqaba. Qophaa\'aa!',
+        icon: 'images/WDB_LOGO_CIRCLE.png',
+        badge: 'images/WDB_LOGO_CIRCLE.png'
+      });
+    }, msUntil);
+    // Also notify at start time
+    const msUntilStart = next - new Date();
+    if (msUntilStart > 0) {
+      setTimeout(() => {
+        new Notification('🔴 Sagantaa TikTok LIVE!', {
+          body: 'Sagantaan amma jalqabe! Tuqaa ilaaluu.',
+          icon: 'images/WDB_LOGO_CIRCLE.png'
+        });
+      }, msUntilStart);
+    }
+  }
+}
+
+function showToastNotify(msg) {
+  // Reuse existing toast if available, else simple alert
+  const t = document.getElementById('toast');
+  if (t) { t.textContent = msg; t.className = 'show success'; setTimeout(() => t.className = '', 4000); }
+}
+
+// Restore button state if already subscribed
+function restoreNotifyBtn() {
+  const pref = JSON.parse(localStorage.getItem(NOTIFY_KEY) || '{}');
+  if (pref.subscribed) {
+    const btn = document.getElementById('tiktokNotifyBtn');
+    if (btn) {
+      btn.textContent = '✅ Beeksifameera!';
+      btn.style.background = '#28a745';
+      btn.style.color = 'white';
+      btn.disabled = true;
+      scheduleNotification();
+    }
+  }
+}
+
+// Start countdown ticker
+document.addEventListener('DOMContentLoaded', () => {
+  updateTikTokCountdown();
+  setInterval(updateTikTokCountdown, 1000);
+  restoreNotifyBtn();
 });
 </script>
 
