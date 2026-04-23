@@ -1221,38 +1221,7 @@
         <h3>🎵 Lallaba & Faarfannaa</h3>
         <div class="now-playing-bar" id="nowPlayingBar">▶ Amma taphatamaa jira: <span id="nowPlayingTitle"></span></div>
         <ul class="sermon-list" id="sermonList">
-          <li class="sermon-item" onclick="playSermon(0)">
-            <span class="sermon-play-icon">▶</span>
-            <div class="sermon-info">
-              <div class="sermon-title">Lallaba Wangeelaa - Yaa'ii Ji'aa</div>
-              <div class="sermon-meta">Waldaa Duuka Bu'ootaa • Amajjii 2026</div>
-            </div>
-            <span class="sermon-duration">45:00</span>
-          </li>
-          <li class="sermon-item" onclick="playSermon(1)">
-            <span class="sermon-play-icon">▶</span>
-            <div class="sermon-info">
-              <div class="sermon-title">Faarfannaa Kadhannaa</div>
-              <div class="sermon-meta">Garee Faarfannaa • Guraandhala 2026</div>
-            </div>
-            <span class="sermon-duration">32:15</span>
-          </li>
-          <li class="sermon-item" onclick="playSermon(2)">
-            <span class="sermon-play-icon">▶</span>
-            <div class="sermon-info">
-              <div class="sermon-title">Barnoota Macaafaa - Faarfannaa 23</div>
-              <div class="sermon-meta">Waldaa Duuka Bu'ootaa • Bitootessa 2026</div>
-            </div>
-            <span class="sermon-duration">28:40</span>
-          </li>
-          <li class="sermon-item" onclick="playSermon(3)">
-            <span class="sermon-play-icon">▶</span>
-            <div class="sermon-info">
-              <div class="sermon-title">Imala gara Kawaalotaa - Gabaasa</div>
-              <div class="sermon-meta">Waldaa Duuka Bu'ootaa • Ebla 2026</div>
-            </div>
-            <span class="sermon-duration">18:55</span>
-          </li>
+          <!-- Dynamically populated from admin localStorage -->
         </ul>
         <div class="player-controls">
           <button onclick="sermonPrev()" title="Dura">⏮</button>
@@ -3681,34 +3650,85 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
 });
 
 // ── Audio Sermon Player ──
-const sermons = [
-  { title: "Lallaba Wangeelaa - Yaa'ii Ji'aa", src: '' },
-  { title: 'Faarfannaa Kadhannaa',              src: '' },
-  { title: 'Barnoota Macaafaa - Faarfannaa23',   src: '' },
-  { title: 'Imala gara Kawaalotaa - Gabaasa',   src: '' },
+const defaultSermons = [
+  { title: "Lallaba Wangeelaa - Yaa'ii Ji'aa", speaker:"Waldaa Duuka Bu'ootaa", date:"Amajjii 2026",    duration:"45:00", src: '', type:'audio' },
+  { title: 'Faarfannaa Kadhannaa',              speaker:'Garee Faarfannaa',       date:"Guraandhala 2026", duration:"32:15", src: '', type:'audio' },
+  { title: 'Barnoota Macaafaa - Faarfannaa 23', speaker:"Waldaa Duuka Bu'ootaa", date:"Bitootessa 2026", duration:"28:40", src: '', type:'audio' },
+  { title: 'Imala gara Kawaalotaa - Gabaasa',   speaker:"Waldaa Duuka Bu'ootaa", date:"Ebla 2026",       duration:"18:55", src: '', type:'audio' },
 ];
+
+function loadSermons() {
+  const adminSermons = JSON.parse(localStorage.getItem('wdb_sermons') || '[]');
+  const mapped = adminSermons.map(s => ({
+    title:    s.title,
+    speaker:  s.speaker || "Waldaa Duuka Bu'ootaa",
+    date:     s.date    || '',
+    duration: s.duration ? s.duration + ':00' : '—',
+    src:      s.src     || '',
+    type:     s.src && s.src.includes('youtube') ? 'youtube' : 'audio'
+  }));
+  // Admin sermons first; if none, show defaults
+  return mapped.length > 0 ? mapped : defaultSermons;
+}
+
+let sermons = [];
 let currentSermon = -1;
 const audio = document.getElementById('audioPlayer');
 
+function renderSermonList() {
+  sermons = loadSermons(); // always re-read fresh
+  const list = document.getElementById('sermonList');
+  if (!list) return;
+  if (!sermons.length) {
+    list.innerHTML = '<li style="color:rgba(255,255,255,0.5);padding:1rem;text-align:center;">Lallaba hin jiru.</li>';
+    return;
+  }
+  list.innerHTML = sermons.map((s, i) => `
+    <li class="sermon-item" onclick="playSermon(${i})">
+      <span class="sermon-play-icon">${s.type === 'youtube' ? '▶ yt' : '▶'}</span>
+      <div class="sermon-info">
+        <div class="sermon-title">${s.title}</div>
+        <div class="sermon-meta">${s.speaker}${s.date ? ' • ' + s.date : ''}</div>
+      </div>
+      <span class="sermon-duration">${s.duration || '—'}</span>
+    </li>`).join('');
+}
+
 function playSermon(i) {
   currentSermon = i;
+  const s = sermons[i];
   document.querySelectorAll('.sermon-item').forEach((el, idx) => {
     el.classList.toggle('playing', idx === i);
     el.querySelector('.sermon-play-icon').textContent = idx === i ? '⏸' : '▶';
   });
-  document.getElementById('nowPlayingTitle').textContent = sermons[i].title;
+  document.getElementById('nowPlayingTitle').textContent = s.title;
   document.getElementById('nowPlayingBar').classList.add('active');
   document.getElementById('playPauseBtn').textContent = '⏸';
-  if (sermons[i].src) { audio.src = sermons[i].src; audio.play(); }
+
+  if (s.type === 'youtube') {
+    // Open YouTube in new tab — can't embed audio-only
+    audio.pause();
+    window.open(s.src, '_blank');
+    document.getElementById('playPauseBtn').textContent = '▶';
+  } else if (s.src) {
+    audio.src = s.src;
+    audio.play().catch(() => {
+      document.getElementById('playerTime').textContent = 'Faayilii hin argamne';
+    });
+  } else {
+    document.getElementById('playerTime').textContent = 'Faayilii hin jiru';
+  }
 }
+
 function togglePlayPause() {
   if (currentSermon === -1) { playSermon(0); return; }
   if (audio.paused) { audio.play(); document.getElementById('playPauseBtn').textContent = '⏸'; }
-  else { audio.pause(); document.getElementById('playPauseBtn').textContent = '▶'; }
+  else              { audio.pause(); document.getElementById('playPauseBtn').textContent = '▶'; }
 }
 function sermonNext() { playSermon((currentSermon + 1) % sermons.length); }
 function sermonPrev() { playSermon((currentSermon - 1 + sermons.length) % sermons.length); }
 function seekAudio(v) { if (audio.duration) audio.currentTime = audio.duration * v / 100; }
+
 audio.addEventListener('timeupdate', () => {
   if (!audio.duration) return;
   document.getElementById('progressBar').value = (audio.currentTime / audio.duration) * 100;
@@ -3716,6 +3736,16 @@ audio.addEventListener('timeupdate', () => {
   document.getElementById('playerTime').textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`;
 });
 audio.addEventListener('ended', sermonNext);
+audio.addEventListener('play',  () => document.getElementById('playPauseBtn').textContent = '⏸');
+audio.addEventListener('pause', () => document.getElementById('playPauseBtn').textContent = '▶');
+
+// Render list on load
+document.addEventListener('DOMContentLoaded', renderSermonList);
+
+// Auto-refresh when admin adds/deletes sermons (same browser, different tab)
+window.addEventListener('storage', e => {
+  if (e.key === 'wdb_sermons') renderSermonList();
+});
 </script>
 
 <script>
