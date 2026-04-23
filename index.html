@@ -717,17 +717,56 @@
 
     /* Responsive Design */
     @media (max-width: 768px) {
+      /* Layout */
       .hero-container { grid-template-columns: 1fr; text-align: center; }
-      .hero h1 { font-size: 2.5rem; }
-      .events-grid { grid-template-columns: 1fr; }
-      .footer-content { grid-template-columns: 1fr; }
+      .hero { background-attachment: scroll; height: auto; padding: 4rem 0; }
+      .hero h1 { font-size: 2rem; }
+      .hero p { font-size: 1rem; }
+      .hero-image { display: none; }
+      .hero-buttons { flex-direction: column; align-items: center; gap: 0.8rem; }
+      .btn { width: 100%; text-align: center; }
+
+      /* Grids → single column */
+      .events-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .services-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+      .footer-content { grid-template-columns: 1fr; gap: 1.5rem; }
       .newsletter-form { flex-direction: column; }
-      .logo-container { flex-direction: column; gap: 0.5rem; }
-      .logo-image { width: 40px; height: 40px; }
-      .logo { font-size: 1.2rem; }
       .form-row { grid-template-columns: 1fr; }
 
-      /* Hamburger active */
+      /* Logo */
+      .logo-container { gap: 0.5rem; }
+      .logo-image { width: 40px; height: 40px; }
+      .logo { font-size: 1.1rem; }
+
+      /* Sections */
+      .section { margin-bottom: 3rem; }
+      .container { padding: 0 1rem; }
+      .community-hero { height: 40vh; }
+      .community-content h2 { font-size: 1.8rem; }
+      .community-content p { font-size: 1rem; }
+      .events-section { padding: 2rem 0; }
+      .events-content h2 { font-size: 1.8rem; }
+      .gallery-section { padding: 2rem 0; }
+      .gallery-section h2 { font-size: 1.8rem; }
+      .services-section { padding: 2rem 0; }
+
+      /* Program sections */
+      .kadhannaa-slideshow { height: 220px; }
+
+      /* Contact form */
+      .contact-form-wrap { padding: 1.5rem; }
+
+      /* Sermon player */
+      .player-controls { flex-wrap: wrap; gap: 0.5rem; }
+      .player-progress { width: 100%; order: 3; }
+
+      /* Back to top & chat */
+      #backToTop { bottom: 80px; right: 10px; }
+      .chat-widget { bottom: 15px; right: 10px; }
+
+      /* Hamburger nav */
       .hamburger { display: flex; }
       nav {
         position: fixed; top: 0; right: -100%;
@@ -749,6 +788,19 @@
         background: rgba(0,0,0,0.5); z-index: 1040;
       }
       .nav-overlay.active { display: block; }
+    }
+
+    /* Small phones */
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 1.7rem; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .hero-badge { font-size: 0.8rem; }
+      .card { padding: 1.2rem; }
+      .sermon-player { padding: 1.2rem; }
+      .contact-form-wrap { padding: 1rem; }
+      #lightbox-prev { left: 5px; }
+      #lightbox-next { right: 5px; }
+      .chat-icon { padding: 0.7rem 1rem; font-size: 0.85rem; }
     }
   </style>
 </head>
@@ -1066,8 +1118,9 @@
           <p>Dilbata hunda 10:00 & 14:00.</p>
         </div>
         <div class="service-card">
-          <h3>Sagantaa TikTok</h3>
-          <p>torbanii</p>
+          <h3>🎵 Sagantaa TikTok</h3>
+          <p>Torbanitti sagantaa haaraa ilaali.</p>
+          <a href="https://www.tiktok.com/@tvsagaleedhugaa" target="_blank" rel="noopener" style="color:#d4af37;font-weight:bold;">@tvsagaleedhugaa →</a>
         </div>
       </div>
       <div style="text-align: center; margin-top: 3rem;">
@@ -1229,7 +1282,7 @@
 
   <section class="newsletter">
     <div class="container">
-      <h2>Walqabatanii turaa</h2>
+      <h2>Imeelii Keessan Waliin wal Qabsiisaa</h2>
       <p>Waa'ee taateewwanii fi daawwannaa odeeffannoo argadhaa.</p>
       <form class="newsletter-form" id="newsletterForm" novalidate>
         <input type="email" id="newsletterEmail" placeholder="imeelii@keessan.com" autocomplete="email">
@@ -1240,6 +1293,28 @@
     </div>
   </section>
 </main>
+
+<!-- Social Media Bar -->
+<div style="background:#12293f;padding:1.5rem 0;text-align:center;border-top:3px solid #d4af37;">
+  <p style="color:rgba(255,255,255,0.6);font-size:0.85rem;margin-bottom:1rem;">Nu hordofaa — Follow Us</p>
+  <div style="display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;">
+    <a href="https://www.facebook.com/wdb2004/" target="_blank" rel="noopener"
+       style="display:flex;align-items:center;gap:0.5rem;background:#1877f2;color:white;padding:0.6rem 1.2rem;border-radius:25px;text-decoration:none;font-weight:bold;font-size:0.9rem;transition:opacity 0.3s;"
+       onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+      📘 Facebook
+    </a>
+    <a href="https://www.youtube.com/@WaldaaDuukaBuutotaa" target="_blank" rel="noopener"
+       style="display:flex;align-items:center;gap:0.5rem;background:#ff0000;color:white;padding:0.6rem 1.2rem;border-radius:25px;text-decoration:none;font-weight:bold;font-size:0.9rem;transition:opacity 0.3s;"
+       onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+      ▶️ YouTube
+    </a>
+    <a href="https://www.tiktok.com/@tvsagaleedhugaa" target="_blank" rel="noopener"
+       style="display:flex;align-items:center;gap:0.5rem;background:#010101;color:white;padding:0.6rem 1.2rem;border-radius:25px;text-decoration:none;font-weight:bold;font-size:0.9rem;transition:opacity 0.3s;"
+       onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+      🎵 TikTok
+    </a>
+  </div>
+</div>
 
 <footer>
   <div class="footer-content">
@@ -1261,9 +1336,9 @@
     </div>
     <div class="footer-section">
       <h3>Walqabachuu</h3>
-      <a href="#">Facebook</a>
-      <a href="#">Instagram</a>
-      <a href="#">YouTube</a>
+      <a href="https://www.facebook.com/wdb2004/" target="_blank" rel="noopener">📘 Facebook</a>
+      <a href="https://www.youtube.com/@WaldaaDuukaBuutotaa" target="_blank" rel="noopener">▶️ YouTube</a>
+      <a href="https://www.tiktok.com/@tvsagaleedhugaa" target="_blank" rel="noopener">🎵 TikTok</a>
     </div>
   </div>
   <div class="footer-bottom">
