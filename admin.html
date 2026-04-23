@@ -6,11 +6,17 @@
   <title>Bulchiinsa Waldaa - Admin Panel</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'Georgia',serif;background:#f0f2f5;color:#333;min-height:100vh;}
+    body{
+      font-family:'Georgia',serif;
+      color:#333;
+      min-height:100vh;
+      background: linear-gradient(rgba(26,59,92,0.82), rgba(26,59,92,0.82)),
+                  url('images/wdb l.png') center/cover fixed;
+    }
 
     /* ── LOGIN SCREEN ── */
     #loginScreen{
-      position:fixed;inset:0;background:linear-gradient(135deg,#1a3b5c,#2c5282);
+      position:fixed;inset:0;background:rgba(10,25,45,0.55);backdrop-filter:blur(3px);
       display:flex;align-items:center;justify-content:center;z-index:9999;
     }
     .login-box{
@@ -67,7 +73,7 @@
     .nav-badge{background:#e74c3c;color:white;font-size:0.7rem;padding:0.1rem 0.5rem;border-radius:10px;margin-left:auto;}
 
     /* ── MAIN CONTENT ── */
-    .main-content{flex:1;padding:2rem;overflow-y:auto;}
+    .main-content{flex:1;padding:2rem;overflow-y:auto;background:rgba(240,242,245,0.92);backdrop-filter:blur(2px);}
     .page{display:none;}
     .page.active{display:block;}
     .page-title{color:#1a3b5c;font-size:1.8rem;margin-bottom:0.3rem;}
@@ -383,7 +389,11 @@
             <div class="form-group"><label>Lallabu / Faarfataa</label><input type="text" id="srmSpeaker" placeholder="Maqaa..."></div>
             <div class="form-group"><label>Yeroo (daqiiqaa)</label><input type="number" id="srmDuration" placeholder="45"></div>
           </div>
-          <div class="form-group"><label>Faayilii Audio (URL ykn path)</label><input type="text" id="srmSrc" placeholder="audio/lallaba.mp3"></div>
+          <div class="form-group">
+            <label>🔗 Audio URL, YouTube link, ykn faayilii path</label>
+            <input type="text" id="srmSrc" placeholder="https://youtube.com/watch?v=... ykn audio/lallaba.mp3">
+            <small style="color:#888;font-size:0.8rem;">YouTube link yoo ta'e, tuqaan browser haaraa keessatti ni bana. MP3 yoo ta'e, player keessatti ni taphata.</small>
+          </div>
           <button class="btn btn-primary" onclick="addSermon()">💾 Olkaa'i</button>
         </div>
         <div class="card">
