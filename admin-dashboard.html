@@ -526,9 +526,185 @@
 
         function logout() {
             if (confirm('Are you sure you want to logout?')) {
-                window.location.href = 'admin-login.html';
+                // Show loading state
+                const logoutBtn = document.querySelector('button[onclick="logout()"]');
+                const originalContent = logoutBtn.innerHTML;
+                logoutBtn.innerHTML = '<div class="loading-spinner"></div> Logging out...';
+                logoutBtn.disabled = true;
+                
+                // Show logout notification
+                showNotification('info', 'Logging Out', 'Clearing session data...');
+                
+                // Clear session data
+                sessionStorage.removeItem('wdb_admin_logged_in');
+                sessionStorage.removeItem('wdb_admin_user');
+                localStorage.removeItem('wdb_admin_remember');
+                
+                // Clear any other admin-related data
+                sessionStorage.clear();
+                
+                // Show success message briefly before redirect
+                setTimeout(() => {
+                    showNotification('success', 'Logged Out', 'Redirecting to login page...');
+                    
+                    setTimeout(() => {
+                        // Redirect to login page
+                        window.location.href = 'admin-login.html';
+                    }, 1000);
+                }, 1000);
             }
         }
+        
+        // Notification system
+        function showNotification(type, title, message) {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.admin-notification');
+            existingNotifications.forEach(notification => notification.remove());
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `admin-notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <div class="notification-icon">
+                        ${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'info' ? 'ℹ️' : '⚠️'}
+                    </div>
+                    <div class="notification-text">
+                        <div class="notification-title">${title}</div>
+                        <div class="notification-message">${message}</div>
+                    </div>
+                    <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+                </div>
+            `;
+
+            // Add to page
+            document.body.appendChild(notification);
+
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 4000);
+        }
+        
+        // Add notification styles
+        if (!document.querySelector('#notificationStyle')) {
+            const style = document.createElement('style');
+            style.id = 'notificationStyle';
+            style.textContent = `
+                .admin-notification {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 10000;
+                    max-width: 400px;
+                    border-radius: 12px;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                    animation: slideInRight 0.3s ease;
+                    backdrop-filter: blur(10px);
+                }
+                
+                .admin-notification.success {
+                    background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 0.9));
+                    border-left: 4px solid #10b981;
+                }
+                
+                .admin-notification.error {
+                    background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
+                    border-left: 4px solid #ef4444;
+                }
+                
+                .admin-notification.info {
+                    background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(37, 99, 235, 0.9));
+                    border-left: 4px solid #3b82f6;
+                }
+                
+                @keyframes slideInRight {
+                    from {
+                        opacity: 0;
+                        transform: translateX(100%);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateX(0);
+                    }
+                }
+                
+                .notification-content {
+                    display: flex;
+                    align-items: flex-start;
+                    padding: 16px;
+                    gap: 12px;
+                    color: white;
+                }
+                
+                .notification-icon {
+                    font-size: 1.5rem;
+                    flex-shrink: 0;
+                }
+                
+                .notification-text {
+                    flex: 1;
+                }
+                
+                .notification-title {
+                    font-weight: 600;
+                    margin-bottom: 4px;
+                }
+                
+                .notification-message {
+                    font-size: 0.9rem;
+                    opacity: 0.9;
+                }
+                
+                .notification-close {
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                    padding: 0;
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: background 0.3s ease;
+                    flex-shrink: 0;
+                    opacity: 0.7;
+                }
+                
+                .notification-close:hover {
+                    background: rgba(255, 255, 255, 0.2);
+                    opacity: 1;
+                }
+                
+                .loading-spinner {
+                    display: inline-block;
+                    width: 16px;
+                    height: 16px;
+                    border: 2px solid rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    border-top-color: white;
+                    animation: spin 1s ease-in-out infinite;
+                }
+                
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Check if user is actually logged in on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!sessionStorage.getItem('wdb_admin_logged_in')) {
+                // If not logged in, redirect to login page
+                window.location.href = 'admin-login.html';
+            }
+        });
     </script>
 </body>
 </html>
