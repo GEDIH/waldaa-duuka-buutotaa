@@ -631,9 +631,10 @@
                         <button class="language-btn active" onclick="switchLanguage('or')" data-lang="or">🇪🇹 Oromoo</button>
                         <button class="language-btn" onclick="switchLanguage('en')" data-lang="en">🇬🇧 English</button>
                     </div>
-                    <button onclick="logout()" class="text-white opacity-80 hover:opacity-100 transition-opacity">
-                        <i class="fas fa-sign-out-alt mr-2"></i>
-                        <span data-translate="logout">Logout</span>
+                    <span id="headerUsername" class="text-yellow-400 font-mono text-sm hidden md:inline"></span>
+                    <button onclick="logout()" class="text-white opacity-80 hover:opacity-100 transition-opacity flex items-center gap-2">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span data-translate="logout" class="hidden sm:inline">Logout</span>
                     </button>
                 </div>
             </div>
@@ -1278,27 +1279,35 @@
         }
 
         function loadMemberData() {
-            const memberData = {
-                name: 'Abebe Kebede Tesfaye', memberId: 'WDB-2024-0001',
-                joinDate: 'January 15, 2024',  fullName: 'Abebe Kebede Tesfaye',
-                gender: 'Male', dob: 'March 15, 1990', phone: '+251 911 234 567',
-                email: 'abebe@example.com', address: 'Addis Ababa, Ethiopia',
-                church: 'St. Mary Orthodox Church', baptized: 'Yes',
-                service: 'Choir Ministry', howHeard: 'Facebook'
-            };
-            document.getElementById('memberName').textContent   = `Welcome, ${memberData.name}!`;
-            document.getElementById('memberId').textContent     = memberData.memberId;
-            document.getElementById('joinDate').textContent     = memberData.joinDate;
-            document.getElementById('profileFullName').textContent = memberData.fullName;
-            document.getElementById('profileGender').textContent   = memberData.gender;
-            document.getElementById('profileDOB').textContent      = memberData.dob;
-            document.getElementById('profilePhone').textContent    = memberData.phone;
-            document.getElementById('profileEmail').textContent    = memberData.email;
-            document.getElementById('profileAddress').textContent  = memberData.address;
-            document.getElementById('profileChurch').textContent   = memberData.church;
-            document.getElementById('profileBaptized').textContent = memberData.baptized;
-            document.getElementById('profileService').textContent  = memberData.service;
-            document.getElementById('profileHowHeard').textContent = memberData.howHeard;
+            // ── Read from session (set by member-login.html) ──
+            const raw = sessionStorage.getItem('wdb_member_user');
+            const account = raw ? JSON.parse(raw) : null;
+
+            const fullName  = account ? `${account.firstName} ${account.lastName}` : 'Member';
+            const memberId  = account?.memberId  || '—';
+            const phone     = account?.phone     || '—';
+            const joinDate  = account?.createdAt
+                ? new Date(account.createdAt).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
+                : '—';
+            const username  = account?.username  || '—';
+
+            document.getElementById('memberName').textContent      = `Welcome, ${fullName}!`;
+            document.getElementById('memberId').textContent        = memberId;
+            document.getElementById('joinDate').textContent        = joinDate;
+            document.getElementById('profileFullName').textContent = fullName;
+            document.getElementById('profileGender').textContent   = 'Not specified';
+            document.getElementById('profileDOB').textContent      = 'Not specified';
+            document.getElementById('profilePhone').textContent    = phone;
+            document.getElementById('profileEmail').textContent    = account?.email || 'Not provided';
+            document.getElementById('profileAddress').textContent  = account?.address || 'Not specified';
+            document.getElementById('profileChurch').textContent   = account?.church  || 'Not specified';
+            document.getElementById('profileBaptized').textContent = account?.baptized || 'Not specified';
+            document.getElementById('profileService').textContent  = account?.service  || 'Not specified';
+            document.getElementById('profileHowHeard').textContent = account?.howHeard || 'Not specified';
+
+            // Show username badge in header if element exists
+            const userBadge = document.getElementById('headerUsername');
+            if (userBadge) userBadge.textContent = `@${username}`;
         }
 
         function loadRecentAnnouncements() {
@@ -1316,6 +1325,11 @@
 
         // ── Init ──────────────────────────────────────────────
         window.addEventListener('DOMContentLoaded', function() {
+            // Auth guard — redirect to login if no session
+            if (!sessionStorage.getItem('wdb_member_logged_in')) {
+                window.location.href = 'member-login.html';
+                return;
+            }
             loadMemberData();
             loadRecentAnnouncements();
             renderContributions();
@@ -1323,9 +1337,6 @@
             renderEvents();
             renderWeeklySchedule();
             switchLanguage(currentLanguage);
-            if (!sessionStorage.getItem('wdb_member_logged_in')) {
-                sessionStorage.setItem('wdb_member_logged_in', 'true');
-            }
         });
 
         function editProfile() {
@@ -1470,9 +1481,9 @@
             sessionStorage.clear();
             localStorage.removeItem('wdb_member_remember');
             setTimeout(() => {
-                showNotification('success', 'Logged Out', 'Redirecting to home page...');
-                setTimeout(() => { window.location.href = 'index.html'; }, 1000);
-            }, 1000);
+                showNotification('success', 'Logged Out', 'Redirecting to login page...');
+                setTimeout(() => { window.location.href = 'member-login.html'; }, 800);
+            }, 800);
         }
     </script>
 </body>
