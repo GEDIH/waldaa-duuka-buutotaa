@@ -1130,7 +1130,7 @@
         </div>
         <div class="service-card" id="tiktokCard">
           <h3>🎵 Sagantaa TikTok</h3>
-          <p>Guyyaa Sanbata duraa galgala sa'aatii 2:00 irraa eegalee.</p>
+          <p>Guyyaa Sanbata galgala sa'aatii 2:00 irraa eegalee ni taphata.</p>
           <div id="tiktokCountdown" style="background:rgba(212,175,55,0.15);border-radius:8px;padding:0.6rem;margin:0.8rem 0;font-size:0.85rem;color:#d4af37;font-weight:bold;text-align:center;"></div>
           <a href="https://www.tiktok.com/@tvsagaleedhugaa" target="_blank" rel="noopener" style="color:#d4af37;font-weight:bold;">@tvsagaleedhugaa →</a>
           <div style="margin-top:0.8rem;">
@@ -3824,13 +3824,13 @@ const TIKTOK_URL   = 'https://www.tiktok.com/@tvsagaleedhugaa';
 const NOTIFY_KEY   = 'wdb_tiktok_notify';
 const NOTIFY_EMAIL_KEY = 'wdb_tiktok_email';
 
-function getNextFridayAt8PM() {
+function getNextSaturdayAt8PM() {
   const now = new Date();
-  const day = now.getDay(); // 0=Sun,1=Mon,...,5=Fri,6=Sat
-  let daysUntilFriday = (5 - day + 7) % 7;
-  if (daysUntilFriday === 0 && now.getHours() >= 20) daysUntilFriday = 7; // past this week's
+  const day = now.getDay(); // 0=Sun,1=Mon,...,6=Sat
+  let daysUntilSaturday = (6 - day + 7) % 7;
+  if (daysUntilSaturday === 0 && now.getHours() >= 20) daysUntilSaturday = 7;
   const next = new Date(now);
-  next.setDate(now.getDate() + daysUntilFriday);
+  next.setDate(now.getDate() + daysUntilSaturday);
   next.setHours(20, 0, 0, 0); // 8:00 PM = Ethiopian sa'a 2:00 galgala
   return next;
 }
@@ -3850,7 +3850,7 @@ function formatCountdown(ms) {
 function updateTikTokCountdown() {
   const el = document.getElementById('tiktokCountdown');
   if (!el) return;
-  const next = getNextFridayAt8PM();
+  const next = getNextSaturdayAt8PM();
   const diff = next - new Date();
 
   if (diff <= 0) {
@@ -3881,7 +3881,7 @@ function showUpcomingBanner(diff) {
   const banner = document.getElementById('tiktokBanner');
   const text   = document.getElementById('tiktokBannerText');
   const mins   = Math.floor(diff / 60000);
-  text.innerHTML = `🎵 <strong>Sagantaa TikTok</strong> daqiiqaa ${mins} booda jalqaba — Jimaata galgala sa'a 2:00!`;
+  text.innerHTML = `🎵 <strong>Sagantaa TikTok</strong> daqiiqaa ${mins} booda jalqaba — Sanbata galgala sa'a 2:00!`;
   banner.style.background = 'linear-gradient(135deg,#010101,#333)';
   banner.style.display = 'block';
 }
@@ -3907,7 +3907,7 @@ function subscribeTikTokNotify() {
     btn.style.background = '#28a745';
     btn.style.color = 'white';
     btn.disabled = true;
-    showToastNotify('✅ Beeksisa argatta! Sagantaan Jimaata galgala sa\'a 2:00 jalqaba.');
+    showToastNotify('✅ Beeksisa argatta! Sagantaan Sanbata galgala sa\'a 2:00 jalqaba.');
     scheduleNotification();
   } else if (Notification.permission !== 'denied') {
     Notification.requestPermission().then(perm => {
@@ -3917,7 +3917,7 @@ function subscribeTikTokNotify() {
         btn.style.background = '#28a745';
         btn.style.color = 'white';
         btn.disabled = true;
-        showToastNotify('✅ Beeksisa argatta! Sagantaan Jimaata galgala sa\'a 2:00 jalqaba.');
+        showToastNotify('✅ Beeksisa argatta! Sagantaan Sanbata galgala sa\'a 2:00 jalqaba.');
         scheduleNotification();
       } else {
         askEmailNotify();
@@ -3947,13 +3947,13 @@ function saveNotifyPreference() {
 }
 
 function scheduleNotification() {
-  const next = getNextFridayAt8PM();
+  const next = getNextSaturdayAt8PM();
   const oneHourBefore = new Date(next.getTime() - 3600000);
   const msUntil = oneHourBefore - new Date();
   if (msUntil > 0 && msUntil < 86400000 * 7) {
     setTimeout(() => {
       new Notification('🎵 Sagantaa TikTok — Sa\'a 1 booda!', {
-        body: 'Sagantaan TikTok Jimaata galgala sa\'a 2:00 jalqaba. Qophaa\'aa!',
+        body: 'Sagantaan TikTok Sanbata galgala sa\'a 2:00 jalqaba. Qophaa\'aa!',
         icon: 'images/WDB_LOGO_CIRCLE.png',
         badge: 'images/WDB_LOGO_CIRCLE.png'
       });
