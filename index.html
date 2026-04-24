@@ -872,6 +872,9 @@
         <li><a href="#reserve">Qabachuu</a></li>
         <li><a href="#donate">Kennaa</a></li>
         <li><a href="#contact">Nu Quunnamuuf</a></li>
+        <li><a href="member-registration.html">👥 Galmaa'i</a></li>
+        <li><a href="member-dashboard.html">📊 Dashboard</a></li>
+        <li><a href="admin-login.html" style="opacity: 0.7; font-size: 0.9rem;">⚙️ Admin</a></li>
         <li class="language-switcher">
           <select onchange="switchLanguage(this.value)">
             <option value="om">Afaan Oromoo</option>
@@ -915,7 +918,20 @@
       <p>Kiristaanotni naannoo Oromiyaa amantaa Ortodooksii Tawaahidoo hordofan Afaan Oromoon waa'ee amantaa isaanii baranii karaa Waaqayyoorra akka deddeebi'an barsiisuu dha. Mana sagadaa keenya keessatti bakka qulqulluu qorannoo, seenaa argachuu fi hawaasa keenya waliin walqabachuu.</p>
       <div class="hero-buttons">
         <a href="#tour" class="btn btn-primary">Daawwannaa Qajeelfamaa Galmeessi</a>
-        <a href="#events" class="btn btn-secondary">Taateewwan Ilaali</a>
+        <a href="member-registration.html" class="btn btn-secondary">👥 Miseensa Ta'i</a>
+      </div>
+      
+      <!-- Quick Access Links -->
+      <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+        <a href="member-dashboard.html" style="color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9rem; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; transition: all 0.3s ease;" 
+           onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">
+          📊 Member Dashboard
+        </a>
+        <a href="admin-dashboard.html" style="color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.85rem; padding: 0.4rem 0.8rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; transition: all 0.3s ease;"
+           onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+          ⚙️ Admin Panel
+        </a>
+      </div>="#events" class="btn btn-secondary">Taateewwan Ilaali</a>
       </div>
     </div>
     <div class="hero-image">
@@ -1362,6 +1378,11 @@
     <div class="container">
       <h2>👥 Miseensa Waldichaa Ta'i</h2>
       <p>Waldaa Duuka Bu'ootaa keessatti miseensa ta'uuf galmaa'i. Tajaajila afuurawaa Afaan Oromoon argachuuf nu waliin ta'i.</p>
+      <!-- 
+        OPTION 1 (XAMPP/local): href="membership/member-registration.html"
+        OPTION 2 (separate host): href="https://YOUR-PHP-HOST.com/member-registration.html"
+        OPTION 3 (same server): href="member-registration.html"  ← current
+      -->
       <a href="member-registration.html" class="btn-gold">📋 Amma Galmaa'i →</a>
       <p style="margin-top:1rem;font-size:0.85rem;opacity:0.6;">Galmaa'uun bilisaa fi salphaa dha</p>
     </div>
