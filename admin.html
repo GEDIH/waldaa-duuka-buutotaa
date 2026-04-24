@@ -10,13 +10,24 @@
       font-family:'Georgia',serif;
       color:#333;
       min-height:100vh;
-      background: linear-gradient(rgba(26,59,92,0.82), rgba(26,59,92,0.82)),
-                  url('images/wdb l.png') center/cover fixed;
+      background: url('images/wdb l.png') center/cover fixed;
+      position: relative;
+    }
+    /* Subtle dark veil so content stays readable */
+    body::before {
+      content:'';
+      position:fixed; inset:0;
+      background: rgba(10, 20, 40, 0.55);
+      z-index: 0;
+      pointer-events: none;
     }
 
     /* ── LOGIN SCREEN ── */
     #loginScreen{
-      position:fixed;inset:0;background:rgba(10,25,45,0.55);backdrop-filter:blur(3px);
+      position:fixed;inset:0;
+      background:rgba(5,15,30,0.45);
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
       display:flex;align-items:center;justify-content:center;z-index:9999;
     }
     .login-box{
@@ -43,9 +54,13 @@
     /* ── ADMIN LAYOUT ── */
     #adminApp{display:none;}
     .top-bar{
-      background:#1a3b5c;color:white;padding:0.8rem 2rem;
+      background:rgba(15,35,65,0.85);backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      color:white;padding:0.8rem 2rem;
       display:flex;align-items:center;justify-content:space-between;
-      position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.2);
+      position:sticky;top:0;z-index:100;
+      box-shadow:0 2px 20px rgba(0,0,0,0.4);
+      border-bottom:1px solid rgba(212,175,55,0.3);
     }
     .top-bar-left{display:flex;align-items:center;gap:1rem;}
     .top-bar-left img{width:36px;height:36px;border-radius:50%;object-fit:cover;}
@@ -59,8 +74,14 @@
 
     /* ── SIDEBAR ── */
     .sidebar{
-      width:240px;background:#1a3b5c;color:white;padding:1.5rem 0;
-      flex-shrink:0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;
+      width:240px;
+      background:rgba(15,35,65,0.80);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      color:white;padding:1.5rem 0;
+      flex-shrink:0;position:sticky;top:56px;
+      height:calc(100vh - 56px);overflow-y:auto;
+      border-right:1px solid rgba(212,175,55,0.15);
     }
     .sidebar-section{padding:0.5rem 1.5rem;font-size:0.75rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;margin-top:1rem;}
     .nav-item{
@@ -73,7 +94,7 @@
     .nav-badge{background:#e74c3c;color:white;font-size:0.7rem;padding:0.1rem 0.5rem;border-radius:10px;margin-left:auto;}
 
     /* ── MAIN CONTENT ── */
-    .main-content{flex:1;padding:2rem;overflow-y:auto;background:rgba(240,242,245,0.92);backdrop-filter:blur(2px);}
+    .main-content{flex:1;padding:2rem;overflow-y:auto;background:rgba(240,242,245,0.88);backdrop-filter:blur(2px);}
     .page{display:none;}
     .page.active{display:block;}
     .page-title{color:#1a3b5c;font-size:1.8rem;margin-bottom:0.3rem;}
@@ -260,6 +281,7 @@
       <div class="sidebar-section">Bulchiinsa</div>
       <div class="nav-item" onclick="showPage('messages',this)">✉️ Ergaalee <span class="nav-badge" id="msgBadge">0</span></div>
       <div class="nav-item" onclick="showPage('subscribers',this)">👥 Miseensota</div>
+      <div class="nav-item" onclick="showPage('announcements',this)">📢 Beeksisaalee</div>
       <div class="nav-item" onclick="showPage('events',this)">📅 Taateewwan</div>
       <div class="nav-item" onclick="showPage('sermons',this)">🎵 Lallaba</div>
 
@@ -338,6 +360,48 @@
             <table>
               <thead><tr><th>#</th><th>Imeelii</th><th>Guyyaa Galmaa'e</th><th>Hojii</th></tr></thead>
               <tbody id="subscribersBody"><tr><td colspan="4" style="text-align:center;color:#888;padding:2rem;">Miseensa hin jiru.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ANNOUNCEMENTS ── -->
+      <div class="page" id="page-announcements">
+        <div class="page-title">📢 Beeksisaalee</div>
+        <div class="page-sub">Beeksisaalee websaayitii irratti maxxansi</div>
+        <div class="card">
+          <h3>➕ Beeksisa Haaraa Ida'i</h3>
+          <div class="form-group">
+            <label>Mata Duree *</label>
+            <input type="text" id="annTitle" placeholder="Beeksisa mata duree...">
+          </div>
+          <div class="form-group">
+            <label>Ergaa *</label>
+            <textarea id="annBody" rows="3" placeholder="Beeksisa guutuu..."></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Guyyaa</label>
+              <input type="date" id="annDate">
+            </div>
+            <div class="form-group">
+              <label>Gosa</label>
+              <select id="annUrgent">
+                <option value="0">📢 Beeksisa Idilee</option>
+                <option value="1">🔴 Hatattama</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="addAnnouncement()">💾 Maxxansi</button>
+        </div>
+        <div class="card">
+          <h3>📋 Beeksisaalee Jiran</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Mata Duree</th><th>Ergaa</th><th>Guyyaa</th><th>Gosa</th><th>Hojii</th></tr></thead>
+              <tbody id="announcementsBody">
+                <tr><td colspan="5" style="text-align:center;color:#888;padding:2rem;">Beeksisa hin jiru.</td></tr>
+              </tbody>
             </table>
           </div>
         </div>
@@ -639,7 +703,8 @@ function showPage(id, el) {
     if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${id}'`)) b.classList.add('active');
   });
   const loaders = { dashboard: refreshDashboard, subscribers: renderSubscribers,
-    messages: renderMessages, events: renderEvents, sermons: renderSermons, gallery: renderGallery };
+    messages: renderMessages, announcements: renderAnnouncements,
+    events: renderEvents, sermons: renderSermons, gallery: renderGallery };
   if (loaders[id]) loaders[id]();
 }
 
@@ -762,6 +827,52 @@ function exportSubscribers() {
   a.download = 'miseensota.csv';
   a.click();
   toast('CSV buufatame!');
+}
+
+// ══════════════════════════════════════════
+//  ANNOUNCEMENTS
+// ══════════════════════════════════════════
+const ANN_KEY = 'wdb_announcements';
+
+function addAnnouncement() {
+  const title  = document.getElementById('annTitle').value.trim();
+  const body   = document.getElementById('annBody').value.trim();
+  const date   = document.getElementById('annDate').value || new Date().toISOString();
+  const urgent = document.getElementById('annUrgent').value === '1';
+  if (!title || !body) { toast('Mata duree fi ergaa barreessi.', 'error'); return; }
+  const list = getData(ANN_KEY);
+  list.push({ id: Date.now(), title, body, date, urgent });
+  setData(ANN_KEY, list);
+  ['annTitle','annBody','annDate'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('annUrgent').value = '0';
+  renderAnnouncements();
+  window.dispatchEvent(new StorageEvent('storage', { key: ANN_KEY }));
+  toast("Beeksisi maxxanfame!");
+}
+
+function renderAnnouncements() {
+  const list  = getData(ANN_KEY);
+  const tbody = document.getElementById('announcementsBody');
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#888;padding:2rem;">Beeksisa hin jiru.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.slice().reverse().map(a => `
+    <tr>
+      <td><strong>${a.title}</strong></td>
+      <td style="font-size:0.85rem;max-width:200px;">${a.body.substring(0,60)}${a.body.length>60?'...':''}</td>
+      <td style="font-size:0.8rem;color:#888;">${a.date ? new Date(a.date).toLocaleDateString() : '—'}</td>
+      <td><span class="badge ${a.urgent?'badge-new':'badge-read'}">${a.urgent?'🔴 Hatattama':'📢 Idilee'}</span></td>
+      <td><button class="btn btn-sm btn-danger" onclick="deleteAnnouncement(${a.id})">🗑</button></td>
+    </tr>`).join('');
+}
+
+function deleteAnnouncement(id) {
+  if (!confirm('Beeksisa kana haquuf mirkaneessi?')) return;
+  setData(ANN_KEY, getData(ANN_KEY).filter(a => a.id !== id));
+  renderAnnouncements();
+  window.dispatchEvent(new StorageEvent('storage', { key: ANN_KEY }));
+  toast('Beeksisi haqame.');
 }
 
 // ══════════════════════════════════════════
