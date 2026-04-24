@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Miseensa Ta'uuf Galmaa'i - Waldaa Duuka Bu'ootaa</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Georgia',serif;background:#f0f2f5;color:#333;min-height:100vh;}
+
+    /* Header */
+    .reg-header{
+      background:#1a3b5c;color:white;padding:1rem 2rem;
+      display:flex;align-items:center;gap:1rem;
+      box-shadow:0 2px 10px rgba(0,0,0,0.2);
+    }
+    .reg-header img{width:45px;height:45px;border-radius:50%;object-fit:cover;}
+    .reg-header h1{font-size:1.2rem;}
+    .reg-header a{margin-left:auto;color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.9rem;}
+    .reg-header a:hover{color:#d4af37;}
+
+    /* Hero */
+    .reg-hero{
+      background:linear-gradient(135deg,#1a3b5c,#2c5282);
+      color:white;text-align:center;padding:3rem 1rem;
+    }
+    .reg-hero h2{font-size:2rem;color:#d4af37;margin-bottom:0.5rem;}
+    .reg-hero p{opacity:0.85;font-size:1rem;max-width:500px;margin:0 auto;}
+
+    /* Form Container */
+    .reg-container{max-width:700px;margin:2rem auto;padding:0 1rem 3rem;}
+
+    .reg-card{
+      background:white;border-radius:15px;padding:2rem;
+      box-shadow:0 5px 20px rgba(0,0,0,0.08);margin-bottom:1.5rem;
+    }
+    .reg-card h3{
+      color:#1a3b5c;font-size:1.1rem;margin-bottom:1.5rem;
+      padding-bottom:0.8rem;border-bottom:2px solid #f0f2f5;
+      display:flex;align-items:center;gap:0.5rem;
+    }
+
+    /* Steps */
+    .steps{display:flex;justify-content:center;gap:0;margin-bottom:2rem;}
+    .step{
+      display:flex;flex-direction:column;align-items:center;gap:0.3rem;
+      flex:1;max-width:120px;position:relative;
+    }
+    .step:not(:last-child)::after{
+      content:'';position:absolute;top:16px;left:60%;width:80%;height:2px;
+      background:#e9ecef;z-index:0;
+    }
+    .step.done::after{background:#d4af37;}
+    .step-num{
+      width:32px;height:32px;border-radius:50%;background:#e9ecef;
+      color:#888;font-weight:bold;font-size:0.85rem;
+      display:flex;align-items:center;justify-content:center;z-index:1;
+      transition:all 0.3s;
+    }
+    .step.active .step-num{background:#d4af37;color:#1a3b5c;}
+    .step.done .step-num{background:#28a745;color:white;}
+    .step-label{font-size:0.72rem;color:#888;text-align:center;}
+    .step.active .step-label{color:#1a3b5c;font-weight:bold;}
+
+    /* Form fields */
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+    .form-group{margin-bottom:1rem;}
+    .form-group label{display:block;font-weight:600;color:#1a3b5c;font-size:0.88rem;margin-bottom:0.4rem;}
+    .form-group input,.form-group select,.form-group textarea{
+      width:100%;padding:0.8rem 1rem;border:2px solid #e9ecef;border-radius:8px;
+      font-size:0.95rem;font-family:inherit;outline:none;transition:border-color 0.3s;
+    }
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#d4af37;}
+    .form-group input.err,.form-group select.err{border-color:#e74c3c;}
+    .err-msg{color:#e74c3c;font-size:0.78rem;margin-top:0.3rem;display:none;}
+    .has-error .err-msg{display:block;}
+    .required{color:#e74c3c;}
+
+    /* Buttons */
+    .btn-row{display:flex;gap:1rem;justify-content:flex-end;margin-top:1.5rem;}
+    .btn{padding:0.8rem 2rem;border:none;border-radius:10px;font-weight:bold;cursor:pointer;font-size:0.95rem;transition:all 0.3s;}
+    .btn-primary{background:linear-gradient(135deg,#d4af37,#b8941f);color:#1a3b5c;}
+    .btn-primary:hover{background:linear-gradient(135deg,#1a3b5c,#2c5282);color:white;transform:translateY(-1px);}
+    .btn-secondary{background:#f0f2f5;color:#555;border:2px solid #e9ecef;}
+    .btn-secondary:hover{border-color:#1a3b5c;color:#1a3b5c;}
+
+    /* Section pages */
+    .reg-section{display:none;}
+    .reg-section.active{display:block;}
+
+    /* Success */
+    .success-box{
+      text-align:center;padding:3rem 2rem;
+      background:white;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.08);
+    }
+    .success-icon{font-size:4rem;margin-bottom:1rem;}
+    .success-box h2{color:#1a3b5c;margin-bottom:0.5rem;}
+    .success-box p{color:#666;margin-bottom:1.5rem;}
+    .reg-id{
+      background:#fef9e7;border:2px solid #d4af37;border-radius:10px;
+      padding:1rem;font-size:1.3rem;font-weight:bold;color:#1a3b5c;
+      letter-spacing:2px;margin:1rem 0;
+    }
+
+    @media(max-width:600px){
+      .form-row{grid-template-columns:1fr;}
+      .reg-hero h2{font-size:1.5rem;}
+      .reg-card{padding:1.2rem;}
+      .steps{gap:0;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="reg-header">
+  <img src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo">
+  <h1>Waldaa Duuka Bu'ootaa</h1>
+  <a href="index.html">← Duubatti Deebi'i</a>
+</div>
+
+<div class="reg-hero">
+  <h2>👥 Miseensa Galmaa'i</h2>
+  <p>Waldaa Duuka Bu'ootaa keessatti miseensa ta'uuf foormii armaan gadii guuti.</p>
+</div>
+
+<div class="reg-container">
+
+  <!-- Steps indicator -->
+  <div class="steps" id="stepsBar">
+    <div class="step active" id="step1"><div class="step-num">1</div><div class="step-label">Odeeffannoo</div></div>
+    <div class="step" id="step2"><div class="step-num">2</div><div class="step-label">Amantaa</div></div>
+    <div class="step" id="step3"><div class="step-num">3</div><div class="step-label">Mirkaneessi</div></div>
+  </div>
+
+  <!-- ── SECTION 1: Personal Info ── -->
+  <div class="reg-section active" id="sec1">
+    <div class="reg-card">
+      <h3>👤 Odeeffannoo Dhuunfaa</h3>
+      <div class="form-row">
+        <div class="form-group" id="fg-fname">
+          <label>Maqaa Jalqabaa <span class="required">*</span></label>
+          <input type="text" id="fname" placeholder="Maqaa...">
+          <div class="err-msg">Maqaa barreessi</div>
+        </div>
+        <div class="form-group" id="fg-lname">
+          <label>Maqaa Abbaa <span class="required">*</span></label>
+          <input type="text" id="lname" placeholder="Maqaa abbaa...">
+          <div class="err-msg">Maqaa abbaa barreessi</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group" id="fg-gender">
+          <label>Saala <span class="required">*</span></label>
+          <select id="gender">
+            <option value="">Filadhu...</option>
+            <option>Dhiira</option>
+            <option>Dubartii</option>
+          </select>
+          <div class="err-msg">Saala filadhu</div>
+        </div>
+        <div class="form-group" id="fg-dob">
+          <label>Guyyaa Dhalootaa</label>
+          <input type="date" id="dob">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group" id="fg-phone">
+          <label>Lakkoofsa Bilbilaa <span class="required">*</span></label>
+          <input type="tel" id="phone" placeholder="+251 9XX XXX XXX">
+          <div class="err-msg">Lakkoofsa bilbilaa barreessi</div>
+        </div>
+        <div class="form-group" id="fg-email">
+          <label>Imeelii</label>
+          <input type="email" id="email" placeholder="imeelii@keessan.com">
+        </div>
+      </div>
+      <div class="form-group" id="fg-address">
+        <label>Teessoo (Magaalaa/Aanaa) <span class="required">*</span></label>
+        <input type="text" id="address" placeholder="Finfinnee, Oromiyaa...">
+        <div class="err-msg">Teessoo barreessi</div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goToSec2()">Itti Aanaa →</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: Faith Info ── -->
+  <div class="reg-section" id="sec2">
+    <div class="reg-card">
+      <h3>✝️ Odeeffannoo Amantaa</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Mana Kiristaanaa Ammaa</label>
+          <input type="text" id="currentChurch" placeholder="Mana kiristaanaa jirtu...">
+        </div>
+        <div class="form-group" id="fg-baptized">
+          <label>Cuuphaa Fudhattee? <span class="required">*</span></label>
+          <select id="baptized">
+            <option value="">Filadhu...</option>
+            <option value="eeyyee">Eeyyee</option>
+            <option value="lakki">Lakki</option>
+          </select>
+          <div class="err-msg">Deebii filadhu</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tajaajila Waldaa Keessatti Barbaaddu</label>
+        <select id="service">
+          <option value="">Filadhu...</option>
+          <option>Faarfannaa</option>
+          <option>Barnoota Macaafaa</option>
+          <option>Kadhannaa</option>
+          <option>Gargaarsa Hawaasaa</option>
+          <option>Hogganummaa</option>
+          <option>Biroo</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Waa'ee Waldichaa Akkamitti Dhagahatte?</label>
+        <select id="howHeard">
+          <option value="">Filadhu...</option>
+          <option>Hiriyaa/Maatii</option>
+          <option>Facebook</option>
+          <option>YouTube</option>
+          <option>TikTok</option>
+          <option>Biroo</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Yaada Dabalataa</label>
+        <textarea id="notes" rows="3" placeholder="Yaada ykn gaaffii qabduu..."></textarea>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goToSec1()">← Duubatti</button>
+      <button class="btn btn-primary" onclick="goToSec3()">Mirkaneessi →</button>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: Review ── -->
+  <div class="reg-section" id="sec3">
+    <div class="reg-card">
+      <h3>✅ Odeeffannoo Mirkaneessi</h3>
+      <div id="reviewContent" style="font-size:0.95rem;line-height:2;"></div>
+      <div style="background:#fef9e7;border-left:4px solid #d4af37;padding:1rem;border-radius:8px;margin-top:1rem;font-size:0.88rem;color:#555;">
+        🔒 Odeeffannoon keessan nageenya qabeessa ta'ee eegama. Waldaa Duuka Bu'ootaa qofaaf fayyadamama.
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goToSec2()">← Duubatti</button>
+      <button class="btn btn-primary" onclick="submitRegistration()">📋 Galmaa'i ✓</button>
+    </div>
+  </div>
+
+  <!-- ── SUCCESS ── -->
+  <div class="reg-section" id="secSuccess">
+    <div class="success-box">
+      <div class="success-icon">🎉</div>
+      <h2>Baga Galmoofte!</h2>
+      <p>Baga nagaan Gara Waldaa Duuka Bu'ootaatti dhufte. Galmaa'inni keessan milkaa'inaan xumurame.</p>
+      <div class="reg-id" id="regIdDisplay"></div>
+      <p style="font-size:0.85rem;color:#888;">Lakkoofsa galmaa'inaa kana olkaa'i. Gaaffii yoo qabaatte nu quunnamuu dandeessa.</p>
+      <div style="margin-top:2rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="index.html" class="btn btn-primary">🏠 Mana Deebi'i</a>
+        <button class="btn btn-secondary" onclick="printReg()">🖨️ Maxxansi</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /reg-container -->
+
+<script>
+const MEMBERS_KEY = 'wdb_members';
+let currentSec = 1;
+
+function setStep(n) {
+  currentSec = n;
+  [1,2,3].forEach(i => {
+    document.getElementById('sec'+i).classList.toggle('active', i===n);
+    const s = document.getElementById('step'+i);
+    s.classList.remove('active','done');
+    if (i < n) s.classList.add('done');
+    if (i === n) s.classList.add('active');
+  });
+  document.getElementById('secSuccess').classList.remove('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function validate1() {
+  let ok = true;
+  function chk(fgId, inputId, fn) {
+    const fg = document.getElementById(fgId);
+    const v  = document.getElementById(inputId).value.trim();
+    if (!fn(v)) { fg.classList.add('has-error'); ok = false; }
+    else fg.classList.remove('has-error');
+  }
+  chk('fg-fname',   'fname',   v => v.length > 1);
+  chk('fg-lname',   'lname',   v => v.length > 1);
+  chk('fg-gender',  'gender',  v => v !== '');
+  chk('fg-phone',   'phone',   v => v.length > 6);
+  chk('fg-address', 'address', v => v.length > 2);
+  return ok;
+}
+
+function validate2() {
+  let ok = true;
+  const fg = document.getElementById('fg-baptized');
+  if (!document.getElementById('baptized').value) {
+    fg.classList.add('has-error'); ok = false;
+  } else fg.classList.remove('has-error');
+  return ok;
+}
+
+function goToSec1() { setStep(1); }
+function goToSec2() { if (validate1()) setStep(2); }
+function goToSec3() {
+  if (!validate2()) return;
+  // Build review
+  const data = collectData();
+  document.getElementById('reviewContent').innerHTML = `
+    <table style="width:100%;border-collapse:collapse;">
+      ${row('👤 Maqaa Guutuu', data.fname + ' ' + data.lname)}
+      ${row('⚧ Saala', data.gender)}
+      ${row('📅 Guyyaa Dhalootaa', data.dob || '—')}
+      ${row('📞 Bilbila', data.phone)}
+      ${row('📧 Imeelii', data.email || '—')}
+      ${row('📍 Teessoo', data.address)}
+      ${row('⛪ Mana Kiristaanaa', data.currentChurch || '—')}
+      ${row('✝️ Cuuphaa', data.baptized)}
+      ${row('🙏 Tajaajila', data.service || '—')}
+      ${row('📣 Akkamitti Dhagahatte', data.howHeard || '—')}
+    </table>`;
+  setStep(3);
+}
+
+function row(label, val) {
+  return `<tr>
+    <td style="padding:0.4rem 0.8rem 0.4rem 0;color:#888;font-size:0.85rem;white-space:nowrap;">${label}</td>
+    <td style="padding:0.4rem 0;font-weight:600;color:#1a3b5c;">${val}</td>
+  </tr>`;
+}
+
+function collectData() {
+  return {
+    fname:         document.getElementById('fname').value.trim(),
+    lname:         document.getElementById('lname').value.trim(),
+    gender:        document.getElementById('gender').value,
+    dob:           document.getElementById('dob').value,
+    phone:         document.getElementById('phone').value.trim(),
+    email:         document.getElementById('email').value.trim(),
+    address:       document.getElementById('address').value.trim(),
+    currentChurch: document.getElementById('currentChurch').value.trim(),
+    baptized:      document.getElementById('baptized').value,
+    service:       document.getElementById('service').value,
+    howHeard:      document.getElementById('howHeard').value,
+    notes:         document.getElementById('notes').value.trim(),
+  };
+}
+
+function submitRegistration() {
+  const data     = collectData();
+  const regId    = 'WDB-' + Date.now().toString().slice(-6);
+  const members  = JSON.parse(localStorage.getItem(MEMBERS_KEY) || '[]');
+  members.push({ ...data, regId, date: new Date().toISOString(), status: 'haaraa' });
+  localStorage.setItem(MEMBERS_KEY, JSON.stringify(members));
+
+  // Show success
+  [1,2,3].forEach(i => document.getElementById('sec'+i).classList.remove('active'));
+  document.getElementById('secSuccess').classList.add('active');
+  document.getElementById('regIdDisplay').textContent = regId;
+  [1,2,3].forEach(i => document.getElementById('step'+i).classList.add('done'));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function printReg() { window.print(); }
+</script>
+</body>
+</html>
