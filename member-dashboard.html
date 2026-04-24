@@ -379,6 +379,120 @@
                 max-width: none;
             }
         }
+
+        /* ── Logout Confirmation Modal ── */
+        .logout-confirmation-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+            animation: lcFadeIn 0.2s ease;
+        }
+        @keyframes lcFadeIn { from { opacity:0; } to { opacity:1; } }
+
+        .logout-confirmation-modal {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+            max-width: 420px;
+            width: 90%;
+            overflow: hidden;
+            animation: lcSlideIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes lcSlideIn {
+            from { opacity:0; transform: translateY(-40px) scale(0.9); }
+            to   { opacity:1; transform: translateY(0)    scale(1);   }
+        }
+
+        .logout-modal-header {
+            background: linear-gradient(135deg, #dc3545, #a71e2a);
+            color: white;
+            padding: 28px 30px 20px;
+            text-align: center;
+        }
+        .logout-icon {
+            width: 64px; height: 64px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 14px;
+            font-size: 26px;
+        }
+        .logout-modal-header h3 { margin:0; font-size:1.4rem; font-weight:700; }
+
+        .logout-modal-body {
+            padding: 28px 30px 10px;
+            text-align: center;
+            color: #1a3b5c;
+        }
+        .logout-modal-body p { margin: 0 0 10px; font-size: 1.05rem; line-height: 1.6; }
+        .logout-warning { font-size: 0.9rem !important; color: #888 !important; font-style: italic; }
+
+        .logout-modal-footer {
+            display: flex;
+            gap: 12px;
+            padding: 20px 30px 28px;
+            justify-content: center;
+        }
+        .btn-cancel {
+            background: #f1f3f5;
+            color: #495057;
+            border: 2px solid #dee2e6;
+            font-weight: 600;
+            padding: 11px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
+        }
+        .btn-cancel:hover { background: #e2e6ea; transform: translateY(-2px); }
+
+        .btn-confirm-logout {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            border: none;
+            font-weight: 600;
+            padding: 11px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
+        }
+        .btn-confirm-logout:hover {
+            background: linear-gradient(135deg, #c82333, #a71e2a);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(220,53,69,0.4);
+        }
+
+        /* ── Member Toast Notifications ── */
+        .member-notification {
+            position: fixed;
+            top: 20px; right: 20px;
+            z-index: 10002;
+            max-width: 380px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            animation: toastIn 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        @keyframes toastIn {
+            from { opacity:0; transform: translateX(100%); }
+            to   { opacity:1; transform: translateX(0); }
+        }
+        .member-notification.success { background: linear-gradient(135deg,rgba(16,185,129,0.92),rgba(5,150,105,0.92)); border-left:4px solid #10b981; }
+        .member-notification.error   { background: linear-gradient(135deg,rgba(239,68,68,0.92),rgba(220,38,38,0.92));   border-left:4px solid #ef4444; }
+        .member-notification.info    { background: linear-gradient(135deg,rgba(59,130,246,0.92),rgba(37,99,235,0.92));   border-left:4px solid #3b82f6; }
+
+        @media (max-width: 480px) {
+            .logout-confirmation-modal { width: 95%; }
+            .logout-modal-footer { flex-direction: column; }
+            .btn-cancel, .btn-confirm-logout { width: 100%; text-align: center; }
+            .member-notification { left: 10px; right: 10px; max-width: none; }
+        }
     </style>
 </head>
 <body>
@@ -771,7 +885,11 @@
                 'current-church': 'Mana Kiristaanaa Ammaa',
                 'service-interest': 'Tajaajila Barbaaddu',
                 'cancel': 'Dhiisi',
-                'save-changes': 'Jijjiirama Olkaa\'i'
+                'save-changes': 'Jijjiirama Olkaa\'i',
+                'confirm-logout': 'Ba\'uu Mirkaneessi',
+                'logout-question': 'Miseensa keessan irraa ba\'uu barbaadduu?',
+                'logout-warning': 'Gara dashboard keessanitti deebi\'uuf seensuu qabdu.',
+                'yes-logout': 'Eeyyee, Ba\'i'
             },
             en: {
                 'logout': 'Logout',
@@ -798,7 +916,11 @@
                 'current-church': 'Current Church',
                 'service-interest': 'Service Interest',
                 'cancel': 'Cancel',
-                'save-changes': 'Save Changes'
+                'save-changes': 'Save Changes',
+                'confirm-logout': 'Confirm Logout',
+                'logout-question': 'Are you sure you want to logout from your member account?',
+                'logout-warning': 'You will need to login again to access your dashboard.',
+                'yes-logout': 'Yes, Logout'
             }
         };
 
@@ -1023,14 +1145,117 @@
         }
 
         function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                // Clear session data
-                sessionStorage.removeItem('wdb_member_logged_in');
-                sessionStorage.removeItem('wdb_member_data');
-                
-                // Redirect to home page
-                window.location.href = 'index.html';
+            showLogoutConfirmation();
+        }
+        
+        function showLogoutConfirmation() {
+            // Create custom confirmation modal
+            const modal = document.createElement('div');
+            modal.className = 'logout-confirmation-overlay';
+            modal.innerHTML = `
+                <div class="logout-confirmation-modal">
+                    <div class="logout-modal-header">
+                        <div class="logout-icon">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </div>
+                        <h3 data-translate="confirm-logout">Confirm Logout</h3>
+                    </div>
+                    <div class="logout-modal-body">
+                        <p data-translate="logout-question">Are you sure you want to logout from your member account?</p>
+                        <p class="logout-warning" data-translate="logout-warning">You will need to login again to access your dashboard.</p>
+                    </div>
+                    <div class="logout-modal-footer">
+                        <button class="btn-cancel" onclick="closeLogoutConfirmation()">
+                            <i class="fas fa-times mr-2"></i><span data-translate="cancel">Cancel</span>
+                        </button>
+                        <button class="btn-confirm-logout" onclick="confirmLogout()">
+                            <i class="fas fa-sign-out-alt mr-2"></i><span data-translate="yes-logout">Yes, Logout</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+            
+            // Apply current language translations to modal
+            switchLanguage(currentLanguage);
+            
+            // Add event listener for ESC key
+            document.addEventListener('keydown', handleLogoutEscKey);
+        }
+        
+        function closeLogoutConfirmation() {
+            const modal = document.querySelector('.logout-confirmation-overlay');
+            if (modal) {
+                modal.remove();
+                document.body.style.overflow = 'auto';
+                document.removeEventListener('keydown', handleLogoutEscKey);
             }
+        }
+        
+        function handleLogoutEscKey(event) {
+            if (event.key === 'Escape') {
+                closeLogoutConfirmation();
+            }
+        }
+        
+        function confirmLogout() {
+            // Close confirmation modal
+            closeLogoutConfirmation();
+            
+            // Show loading notification
+            showNotification('info', 'Logging Out', 'Clearing session data...');
+            
+            // Clear session data
+            sessionStorage.removeItem('wdb_member_logged_in');
+            sessionStorage.removeItem('wdb_member_data');
+            localStorage.removeItem('wdb_member_remember');
+            
+            // Clear any other member-related data
+            sessionStorage.clear();
+            
+            // Show success message briefly before redirect
+            setTimeout(() => {
+                showNotification('success', 'Logged Out', 'Redirecting to home page...');
+                
+                setTimeout(() => {
+                    // Redirect to home page
+                    window.location.href = 'index.html';
+                }, 1000);
+            }, 1000);
+        }
+        
+        function showNotification(type, title, message) {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.member-notification');
+            existingNotifications.forEach(notification => notification.remove());
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `member-notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <div class="notification-icon">
+                        ${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'info' ? 'ℹ️' : '⚠️'}
+                    </div>
+                    <div class="notification-text">
+                        <div class="notification-title">${title}</div>
+                        <div class="notification-message">${message}</div>
+                    </div>
+                    <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+                </div>
+            `;
+
+            // Add to page
+            document.body.appendChild(notification);
+
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 4000);
         }
 
         // Check if user is logged in (basic check)
