@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="or">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Login - Waldaa Duuka Bu'ootaa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            backdrop-filter: blur(25px) saturate(200%);
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+        .form-input {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.25);
+            border-radius: 12px;
+            padding: 13px 16px;
+            color: white;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        .form-input:focus { outline: none; border-color: #d4af37; background: rgba(255,255,255,0.18); }
+        .form-input::placeholder { color: rgba(255,255,255,0.6); }
+        .btn-gold {
+            background: linear-gradient(135deg, #d4af37, #b8941f);
+            color: #1a3b5c;
+            font-weight: 700;
+            padding: 14px 24px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .btn-gold:hover { background: linear-gradient(135deg, #1a3b5c, #2c5282); color: white; transform: translateY(-2px); }
+        .btn-gold:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .tab-btn {
+            flex: 1; padding: 12px; border: none; cursor: pointer;
+            font-weight: 600; font-size: 0.95rem; transition: all 0.3s;
+            border-radius: 10px;
+        }
+        .tab-btn.active { background: #d4af37; color: #1a3b5c; }
+        .tab-btn:not(.active) { background: rgba(255,255,255,0.1); color: white; }
+        .error-msg { color: #fca5a5; font-size: 0.85rem; margin-top: 6px; display: none; }
+        .error-msg.show { display: block; }
+        .loading-spinner {
+            display: inline-block; width: 18px; height: 18px;
+            border: 3px solid rgba(255,255,255,0.3); border-radius: 50%;
+            border-top-color: white; animation: spin 0.8s linear infinite; vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .strength-bar { height: 4px; border-radius: 2px; transition: all 0.3s; margin-top: 6px; }
+        .strength-weak   { background: #ef4444; width: 33%; }
+        .strength-medium { background: #f59e0b; width: 66%; }
+        .strength-strong { background: #10b981; width: 100%; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-md">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <img src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo" class="w-20 h-20 mx-auto rounded-full shadow-2xl mb-4">
+            <h1 class="text-3xl font-bold text-white mb-1">Waldaa Duuka Bu'ootaa</h1>
+            <p class="text-white opacity-75">Member Portal</p>
+        </div>
+
+        <!-- Card -->
+        <div class="glass-card rounded-3xl p-8">
+
+            <!-- Tabs: Login / Register -->
+            <div class="flex gap-2 mb-8 p-1 rounded-xl" style="background:rgba(255,255,255,0.08);">
+                <button class="tab-btn active" id="tab-login"    onclick="switchTab('login')">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Login
+                </button>
+                <button class="tab-btn"         id="tab-register" onclick="switchTab('register')">
+                    <i class="fas fa-user-plus mr-2"></i>Register
+                </button>
+            </div>
+
+            <!-- ── LOGIN FORM ── -->
+            <div id="loginForm">
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-white font-medium mb-2">
+                            <i class="fas fa-user mr-2 text-yellow-400"></i>Username or Member ID
+                        </label>
+                        <input type="text" id="loginUsername" class="form-input"
+                               placeholder="e.g. abebe.kebede or WDB-2024-0001">
+                        <div class="error-msg" id="loginUsernameErr">Please enter your username or Member ID</div>
+                    </div>
+                    <div>
+                        <label class="block text-white font-medium mb-2">
+                            <i class="fas fa-lock mr-2 text-yellow-400"></i>Password
+                        </label>
+                        <div class="relative">
+                            <input type="password" id="loginPassword" class="form-input pr-12"
+                                   placeholder="Enter your password">
+                            <button type="button" onclick="togglePwd('loginPassword','loginPwdIcon')"
+                                    class="absolute right-4 top-4 text-white opacity-60 hover:opacity-100">
+                                <i class="fas fa-eye" id="loginPwdIcon"></i>
+                            </button>
+                        </div>
+                        <div class="error-msg" id="loginPasswordErr">Please enter your password</div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center gap-2 text-white text-sm cursor-pointer">
+                            <input type="checkbox" id="rememberMe" class="rounded">
+                            Remember me
+                        </label>
+                        <button onclick="switchTab('forgot')" class="text-yellow-400 hover:text-yellow-300 text-sm font-medium">
+                            Forgot password?
+                        </button>
+                    </div>
+
+                    <div class="error-msg show" id="loginGeneralErr" style="display:none;"></div>
+
+                    <button class="btn-gold" id="loginBtn" onclick="handleLogin()">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login to Dashboard
+                    </button>
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-white border-opacity-20 text-center">
+                    <p class="text-white opacity-70 text-sm">Don't have an account?</p>
+                    <button onclick="switchTab('register')" class="text-yellow-400 hover:text-yellow-300 font-semibold mt-1">
+                        Register as a Member →
+                    </button>
+                </div>
+            </div>
+
+            <!-- ── REGISTER FORM ── -->
+            <div id="registerForm" style="display:none;">
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-white font-medium mb-2 text-sm">First Name *</label>
+                            <input type="text" id="regFirstName" class="form-input" placeholder="Maqaa Jalqabaa">
+                        </div>
+                        <div>
+                            <label class="block text-white font-medium mb-2 text-sm">Last Name *</label>
+                            <input type="text" id="regLastName" class="form-input" placeholder="Maqaa Abbaa">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-white font-medium mb-2 text-sm">
+                            <i class="fas fa-user mr-1 text-yellow-400"></i>Username *
+                        </label>
+                        <input type="text" id="regUsername" class="form-input" placeholder="e.g. abebe.kebede"
+                               oninput="checkUsernameAvailability()">
+                        <div class="error-msg" id="regUsernameErr"></div>
+                    </div>
+                    <div>
+                        <label class="block text-white font-medium mb-2 text-sm">
+                            <i class="fas fa-phone mr-1 text-yellow-400"></i>Phone Number *
+                        </label>
+                        <input type="tel" id="regPhone" class="form-input" placeholder="+251 9XX XXX XXX">
+                        <div class="error-msg" id="regPhoneErr"></div>
+                    </div>
+                    <div>
+                        <label class="block text-white font-medium mb-2 text-sm">
+                            <i class="fas fa-lock mr-1 text-yellow-400"></i>Password *
+                        </label>
+                        <div class="relative">
+                            <input type="password" id="regPassword" class="form-input pr-12"
+                                   placeholder="Min. 8 characters" oninput="checkPasswordStrength()">
+                            <button type="button" onclick="togglePwd('regPassword','regPwdIcon')"
+                                    class="absolute right-4 top-4 text-white opacity-60 hover:opacity-100">
+                                <i class="fas fa-eye" id="regPwdIcon"></i>
+                            </button>
+                        </div>
+                        <div class="strength-bar" id="strengthBar" style="display:none;"></div>
+                        <div class="error-msg" id="regPasswordErr"></div>
+                    </div>
+                    <div>
+                        <label class="block text-white font-medium mb-2 text-sm">
+                            <i class="fas fa-lock mr-1 text-yellow-400"></i>Confirm Password *
+                        </label>
+                        <input type="password" id="regConfirmPassword" class="form-input"
+                               placeholder="Repeat your password">
+                        <div class="error-msg" id="regConfirmErr"></div>
+                    </div>
+
+                    <div class="error-msg" id="regGeneralErr"></div>
+
+                    <button class="btn-gold" id="registerBtn" onclick="handleRegister()">
+                        <i class="fas fa-user-plus mr-2"></i>Create Account
+                    </button>
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-white border-opacity-20 text-center">
+                    <p class="text-white opacity-70 text-sm">Already have an account?</p>
+                    <button onclick="switchTab('login')" class="text-yellow-400 hover:text-yellow-300 font-semibold mt-1">
+                        ← Back to Login
+                    </button>
+                </div>
+            </div>
+
+            <!-- ── FORGOT PASSWORD ── -->
+            <div id="forgotForm" style="display:none;">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                         style="background:rgba(212,175,55,0.2);">
+                        <i class="fas fa-key text-yellow-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-xl mb-2">Reset Password</h3>
+                    <p class="text-white opacity-70 text-sm">Enter your Member ID or phone number to reset your password.</p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-white font-medium mb-2 text-sm">Member ID or Phone</label>
+                        <input type="text" id="forgotIdentifier" class="form-input"
+                               placeholder="WDB-2024-0001 or +251...">
+                    </div>
+                    <div id="resetNewPwdSection" style="display:none;">
+                        <label class="block text-white font-medium mb-2 text-sm">New Password</label>
+                        <input type="password" id="resetNewPwd" class="form-input mb-3" placeholder="New password">
+                        <label class="block text-white font-medium mb-2 text-sm">Confirm New Password</label>
+                        <input type="password" id="resetConfirmPwd" class="form-input" placeholder="Confirm new password">
+                    </div>
+                    <div class="error-msg" id="forgotErr"></div>
+                    <button class="btn-gold" id="forgotBtn" onclick="handleForgot()">
+                        <i class="fas fa-search mr-2"></i>Find My Account
+                    </button>
+                </div>
+                <div class="mt-6 text-center">
+                    <button onclick="switchTab('login')" class="text-yellow-400 hover:text-yellow-300 font-semibold text-sm">
+                        ← Back to Login
+                    </button>
+                </div>
+            </div>
+
+            <!-- ── SUCCESS ── -->
+            <div id="successPanel" style="display:none;" class="text-center py-4">
+                <div class="text-6xl mb-4">🎉</div>
+                <h3 class="text-white font-bold text-2xl mb-3">Account Created!</h3>
+                <p class="text-white opacity-80 mb-2">Your member account has been created successfully.</p>
+                <p class="text-white opacity-60 text-sm mb-6">You can now login with your username and password.</p>
+                <button class="btn-gold" onclick="switchTab('login')">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Go to Login
+                </button>
+            </div>
+        </div>
+
+        <!-- Back to website -->
+        <div class="text-center mt-6">
+            <a href="index.html" class="text-white opacity-70 hover:opacity-100 text-sm transition-opacity">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Website
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // ── Storage key ───────────────────────────────────────
+        const MEMBERS_STORE = 'wdb_member_accounts';
+
+        // Seed a demo account if none exist
+        function seedDemoAccount() {
+            const accounts = getAccounts();
+            if (!accounts.length) {
+                accounts.push({
+                    username:  'abebe.kebede',
+                    password:  btoa('Password123'),   // base64 – demo only
+                    memberId:  'WDB-2024-0001',
+                    firstName: 'Abebe',
+                    lastName:  'Kebede Tesfaye',
+                    phone:     '+251911234567',
+                    createdAt: '2024-01-15'
+                });
+                saveAccounts(accounts);
+            }
+        }
+
+        function getAccounts()       { return JSON.parse(localStorage.getItem(MEMBERS_STORE) || '[]'); }
+        function saveAccounts(data)  { localStorage.setItem(MEMBERS_STORE, JSON.stringify(data)); }
+
+        // ── Tab switching ─────────────────────────────────────
+        function switchTab(tab) {
+            ['loginForm','registerForm','forgotForm','successPanel'].forEach(id => {
+                document.getElementById(id).style.display = 'none';
+            });
+            ['tab-login','tab-register'].forEach(id => {
+                document.getElementById(id)?.classList.remove('active');
+            });
+
+            if (tab === 'login')    { document.getElementById('loginForm').style.display    = 'block'; document.getElementById('tab-login').classList.add('active'); }
+            if (tab === 'register') { document.getElementById('registerForm').style.display = 'block'; document.getElementById('tab-register').classList.add('active'); }
+            if (tab === 'forgot')   { document.getElementById('forgotForm').style.display   = 'block'; }
+            if (tab === 'success')  { document.getElementById('successPanel').style.display = 'block'; }
+        }
+
+        // ── Helpers ───────────────────────────────────────────
+        function togglePwd(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon  = document.getElementById(iconId);
+            if (input.type === 'password') { input.type = 'text';     icon.classList.replace('fa-eye','fa-eye-slash'); }
+            else                           { input.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
+        }
+
+        function showErr(id, msg) {
+            const el = document.getElementById(id);
+            el.textContent = msg; el.style.display = 'block';
+        }
+        function clearErr(id) { const el = document.getElementById(id); el.style.display = 'none'; el.textContent = ''; }
+
+        function checkPasswordStrength() {
+            const pwd = document.getElementById('regPassword').value;
+            const bar = document.getElementById('strengthBar');
+            bar.style.display = pwd.length ? 'block' : 'none';
+            bar.className = 'strength-bar';
+            if (pwd.length < 6)                                                    bar.classList.add('strength-weak');
+            else if (pwd.length < 10 || !/[A-Z]/.test(pwd) || !/\d/.test(pwd))   bar.classList.add('strength-medium');
+            else                                                                    bar.classList.add('strength-strong');
+        }
+
+        function checkUsernameAvailability() {
+            const username = document.getElementById('regUsername').value.trim().toLowerCase();
+            if (!username) { clearErr('regUsernameErr'); return; }
+            const taken = getAccounts().some(a => a.username === username);
+            if (taken) showErr('regUsernameErr', 'Username already taken. Choose another.');
+            else        clearErr('regUsernameErr');
+        }
+
+        // ── Login ─────────────────────────────────────────────
+        function handleLogin() {
+            clearErr('loginUsernameErr'); clearErr('loginPasswordErr'); clearErr('loginGeneralErr');
+            const identifier = document.getElementById('loginUsername').value.trim();
+            const password   = document.getElementById('loginPassword').value;
+            const remember   = document.getElementById('rememberMe').checked;
+
+            if (!identifier) { showErr('loginUsernameErr','Please enter your username or Member ID'); return; }
+            if (!password)   { showErr('loginPasswordErr','Please enter your password'); return; }
+
+            const btn = document.getElementById('loginBtn');
+            btn.innerHTML = '<div class="loading-spinner"></div> Logging in...';
+            btn.disabled  = true;
+
+            setTimeout(() => {
+                const accounts = getAccounts();
+                const account  = accounts.find(a =>
+                    (a.username === identifier.toLowerCase() || a.memberId === identifier.toUpperCase()) &&
+                    a.password === btoa(password)
+                );
+
+                if (account) {
+                    // Store session
+                    sessionStorage.setItem('wdb_member_logged_in', 'true');
+                    sessionStorage.setItem('wdb_member_user', JSON.stringify(account));
+                    if (remember) localStorage.setItem('wdb_member_remember', identifier);
+                    else          localStorage.removeItem('wdb_member_remember');
+
+                    btn.innerHTML = '✅ Success! Redirecting...';
+                    setTimeout(() => { window.location.href = 'member-dashboard.html'; }, 800);
+                } else {
+                    btn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Login to Dashboard';
+                    btn.disabled  = false;
+                    showErr('loginGeneralErr', '❌ Invalid username/Member ID or password. Please try again.');
+                }
+            }, 1200);
+        }
+
+        // ── Register ──────────────────────────────────────────
+        function handleRegister() {
+            ['regUsernameErr','regPhoneErr','regPasswordErr','regConfirmErr','regGeneralErr'].forEach(clearErr);
+
+            const firstName = document.getElementById('regFirstName').value.trim();
+            const lastName  = document.getElementById('regLastName').value.trim();
+            const username  = document.getElementById('regUsername').value.trim().toLowerCase();
+            const phone     = document.getElementById('regPhone').value.trim();
+            const password  = document.getElementById('regPassword').value;
+            const confirm   = document.getElementById('regConfirmPassword').value;
+
+            let valid = true;
+            if (!firstName || !lastName) { showErr('regGeneralErr','First and last name are required.'); valid = false; }
+            if (!username || username.length < 3) { showErr('regUsernameErr','Username must be at least 3 characters.'); valid = false; }
+            if (!/^[a-z0-9._]+$/.test(username))  { showErr('regUsernameErr','Only letters, numbers, dots and underscores allowed.'); valid = false; }
+            if (!phone || phone.length < 10)       { showErr('regPhoneErr','Enter a valid phone number.'); valid = false; }
+            if (password.length < 8)               { showErr('regPasswordErr','Password must be at least 8 characters.'); valid = false; }
+            if (password !== confirm)              { showErr('regConfirmErr','Passwords do not match.'); valid = false; }
+            if (!valid) return;
+
+            const accounts = getAccounts();
+            if (accounts.some(a => a.username === username)) {
+                showErr('regUsernameErr','Username already taken.'); return;
+            }
+
+            const btn = document.getElementById('registerBtn');
+            btn.innerHTML = '<div class="loading-spinner"></div> Creating account...';
+            btn.disabled  = true;
+
+            setTimeout(() => {
+                const newId = 'WDB-' + new Date().getFullYear() + '-' + String(accounts.length + 1).padStart(4,'0');
+                accounts.push({
+                    username, password: btoa(password),
+                    memberId: newId, firstName, lastName, phone,
+                    createdAt: new Date().toISOString().split('T')[0]
+                });
+                saveAccounts(accounts);
+
+                btn.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Create Account';
+                btn.disabled  = false;
+                switchTab('success');
+            }, 1200);
+        }
+
+        // ── Forgot Password ───────────────────────────────────
+        let forgotAccount = null;
+        function handleForgot() {
+            clearErr('forgotErr');
+            const identifier = document.getElementById('forgotIdentifier').value.trim();
+            const resetSection = document.getElementById('resetNewPwdSection');
+
+            if (!forgotAccount) {
+                // Step 1: find account
+                if (!identifier) { showErr('forgotErr','Please enter your Member ID or phone.'); return; }
+                const accounts = getAccounts();
+                forgotAccount  = accounts.find(a => a.memberId === identifier.toUpperCase() || a.phone === identifier);
+                if (!forgotAccount) { showErr('forgotErr','No account found with that Member ID or phone.'); return; }
+                resetSection.style.display = 'block';
+                document.getElementById('forgotBtn').innerHTML = '<i class="fas fa-save mr-2"></i>Save New Password';
+                document.getElementById('forgotIdentifier').disabled = true;
+            } else {
+                // Step 2: save new password
+                const newPwd  = document.getElementById('resetNewPwd').value;
+                const confPwd = document.getElementById('resetConfirmPwd').value;
+                if (newPwd.length < 8)    { showErr('forgotErr','Password must be at least 8 characters.'); return; }
+                if (newPwd !== confPwd)   { showErr('forgotErr','Passwords do not match.'); return; }
+
+                const accounts = getAccounts();
+                const idx = accounts.findIndex(a => a.memberId === forgotAccount.memberId);
+                if (idx > -1) { accounts[idx].password = btoa(newPwd); saveAccounts(accounts); }
+
+                forgotAccount = null;
+                resetSection.style.display = 'none';
+                document.getElementById('forgotIdentifier').value    = '';
+                document.getElementById('forgotIdentifier').disabled = false;
+                document.getElementById('forgotBtn').innerHTML = '<i class="fas fa-search mr-2"></i>Find My Account';
+                switchTab('login');
+                setTimeout(() => {
+                    const msg = document.getElementById('loginGeneralErr');
+                    msg.style.color = '#86efac';
+                    showErr('loginGeneralErr','✅ Password reset successfully. Please login.');
+                }, 200);
+            }
+        }
+
+        // ── Init ─────────────────────────────────────────────
+        seedDemoAccount();
+
+        // If already logged in, redirect
+        if (sessionStorage.getItem('wdb_member_logged_in')) {
+            window.location.href = 'member-dashboard.html';
+        }
+
+        // Pre-fill remembered username
+        const remembered = localStorage.getItem('wdb_member_remember');
+        if (remembered) {
+            document.getElementById('loginUsername').value = remembered;
+            document.getElementById('rememberMe').checked  = true;
+        }
+
+        // Allow Enter key to submit login
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Enter') {
+                const active = document.getElementById('loginForm').style.display !== 'none' ? 'login'
+                             : document.getElementById('registerForm').style.display !== 'none' ? 'register' : null;
+                if (active === 'login')    handleLogin();
+                if (active === 'register') handleRegister();
+            }
+        });
+    </script>
+</body>
+</html>
