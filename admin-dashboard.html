@@ -132,6 +132,183 @@
         .status-active { background: #10b981; color: white; }
         .status-pending { background: #f59e0b; color: white; }
         .status-inactive { background: #6b7280; color: white; }
+
+        /* ── Member Action Modals ── */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(8px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999; padding: 20px;
+            animation: lcFadeIn 0.2s ease;
+        }
+        .modal-box {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            max-width: 560px; width: 100%;
+            max-height: 90vh; overflow-y: auto;
+            animation: lcSlideIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .modal-box-header {
+            background: linear-gradient(135deg, #1a3b5c, #2c5282);
+            color: white; padding: 20px 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-radius: 20px 20px 0 0;
+        }
+        .modal-box-header h3 { margin:0; font-size:1.2rem; font-weight:600; }
+        .modal-box-header button {
+            background: none; border: none; color: white;
+            font-size: 1.8rem; cursor: pointer; line-height:1;
+            width:32px; height:32px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            transition: background 0.2s;
+        }
+        .modal-box-header button:hover { background: rgba(255,255,255,0.2); }
+        .modal-box-body { padding: 24px; color: #1a3b5c; }
+        .modal-box-footer {
+            padding: 16px 24px; border-top: 1px solid #f0f0f0;
+            display: flex; justify-content: flex-end; gap: 10px;
+        }
+        .detail-row {
+            display: flex; justify-content: space-between;
+            padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+            font-size: 0.95rem;
+        }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { color: #888; font-weight: 500; }
+        .detail-value { color: #1a3b5c; font-weight: 600; text-align: right; }
+        .logout-confirmation-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+            animation: lcFadeIn 0.2s ease;
+        }
+        @keyframes lcFadeIn { from { opacity:0; } to { opacity:1; } }
+
+        .logout-confirmation-modal {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+            max-width: 420px;
+            width: 90%;
+            overflow: hidden;
+            animation: lcSlideIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes lcSlideIn {
+            from { opacity:0; transform: translateY(-40px) scale(0.9); }
+            to   { opacity:1; transform: translateY(0)    scale(1);   }
+        }
+
+        .logout-modal-header {
+            background: linear-gradient(135deg, #dc3545, #a71e2a);
+            color: white;
+            padding: 28px 30px 20px;
+            text-align: center;
+        }
+        .logout-icon {
+            width: 64px; height: 64px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 14px;
+            font-size: 26px;
+        }
+        .logout-modal-header h3 { margin:0; font-size:1.4rem; font-weight:700; }
+
+        .logout-modal-body {
+            padding: 28px 30px 10px;
+            text-align: center;
+            color: #1a3b5c;
+        }
+        .logout-modal-body p { margin: 0 0 10px; font-size: 1.05rem; line-height: 1.6; }
+        .logout-warning { font-size: 0.9rem !important; color: #888 !important; font-style: italic; }
+
+        .logout-modal-footer {
+            display: flex;
+            gap: 12px;
+            padding: 20px 30px 28px;
+            justify-content: center;
+        }
+        .btn-cancel {
+            background: #f1f3f5;
+            color: #495057;
+            border: 2px solid #dee2e6;
+            font-weight: 600;
+            padding: 11px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
+        }
+        .btn-cancel:hover { background: #e2e6ea; transform: translateY(-2px); }
+
+        .btn-confirm-logout {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            border: none;
+            font-weight: 600;
+            padding: 11px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
+        }
+        .btn-confirm-logout:hover {
+            background: linear-gradient(135deg, #c82333, #a71e2a);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(220,53,69,0.4);
+        }
+
+        /* ── Toast Notifications ── */
+        .admin-notification {
+            position: fixed;
+            top: 20px; right: 20px;
+            z-index: 10002;
+            max-width: 380px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            animation: toastIn 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        @keyframes toastIn {
+            from { opacity:0; transform: translateX(100%); }
+            to   { opacity:1; transform: translateX(0); }
+        }
+        .admin-notification.success { background: linear-gradient(135deg,rgba(16,185,129,0.92),rgba(5,150,105,0.92)); border-left:4px solid #10b981; }
+        .admin-notification.error   { background: linear-gradient(135deg,rgba(239,68,68,0.92),rgba(220,38,38,0.92));   border-left:4px solid #ef4444; }
+        .admin-notification.info    { background: linear-gradient(135deg,rgba(59,130,246,0.92),rgba(37,99,235,0.92));   border-left:4px solid #3b82f6; }
+
+        .notification-content { display:flex; align-items:flex-start; padding:14px 16px; gap:12px; color:white; }
+        .notification-icon    { font-size:1.4rem; flex-shrink:0; }
+        .notification-text    { flex:1; }
+        .notification-title   { font-weight:700; margin-bottom:3px; }
+        .notification-message { font-size:0.88rem; opacity:0.9; }
+        .notification-close   {
+            background:none; border:none; color:white; font-size:1.4rem;
+            cursor:pointer; opacity:0.7; flex-shrink:0;
+            width:24px; height:24px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            transition: opacity 0.2s;
+        }
+        .notification-close:hover { opacity:1; background:rgba(255,255,255,0.2); }
+
+        /* ── Loading Spinner ── */
+        .loading-spinner {
+            display: inline-block;
+            width: 15px; height: 15px;
+            border: 2px solid rgba(255,255,255,0.35);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -353,9 +530,164 @@
         <div id="registrations-section" class="section px-6" style="display: none;">
             <div class="glass-card rounded-xl p-6">
                 <h3 class="text-xl font-bold text-white mb-6">Pending Registrations</h3>
-                <div id="pendingRegistrationsTable">
-                    <!-- Pending registrations table -->
+                <div class="table-container">
+                    <table class="table w-full">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Address</th>
+                                <th>Submitted</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pendingTableBody">
+                            <tr><td colspan="5" class="text-center py-6 opacity-60">No pending registrations</td></tr>
+                        </tbody>
+                    </table>
                 </div>
+            </div>
+        </div>
+
+        <div id="announcements-section" class="section px-6" style="display: none;">
+            <div class="glass-card rounded-xl p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-white">Announcements</h3>
+                    <button class="btn-primary" onclick="showAddAnnouncementModal()">
+                        <i class="fas fa-plus mr-2"></i>New Announcement
+                    </button>
+                </div>
+                <div id="announcementsList" class="space-y-4">
+                    <div class="bg-white bg-opacity-10 rounded-xl p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-white font-semibold">Sunday Service Schedule</h4>
+                                <p class="text-white opacity-70 text-sm mt-1">Service starts at 9:00 AM every Sunday.</p>
+                                <p class="text-white opacity-50 text-xs mt-2">Posted: 2 days ago</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="text-yellow-400 hover:text-yellow-300" onclick="editAnnouncement(1)"><i class="fas fa-edit"></i></button>
+                                <button class="text-red-400 hover:text-red-300" onclick="deleteAnnouncement(1)"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="contributions-section" class="section px-6" style="display: none;">
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-6">Contributions</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="stat-card rounded-xl p-5 text-center">
+                        <p class="text-white opacity-70 text-sm mb-1">Total Collected</p>
+                        <p class="text-2xl font-bold text-yellow-400">ETB 45,200</p>
+                    </div>
+                    <div class="stat-card rounded-xl p-5 text-center">
+                        <p class="text-white opacity-70 text-sm mb-1">This Month</p>
+                        <p class="text-2xl font-bold text-green-400">ETB 8,750</p>
+                    </div>
+                    <div class="stat-card rounded-xl p-5 text-center">
+                        <p class="text-white opacity-70 text-sm mb-1">Contributors</p>
+                        <p class="text-2xl font-bold text-blue-400">94</p>
+                    </div>
+                </div>
+                <p class="text-white opacity-60 text-center py-4">Detailed contribution records coming soon.</p>
+            </div>
+        </div>
+
+        <div id="reports-section" class="section px-6" style="display: none;">
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-6">Reports</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button class="bg-white bg-opacity-10 hover:bg-opacity-20 rounded-xl p-5 text-left transition-all" onclick="generateReport('members')">
+                        <i class="fas fa-users text-yellow-400 text-2xl mb-3"></i>
+                        <h4 class="text-white font-semibold">Member Report</h4>
+                        <p class="text-white opacity-60 text-sm mt-1">Full list of all registered members</p>
+                    </button>
+                    <button class="bg-white bg-opacity-10 hover:bg-opacity-20 rounded-xl p-5 text-left transition-all" onclick="generateReport('registrations')">
+                        <i class="fas fa-user-plus text-green-400 text-2xl mb-3"></i>
+                        <h4 class="text-white font-semibold">Registration Report</h4>
+                        <p class="text-white opacity-60 text-sm mt-1">New registrations by date range</p>
+                    </button>
+                    <button class="bg-white bg-opacity-10 hover:bg-opacity-20 rounded-xl p-5 text-left transition-all" onclick="generateReport('contributions')">
+                        <i class="fas fa-donate text-blue-400 text-2xl mb-3"></i>
+                        <h4 class="text-white font-semibold">Contribution Report</h4>
+                        <p class="text-white opacity-60 text-sm mt-1">Financial contributions summary</p>
+                    </button>
+                    <button class="bg-white bg-opacity-10 hover:bg-opacity-20 rounded-xl p-5 text-left transition-all" onclick="generateReport('activity')">
+                        <i class="fas fa-chart-line text-purple-400 text-2xl mb-3"></i>
+                        <h4 class="text-white font-semibold">Activity Report</h4>
+                        <p class="text-white opacity-60 text-sm mt-1">System activity and audit log</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="settings-section" class="section px-6" style="display: none;">
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-6">Settings</h3>
+                <div class="space-y-4 max-w-lg">
+                    <div class="bg-white bg-opacity-10 rounded-xl p-4 flex justify-between items-center">
+                        <div>
+                            <p class="text-white font-medium">Registration</p>
+                            <p class="text-white opacity-60 text-sm">Allow new member registrations</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="toggleRegistration" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-600 peer-checked:bg-yellow-400 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                        </label>
+                    </div>
+                    <div class="bg-white bg-opacity-10 rounded-xl p-4 flex justify-between items-center">
+                        <div>
+                            <p class="text-white font-medium">Email Notifications</p>
+                            <p class="text-white opacity-60 text-sm">Send emails on new registrations</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="toggleEmail" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-600 peer-checked:bg-yellow-400 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                        </label>
+                    </div>
+                    <div class="bg-white bg-opacity-10 rounded-xl p-4">
+                        <p class="text-white font-medium mb-3">Change Admin Password</p>
+                        <input type="password" placeholder="New password" class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg px-4 py-2 text-white placeholder-white placeholder-opacity-50 mb-2 focus:outline-none focus:border-yellow-400">
+                        <input type="password" placeholder="Confirm new password" class="w-full bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg px-4 py-2 text-white placeholder-white placeholder-opacity-50 mb-3 focus:outline-none focus:border-yellow-400">
+                        <button class="btn-primary w-full" onclick="changePassword()">Update Password</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Member Modal -->
+    <div id="viewMemberModal" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+            <div class="modal-box-header">
+                <h3><i class="fas fa-user mr-2"></i>Member Details</h3>
+                <button onclick="closeModal('viewMemberModal')">×</button>
+            </div>
+            <div class="modal-box-body" id="viewMemberContent"></div>
+            <div class="modal-box-footer">
+                <button class="btn-cancel" onclick="closeModal('viewMemberModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirm Modal -->
+    <div id="deleteConfirmModal" class="modal-overlay" style="display:none;">
+        <div class="modal-box" style="max-width:400px;">
+            <div class="modal-box-header" style="background:linear-gradient(135deg,#dc3545,#a71e2a);">
+                <h3><i class="fas fa-trash mr-2"></i>Delete Member</h3>
+                <button onclick="closeModal('deleteConfirmModal')">×</button>
+            </div>
+            <div class="modal-box-body text-center">
+                <div style="font-size:3rem;margin-bottom:12px;">⚠️</div>
+                <p style="color:#1a3b5c;font-size:1.05rem;margin-bottom:8px;">Are you sure you want to delete this member?</p>
+                <p style="color:#888;font-size:0.9rem;font-style:italic;">This action cannot be undone.</p>
+            </div>
+            <div class="modal-box-footer" style="justify-content:center;gap:12px;">
+                <button class="btn-cancel" onclick="closeModal('deleteConfirmModal')"><i class="fas fa-times mr-1"></i>Cancel</button>
+                <button class="btn-confirm-logout" id="confirmDeleteBtn"><i class="fas fa-trash mr-1"></i>Yes, Delete</button>
             </div>
         </div>
     </div>
@@ -503,56 +835,184 @@
         }
 
         function viewMember(memberId) {
-            alert('View member: ' + memberId);
+            const members = [
+                { id: 'WDB-2024-0001', name: 'Abebe Kebede', phone: '+251911234567', email: 'abebe@example.com', address: 'Addis Ababa', status: 'active', registered: '2024-01-15', gender: 'Male', baptized: 'Yes', service: 'Choir' },
+                { id: 'WDB-2024-0002', name: 'Fatuma Ahmed',  phone: '+251922345678', email: 'fatuma@example.com', address: 'Adama',       status: 'active', registered: '2024-01-20', gender: 'Female', baptized: 'Yes', service: 'Prayer' },
+                { id: 'WDB-2024-0003', name: 'Dawit Tesfaye', phone: '+251933456789', email: '—',                  address: 'Jimma',       status: 'pending', registered: '2024-02-01', gender: 'Male', baptized: 'No',  service: 'Bible Study' }
+            ];
+            const m = members.find(x => x.id === memberId);
+            if (!m) return;
+
+            document.getElementById('viewMemberContent').innerHTML = `
+                <div class="detail-row"><span class="detail-label">Member ID</span><span class="detail-value">${m.id}</span></div>
+                <div class="detail-row"><span class="detail-label">Full Name</span><span class="detail-value">${m.name}</span></div>
+                <div class="detail-row"><span class="detail-label">Gender</span><span class="detail-value">${m.gender}</span></div>
+                <div class="detail-row"><span class="detail-label">Phone</span><span class="detail-value">${m.phone}</span></div>
+                <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${m.email}</span></div>
+                <div class="detail-row"><span class="detail-label">Address</span><span class="detail-value">${m.address}</span></div>
+                <div class="detail-row"><span class="detail-label">Baptized</span><span class="detail-value">${m.baptized}</span></div>
+                <div class="detail-row"><span class="detail-label">Service Interest</span><span class="detail-value">${m.service}</span></div>
+                <div class="detail-row"><span class="detail-label">Status</span><span class="detail-value"><span class="status-badge status-${m.status}">${m.status}</span></span></div>
+                <div class="detail-row"><span class="detail-label">Registered</span><span class="detail-value">${m.registered}</span></div>
+            `;
+            openModal('viewMemberModal');
         }
 
         function editMember(memberId) {
-            alert('Edit member: ' + memberId);
+            showNotification('info', 'Edit Member', `Opening editor for member ${memberId}`);
         }
 
         function deleteMember(memberId) {
-            if (confirm('Are you sure you want to delete this member?')) {
-                alert('Delete member: ' + memberId);
-            }
+            const modal = document.getElementById('deleteConfirmModal');
+            openModal('deleteConfirmModal');
+            document.getElementById('confirmDeleteBtn').onclick = function() {
+                closeModal('deleteConfirmModal');
+                showNotification('success', 'Member Deleted', `Member ${memberId} has been removed.`);
+                // In production: call API to delete, then reload table
+            };
         }
 
         function addMember() {
-            alert('Add new member functionality');
+            showNotification('info', 'Add Member', 'Redirecting to registration form...');
+            setTimeout(() => { window.open('member-registration.html', '_blank'); }, 800);
         }
 
         function exportMembers() {
-            alert('Export members functionality');
+            showNotification('info', 'Exporting', 'Preparing member data for export...');
+            setTimeout(() => {
+                // Build CSV from mock data
+                const rows = [
+                    ['Member ID','Name','Phone','Status','Registered'],
+                    ['WDB-2024-0001','Abebe Kebede','+251911234567','active','2024-01-15'],
+                    ['WDB-2024-0002','Fatuma Ahmed', '+251922345678','active','2024-01-20'],
+                    ['WDB-2024-0003','Dawit Tesfaye','+251933456789','pending','2024-02-01']
+                ];
+                const csv = rows.map(r => r.join(',')).join('\n');
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url  = URL.createObjectURL(blob);
+                const a    = document.createElement('a');
+                a.href = url; a.download = 'wdb_members.csv'; a.click();
+                URL.revokeObjectURL(url);
+                showNotification('success', 'Export Complete', 'wdb_members.csv downloaded.');
+            }, 1000);
+        }
+
+        function showAddAnnouncementModal() {
+            showNotification('info', 'Announcements', 'Announcement editor coming soon.');
+        }
+
+        function editAnnouncement(id) {
+            showNotification('info', 'Edit', `Editing announcement #${id}`);
+        }
+
+        function deleteAnnouncement(id) {
+            showNotification('success', 'Deleted', `Announcement #${id} removed.`);
+        }
+
+        function generateReport(type) {
+            showNotification('info', 'Generating Report', `Preparing ${type} report...`);
+            setTimeout(() => showNotification('success', 'Report Ready', `${type.charAt(0).toUpperCase()+type.slice(1)} report is ready.`), 1500);
+        }
+
+        function changePassword() {
+            showNotification('success', 'Password Updated', 'Your admin password has been changed.');
+        }
+
+        function openModal(id) {
+            const m = document.getElementById(id);
+            m.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            m.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
 
         function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                // Show loading state
-                const logoutBtn = document.querySelector('button[onclick="logout()"]');
-                const originalContent = logoutBtn.innerHTML;
-                logoutBtn.innerHTML = '<div class="loading-spinner"></div> Logging out...';
-                logoutBtn.disabled = true;
-                
-                // Show logout notification
-                showNotification('info', 'Logging Out', 'Clearing session data...');
-                
-                // Clear session data
-                sessionStorage.removeItem('wdb_admin_logged_in');
-                sessionStorage.removeItem('wdb_admin_user');
-                localStorage.removeItem('wdb_admin_remember');
-                
-                // Clear any other admin-related data
-                sessionStorage.clear();
-                
-                // Show success message briefly before redirect
-                setTimeout(() => {
-                    showNotification('success', 'Logged Out', 'Redirecting to login page...');
-                    
-                    setTimeout(() => {
-                        // Redirect to login page
-                        window.location.href = 'admin-login.html';
-                    }, 1000);
-                }, 1000);
+            showLogoutConfirmation();
+        }
+        
+        function showLogoutConfirmation() {
+            // Create custom confirmation modal
+            const modal = document.createElement('div');
+            modal.className = 'logout-confirmation-overlay';
+            modal.innerHTML = `
+                <div class="logout-confirmation-modal">
+                    <div class="logout-modal-header">
+                        <div class="logout-icon">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </div>
+                        <h3>Confirm Logout</h3>
+                    </div>
+                    <div class="logout-modal-body">
+                        <p>Are you sure you want to logout from the admin dashboard?</p>
+                        <p class="logout-warning">You will need to login again to access the admin panel.</p>
+                    </div>
+                    <div class="logout-modal-footer">
+                        <button class="btn-cancel" onclick="closeLogoutConfirmation()">
+                            <i class="fas fa-times mr-2"></i>Cancel
+                        </button>
+                        <button class="btn-confirm-logout" onclick="confirmLogout()">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Yes, Logout
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+            
+            // Add event listener for ESC key
+            document.addEventListener('keydown', handleLogoutEscKey);
+        }
+        
+        function closeLogoutConfirmation() {
+            const modal = document.querySelector('.logout-confirmation-overlay');
+            if (modal) {
+                modal.remove();
+                document.body.style.overflow = 'auto';
+                document.removeEventListener('keydown', handleLogoutEscKey);
             }
+        }
+        
+        function handleLogoutEscKey(event) {
+            if (event.key === 'Escape') {
+                closeLogoutConfirmation();
+            }
+        }
+        
+        function confirmLogout() {
+            // Close confirmation modal
+            closeLogoutConfirmation();
+            
+            // Show loading state
+            const logoutBtn = document.querySelector('button[onclick="logout()"]');
+            const originalContent = logoutBtn.innerHTML;
+            logoutBtn.innerHTML = '<div class="loading-spinner"></div> Logging out...';
+            logoutBtn.disabled = true;
+            
+            // Show logout notification
+            showNotification('info', 'Logging Out', 'Clearing session data...');
+            
+            // Clear session data
+            sessionStorage.removeItem('wdb_admin_logged_in');
+            sessionStorage.removeItem('wdb_admin_user');
+            localStorage.removeItem('wdb_admin_remember');
+            
+            // Clear any other admin-related data
+            sessionStorage.clear();
+            
+            // Show success message briefly before redirect
+            setTimeout(() => {
+                showNotification('success', 'Logged Out', 'Redirecting to login page...');
+                
+                setTimeout(() => {
+                    // Redirect to login page
+                    window.location.href = 'admin-login.html';
+                }, 1000);
+            }, 1000);
         }
         
         // Notification system
@@ -588,120 +1048,9 @@
             }, 4000);
         }
         
-        // Add notification styles
-        if (!document.querySelector('#notificationStyle')) {
-            const style = document.createElement('style');
-            style.id = 'notificationStyle';
-            style.textContent = `
-                .admin-notification {
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    z-index: 10000;
-                    max-width: 400px;
-                    border-radius: 12px;
-                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-                    animation: slideInRight 0.3s ease;
-                    backdrop-filter: blur(10px);
-                }
-                
-                .admin-notification.success {
-                    background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 0.9));
-                    border-left: 4px solid #10b981;
-                }
-                
-                .admin-notification.error {
-                    background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
-                    border-left: 4px solid #ef4444;
-                }
-                
-                .admin-notification.info {
-                    background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(37, 99, 235, 0.9));
-                    border-left: 4px solid #3b82f6;
-                }
-                
-                @keyframes slideInRight {
-                    from {
-                        opacity: 0;
-                        transform: translateX(100%);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateX(0);
-                    }
-                }
-                
-                .notification-content {
-                    display: flex;
-                    align-items: flex-start;
-                    padding: 16px;
-                    gap: 12px;
-                    color: white;
-                }
-                
-                .notification-icon {
-                    font-size: 1.5rem;
-                    flex-shrink: 0;
-                }
-                
-                .notification-text {
-                    flex: 1;
-                }
-                
-                .notification-title {
-                    font-weight: 600;
-                    margin-bottom: 4px;
-                }
-                
-                .notification-message {
-                    font-size: 0.9rem;
-                    opacity: 0.9;
-                }
-                
-                .notification-close {
-                    background: none;
-                    border: none;
-                    color: white;
-                    font-size: 1.5rem;
-                    cursor: pointer;
-                    padding: 0;
-                    width: 24px;
-                    height: 24px;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    transition: background 0.3s ease;
-                    flex-shrink: 0;
-                    opacity: 0.7;
-                }
-                
-                .notification-close:hover {
-                    background: rgba(255, 255, 255, 0.2);
-                    opacity: 1;
-                }
-                
-                .loading-spinner {
-                    display: inline-block;
-                    width: 16px;
-                    height: 16px;
-                    border: 2px solid rgba(255, 255, 255, 0.3);
-                    border-radius: 50%;
-                    border-top-color: white;
-                    animation: spin 1s ease-in-out infinite;
-                }
-                
-                @keyframes spin {
-                    to { transform: rotate(360deg); }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-        
         // Check if user is actually logged in on page load
         document.addEventListener('DOMContentLoaded', function() {
             if (!sessionStorage.getItem('wdb_admin_logged_in')) {
-                // If not logged in, redirect to login page
                 window.location.href = 'admin-login.html';
             }
         });
