@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Waldaa Duuka Bu'ootaa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        :root {
+            --primary-color: #1a3b5c;
+            --secondary-color: #2c5282;
+            --accent-color: #d4af37;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+        }
+        
+        .glass-card {
+            backdrop-filter: blur(25px) saturate(200%);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+        }
+        
+        .form-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-color), #b8941f);
+            color: var(--primary-color);
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6">
+    <div class="w-full max-w-md">
+        <!-- Logo and Title -->
+        <div class="text-center mb-8">
+            <img src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo" class="w-20 h-20 mx-auto rounded-full shadow-2xl mb-4">
+            <h1 class="text-3xl font-bold text-white mb-2">Admin Login</h1>
+            <p class="text-white opacity-80">Waldaa Duuka Bu'ootaa Management System</p>
+        </div>
+
+        <!-- Login Form -->
+        <div class="glass-card rounded-3xl p-8">
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-white font-medium mb-2">
+                        <i class="fas fa-user mr-2"></i>Username
+                    </label>
+                    <input type="text" id="username" name="username" class="form-input" 
+                           placeholder="Enter your username" required>
+                </div>
+                
+                <div>
+                    <label class="block text-white font-medium mb-2">
+                        <i class="fas fa-lock mr-2"></i>Password
+                    </label>
+                    <div class="relative">
+                        <input type="password" id="password" name="password" class="form-input pr-12" 
+                               placeholder="Enter your password" required>
+                        <button type="button" onclick="togglePassword()" 
+                                class="absolute right-3 top-3 text-white opacity-70 hover:opacity-100">
+                            <i class="fas fa-eye" id="passwordToggleIcon"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center text-white">
+                        <input type="checkbox" id="remember" name="remember" 
+                               class="mr-2 rounded border-white border-opacity-30">
+                        <span class="text-sm">Remember me</span>
+                    </label>
+                    <a href="#" class="text-yellow-400 hover:text-yellow-300 text-sm">
+                        Forgot password?
+                    </a>
+                </div>
+                
+                <button type="submit" class="btn-primary" id="loginBtn">
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    Login
+                </button>
+            </form>
+            
+            <div class="mt-6 pt-6 border-t border-white border-opacity-20">
+                <div class="text-center">
+                    <a href="index.html" class="text-white opacity-80 hover:opacity-100 text-sm">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Back to Website
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Access -->
+        <div class="mt-6 text-center">
+            <p class="text-white opacity-70 text-sm mb-3">Quick Access</p>
+            <div class="flex justify-center space-x-4">
+                <a href="member-registration.html" class="text-white opacity-80 hover:opacity-100 text-sm">
+                    <i class="fas fa-user-plus mr-1"></i>Register Member
+                </a>
+                <a href="admin-dashboard.html" class="text-white opacity-80 hover:opacity-100 text-sm">
+                    <i class="fas fa-tachometer-alt mr-1"></i>Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+        <div class="glass-card rounded-2xl p-8 text-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto mb-4"></div>
+            <p class="text-white text-lg">Logging in...</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleLogin();
+        });
+
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const toggleIcon = document.getElementById('passwordToggleIcon');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        async function handleLogin() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+            
+            if (!username || !password) {
+                alert('Please enter both username and password');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+            document.getElementById('loginBtn').disabled = true;
+            
+            try {
+                // Simulate API call - replace with actual authentication
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // For demo purposes, accept any username/password
+                // In production, this would validate against the database
+                if (username && password) {
+                    // Store session info
+                    sessionStorage.setItem('wdb_admin_logged_in', 'true');
+                    sessionStorage.setItem('wdb_admin_user', username);
+                    
+                    if (remember) {
+                        localStorage.setItem('wdb_admin_remember', username);
+                    }
+                    
+                    // Redirect to dashboard
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    throw new Error('Invalid credentials');
+                }
+            } catch (error) {
+                alert('Login failed: ' + error.message);
+            } finally {
+                // Hide loading
+                document.getElementById('loadingOverlay').classList.add('hidden');
+                document.getElementById('loginBtn').disabled = false;
+            }
+        }
+
+        // Check if user is already logged in
+        if (sessionStorage.getItem('wdb_admin_logged_in')) {
+            window.location.href = 'admin-dashboard.html';
+        }
+
+        // Pre-fill username if remembered
+        const rememberedUser = localStorage.getItem('wdb_admin_remember');
+        if (rememberedUser) {
+            document.getElementById('username').value = rememberedUser;
+            document.getElementById('remember').checked = true;
+        }
+    </script>
+</body>
+</html>

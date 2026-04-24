@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="or">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Dashboard - Waldaa Duuka Bu'ootaa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        :root {
+            --primary-color: #1a3b5c;
+            --secondary-color: #2c5282;
+            --accent-color: #d4af37;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+        }
+        
+        .glass-morphism {
+            backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glass-card {
+            backdrop-filter: blur(25px) saturate(200%);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .glass-card:hover {
+            backdrop-filter: blur(30px) saturate(220%);
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .profile-card {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.1));
+            border: 2px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .status-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-active { background: #10b981; color: white; }
+        .status-pending { background: #f59e0b; color: white; }
+        .status-inactive { background: #6b7280; color: white; }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-color), #b8941f);
+            color: var(--primary-color);
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .nav-item {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            margin: 4px 0;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+        
+        .nav-item.active {
+            background: var(--accent-color);
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="glass-morphism fixed w-full top-0 z-40">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo" class="w-12 h-12 rounded-full shadow-lg">
+                    <div>
+                        <h1 class="text-xl font-bold text-white">Member Dashboard</h1>
+                        <p class="text-sm text-white opacity-80">Waldaa Duuka Bu'ootaa</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="language-switcher">
+                        <button class="language-btn active" onclick="switchLanguage('or')" data-lang="or">🇪🇹 Oromoo</button>
+                        <button class="language-btn" onclick="switchLanguage('en')" data-lang="en">🇬🇧 English</button>
+                    </div>
+                    <button onclick="logout()" class="text-white opacity-80 hover:opacity-100 transition-opacity">
+                        <i class="fas fa-sign-out-alt mr-2"></i>
+                        <span data-translate="logout">Logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-12 px-6">
+        <div class="max-w-7xl mx-auto">
+            
+            <!-- Welcome Section -->
+            <div class="mb-8">
+                <div class="profile-card glass-card rounded-3xl p-8">
+                    <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8">
+                        <div class="w-24 h-24 bg-yellow-400 rounded-full flex items-center justify-center shadow-2xl">
+                            <i class="fas fa-user text-4xl text-gray-800"></i>
+                        </div>
+                        <div class="text-center md:text-left flex-1">
+                            <h2 class="text-3xl font-bold text-white mb-2" id="memberName">Welcome, Member!</h2>
+                            <p class="text-white opacity-90 mb-4">
+                                <span data-translate="member-id">Member ID:</span> 
+                                <span class="font-mono font-bold" id="memberId">WDB-2024-0001</span>
+                            </p>
+                            <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                                <span class="status-badge status-active" id="memberStatus">Active</span>
+                                <span class="text-white opacity-80">
+                                    <i class="fas fa-calendar mr-2"></i>
+                                    <span data-translate="joined">Joined:</span> <span id="joinDate">January 15, 2024</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn-primary" onclick="editProfile()">
+                                <i class="fas fa-edit mr-2"></i>
+                                <span data-translate="edit-profile">Edit Profile</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="mb-8">
+                <div class="glass-card rounded-2xl p-2">
+                    <div class="flex flex-wrap space-x-2">
+                        <button class="nav-item active px-6 py-3 text-white font-medium" onclick="showTab('overview')" id="tab-overview">
+                            <i class="fas fa-home mr-2"></i>
+                            <span data-translate="overview">Overview</span>
+                        </button>
+                        <button class="nav-item px-6 py-3 text-white font-medium" onclick="showTab('profile')" id="tab-profile">
+                            <i class="fas fa-user mr-2"></i>
+                            <span data-translate="profile">Profile</span>
+                        </button>
+                        <button class="nav-item px-6 py-3 text-white font-medium" onclick="showTab('contributions')" id="tab-contributions">
+                            <i class="fas fa-donate mr-2"></i>
+                            <span data-translate="contributions">Contributions</span>
+                        </button>
+                        <button class="nav-item px-6 py-3 text-white font-medium" onclick="showTab('announcements')" id="tab-announcements">
+                            <i class="fas fa-bullhorn mr-2"></i>
+                            <span data-translate="announcements">Announcements</span>
+                        </button>
+                        <button class="nav-item px-6 py-3 text-white font-medium" onclick="showTab('events')" id="tab-events">
+                            <i class="fas fa-calendar-alt mr-2"></i>
+                            <span data-translate="events">Events</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content -->
+            
+            <!-- Overview Tab -->
+            <div id="overview-content" class="tab-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Quick Stats -->
+                    <div class="glass-card rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-white" data-translate="membership-status">Membership Status</h3>
+                            <i class="fas fa-user-check text-green-400 text-2xl"></i>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-white opacity-70" data-translate="status">Status:</span>
+                                <span class="status-badge status-active">Active</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-white opacity-70" data-translate="member-since">Member Since:</span>
+                                <span class="text-white font-medium">Jan 2024</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-white opacity-70" data-translate="center">Center:</span>
+                                <span class="text-white font-medium">Main Center</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="glass-card rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-white" data-translate="recent-activity">Recent Activity</h3>
+                            <i class="fas fa-clock text-blue-400 text-2xl"></i>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="text-sm">
+                                <p class="text-white font-medium">Profile Updated</p>
+                                <p class="text-white opacity-70">2 days ago</p>
+                            </div>
+                            <div class="text-sm">
+                                <p class="text-white font-medium">Contribution Made</p>
+                                <p class="text-white opacity-70">1 week ago</p>
+                            </div>
+                            <div class="text-sm">
+                                <p class="text-white font-medium">Event Attended</p>
+                                <p class="text-white opacity-70">2 weeks ago</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Events -->
+                    <div class="glass-card rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-white" data-translate="upcoming-events">Upcoming Events</h3>
+                            <i class="fas fa-calendar-plus text-purple-400 text-2xl"></i>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="text-sm">
+                                <p class="text-white font-medium">Sunday Service</p>
+                                <p class="text-white opacity-70">This Sunday, 9:00 AM</p>
+                            </div>
+                            <div class="text-sm">
+                                <p class="text-white font-medium">Bible Study</p>
+                                <p class="text-white opacity-70">Wednesday, 7:00 PM</p>
+                            </div>
+                            <div class="text-sm">
+                                <p class="text-white font-medium">Community Outreach</p>
+                                <p class="text-white opacity-70">Next Saturday</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Announcements -->
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-bullhorn text-yellow-400 mr-3"></i>
+                        <span data-translate="latest-announcements">Latest Announcements</span>
+                    </h3>
+                    <div class="space-y-4" id="recentAnnouncements">
+                        <!-- Announcements will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div id="profile-content" class="tab-content" style="display: none;">
+                <div class="glass-card rounded-xl p-8">
+                    <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-user text-yellow-400 mr-3"></i>
+                        <span data-translate="member-profile">Member Profile</span>
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <h4 class="text-lg font-semibold text-white border-b border-white border-opacity-20 pb-2" data-translate="personal-info">Personal Information</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="text-white opacity-70 text-sm" data-translate="full-name">Full Name</label>
+                                    <p class="text-white font-medium" id="profileFullName">Abebe Kebede Tesfaye</p>
+                                </div>
+                                <div>
+                                    <label class="text-white opacity-70 text-sm" data-translate="gender">Gender</label>
+                                    <p class="text-white font-medium" id="profileGender">Male</p>
+                                </div>
+                                <div>
+                                    <label class="text-white opacity-70 text-sm" data-translate="date-of-birth">Date of Birth</label>
+                                    <p class="text-white font-medium" id="profileDOB">March 15, 1990</p>
+                                </div>
+                                <div>
+                                    <label class="text-white opacity-70 text-sm" data-translate="phone">Phone</label>
+                                    <p class="text-white font-medium" id="profilePhone">+251 911 234 567</p>
+                                </div>
+                                <div>
+                                    <label class="text-white opacity-70 text-sm" data-translate="email">Email</label>
+                                    <p class="text-white font-medium" id="profileEmail">abebe@example.com</p>
+                                </div>
+                                <div>
+                                    <label class="text-white opacity-70 text-sm" data-translate="address">Address</label>
+                                    <p class="text-white font-medium" id="profileAddress">Addis Ababa, Ethiopia</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <h4 class="text-lg font-semibold text-white border-b border-white border-opacity-20 pb-2" data-translate="faith-info">Faith Information</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="text-white opacity-70 text-sm" data-translate="current-church">Current Church</label>
+                                    <p class="text-white font-medium" id="profileChurch">St. Mary Orthodox Church</p>
+                                </div>
+                                <div>
+                                    <label class="text-white opacity-70 text-sm" data-translate="baptized">Baptized</label>
+                                    <p class="text-white font-medium" id="profileBaptized">Yes</p>
+                                </div>
+                                <div>
+                                    <label class="text-white opacity-70 text-sm" data-translate="service-interest">Service Interest</label>
+                                    <p class="text-white font-medium" id="profileService">Choir Ministry</p>
+                                </div>
+                                <div>
+                                    <label class="text-white opacity-70 text-sm" data-translate="how-heard">How You Heard About Us</label>
+                                    <p class="text-white font-medium" id="profileHowHeard">Facebook</p>
+                                </div>
+                            </div>
+                            
+                            <div class="pt-4">
+                                <button class="btn-primary w-full" onclick="editProfile()">
+                                    <i class="fas fa-edit mr-2"></i>
+                                    <span data-translate="edit-profile">Edit Profile</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other tabs content would be implemented similarly -->
+            <div id="contributions-content" class="tab-content" style="display: none;">
+                <div class="glass-card rounded-xl p-8">
+                    <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-donate text-yellow-400 mr-3"></i>
+                        <span data-translate="my-contributions">My Contributions</span>
+                    </h3>
+                    <p class="text-white opacity-80">Contribution tracking feature coming soon...</p>
+                </div>
+            </div>
+
+            <div id="announcements-content" class="tab-content" style="display: none;">
+                <div class="glass-card rounded-xl p-8">
+                    <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-bullhorn text-yellow-400 mr-3"></i>
+                        <span data-translate="all-announcements">All Announcements</span>
+                    </h3>
+                    <p class="text-white opacity-80">Announcements feature coming soon...</p>
+                </div>
+            </div>
+
+            <div id="events-content" class="tab-content" style="display: none;">
+                <div class="glass-card rounded-xl p-8">
+                    <h3 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-calendar-alt text-yellow-400 mr-3"></i>
+                        <span data-translate="church-events">Church Events</span>
+                    </h3>
+                    <p class="text-white opacity-80">Events calendar feature coming soon...</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        let currentLanguage = 'or';
+        let currentTab = 'overview';
+
+        // Multi-language translations (simplified)
+        const translations = {
+            or: {
+                'logout': 'Ba\'i',
+                'member-id': 'Lakkoofsa Miseensaa:',
+                'joined': 'Seene:',
+                'edit-profile': 'Piroofaayilii Fooyyessi',
+                'overview': 'Ilaalcha Guutuu',
+                'profile': 'Piroofaayilii',
+                'contributions': 'Gumaacha',
+                'announcements': 'Beeksisa',
+                'events': 'Taateewwan',
+                'membership-status': 'Haala Miseensummaa',
+                'recent-activity': 'Sochiiwwan Dhiyoo',
+                'upcoming-events': 'Taateewwan Dhufan',
+                'latest-announcements': 'Beeksisaawwan Haaraa',
+                'member-profile': 'Piroofaayilii Miseensaa',
+                'personal-info': 'Odeeffannoo Dhuunfaa',
+                'faith-info': 'Odeeffannoo Amantaa'
+            },
+            en: {
+                'logout': 'Logout',
+                'member-id': 'Member ID:',
+                'joined': 'Joined:',
+                'edit-profile': 'Edit Profile',
+                'overview': 'Overview',
+                'profile': 'Profile',
+                'contributions': 'Contributions',
+                'announcements': 'Announcements',
+                'events': 'Events',
+                'membership-status': 'Membership Status',
+                'recent-activity': 'Recent Activity',
+                'upcoming-events': 'Upcoming Events',
+                'latest-announcements': 'Latest Announcements',
+                'member-profile': 'Member Profile',
+                'personal-info': 'Personal Information',
+                'faith-info': 'Faith Information'
+            }
+        };
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMemberData();
+            loadRecentAnnouncements();
+            switchLanguage(currentLanguage);
+        });
+
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update language buttons
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Translate elements
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + '-content').style.display = 'block';
+            
+            // Update active tab button
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.getElementById('tab-' + tabName).classList.add('active');
+            
+            currentTab = tabName;
+        }
+
+        function loadMemberData() {
+            // This would normally fetch from API or session storage
+            // For demo purposes, using mock data
+            const memberData = {
+                name: 'Abebe Kebede Tesfaye',
+                memberId: 'WDB-2024-0001',
+                status: 'active',
+                joinDate: 'January 15, 2024',
+                fullName: 'Abebe Kebede Tesfaye',
+                gender: 'Male',
+                dob: 'March 15, 1990',
+                phone: '+251 911 234 567',
+                email: 'abebe@example.com',
+                address: 'Addis Ababa, Ethiopia',
+                church: 'St. Mary Orthodox Church',
+                baptized: 'Yes',
+                service: 'Choir Ministry',
+                howHeard: 'Facebook'
+            };
+            
+            // Update UI with member data
+            document.getElementById('memberName').textContent = `Welcome, ${memberData.name}!`;
+            document.getElementById('memberId').textContent = memberData.memberId;
+            document.getElementById('joinDate').textContent = memberData.joinDate;
+            
+            // Update profile tab
+            document.getElementById('profileFullName').textContent = memberData.fullName;
+            document.getElementById('profileGender').textContent = memberData.gender;
+            document.getElementById('profileDOB').textContent = memberData.dob;
+            document.getElementById('profilePhone').textContent = memberData.phone;
+            document.getElementById('profileEmail').textContent = memberData.email;
+            document.getElementById('profileAddress').textContent = memberData.address;
+            document.getElementById('profileChurch').textContent = memberData.church;
+            document.getElementById('profileBaptized').textContent = memberData.baptized;
+            document.getElementById('profileService').textContent = memberData.service;
+            document.getElementById('profileHowHeard').textContent = memberData.howHeard;
+        }
+
+        function loadRecentAnnouncements() {
+            const announcements = [
+                {
+                    title: 'Sunday Service Schedule Change',
+                    content: 'Starting next week, Sunday service will begin at 9:00 AM instead of 10:00 AM.',
+                    date: '2 days ago'
+                },
+                {
+                    title: 'Community Outreach Program',
+                    content: 'Join us for our monthly community outreach program this Saturday.',
+                    date: '1 week ago'
+                },
+                {
+                    title: 'Bible Study Group',
+                    content: 'New Bible study group starting every Wednesday at 7:00 PM.',
+                    date: '2 weeks ago'
+                }
+            ];
+            
+            const container = document.getElementById('recentAnnouncements');
+            container.innerHTML = announcements.map(announcement => `
+                <div class="bg-white bg-opacity-10 rounded-lg p-4">
+                    <h4 class="text-white font-semibold mb-2">${announcement.title}</h4>
+                    <p class="text-white opacity-80 text-sm mb-2">${announcement.content}</p>
+                    <p class="text-white opacity-60 text-xs">${announcement.date}</p>
+                </div>
+            `).join('');
+        }
+
+        function editProfile() {
+            alert('Edit profile functionality would open a modal or redirect to edit page');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Clear session data
+                sessionStorage.removeItem('wdb_member_logged_in');
+                sessionStorage.removeItem('wdb_member_data');
+                
+                // Redirect to home page
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Check if user is logged in (basic check)
+        if (!sessionStorage.getItem('wdb_member_logged_in')) {
+            // For demo purposes, set as logged in
+            sessionStorage.setItem('wdb_member_logged_in', 'true');
+        }
+    </script>
+</body>
+</html>

@@ -4,376 +4,559 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Miseensa Ta'uuf Galmaa'i - Waldaa Duuka Bu'ootaa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Suppress Tailwind CDN production warning
+    if (typeof console !== 'undefined' && console.warn) {
+        const originalWarn = console.warn;
+        console.warn = function(...args) {
+            if (args[0] && args[0].includes('cdn.tailwindcss.com should not be used in production')) {
+                return;
+            }
+            originalWarn.apply(console, args);
+        };
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'Georgia',serif;background:#f0f2f5;color:#333;min-height:100vh;}
-
-    /* Header */
-    .reg-header{
-      background:#1a3b5c;color:white;padding:1rem 2rem;
-      display:flex;align-items:center;gap:1rem;
-      box-shadow:0 2px 10px rgba(0,0,0,0.2);
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+    
+    :root {
+        --primary-color: #1a3b5c;
+        --secondary-color: #2c5282;
+        --accent-color: #d4af37;
+        --success-color: #10b981;
+        --error-color: #ef4444;
     }
-    .reg-header img{width:45px;height:45px;border-radius:50%;object-fit:cover;}
-    .reg-header h1{font-size:1.2rem;}
-    .reg-header a{margin-left:auto;color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.9rem;}
-    .reg-header a:hover{color:#d4af37;}
-
-    /* Hero */
-    .reg-hero{
-      background:linear-gradient(135deg,#1a3b5c,#2c5282);
-      color:white;text-align:center;padding:3rem 1rem;
+    
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        min-height: 100vh;
     }
-    .reg-hero h2{font-size:2rem;color:#d4af37;margin-bottom:0.5rem;}
-    .reg-hero p{opacity:0.85;font-size:1rem;max-width:500px;margin:0 auto;}
-
-    /* Form Container */
-    .reg-container{max-width:700px;margin:2rem auto;padding:0 1rem 3rem;}
-
-    .reg-card{
-      background:white;border-radius:15px;padding:2rem;
-      box-shadow:0 5px 20px rgba(0,0,0,0.08);margin-bottom:1.5rem;
+    
+    .glass-morphism {
+        backdrop-filter: blur(20px) saturate(180%);
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
     }
-    .reg-card h3{
-      color:#1a3b5c;font-size:1.1rem;margin-bottom:1.5rem;
-      padding-bottom:0.8rem;border-bottom:2px solid #f0f2f5;
-      display:flex;align-items:center;gap:0.5rem;
+    
+    .glass-card {
+        backdrop-filter: blur(25px) saturate(200%);
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-
-    /* Steps */
-    .steps{display:flex;justify-content:center;gap:0;margin-bottom:2rem;}
-    .step{
-      display:flex;flex-direction:column;align-items:center;gap:0.3rem;
-      flex:1;max-width:120px;position:relative;
+    
+    .glass-card:hover {
+        backdrop-filter: blur(30px) saturate(220%);
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
     }
-    .step:not(:last-child)::after{
-      content:'';position:absolute;top:16px;left:60%;width:80%;height:2px;
-      background:#e9ecef;z-index:0;
+    
+    .step-indicator {
+        position: relative;
     }
-    .step.done::after{background:#d4af37;}
-    .step-num{
-      width:32px;height:32px;border-radius:50%;background:#e9ecef;
-      color:#888;font-weight:bold;font-size:0.85rem;
-      display:flex;align-items:center;justify-content:center;z-index:1;
-      transition:all 0.3s;
+    
+    .step-indicator::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 100%;
+        width: 100%;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-50%);
+        z-index: 0;
     }
-    .step.active .step-num{background:#d4af37;color:#1a3b5c;}
-    .step.done .step-num{background:#28a745;color:white;}
-    .step-label{font-size:0.72rem;color:#888;text-align:center;}
-    .step.active .step-label{color:#1a3b5c;font-weight:bold;}
-
-    /* Form fields */
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-    .form-group{margin-bottom:1rem;}
-    .form-group label{display:block;font-weight:600;color:#1a3b5c;font-size:0.88rem;margin-bottom:0.4rem;}
-    .form-group input,.form-group select,.form-group textarea{
-      width:100%;padding:0.8rem 1rem;border:2px solid #e9ecef;border-radius:8px;
-      font-size:0.95rem;font-family:inherit;outline:none;transition:border-color 0.3s;
+    
+    .step-indicator.completed::after {
+        background: var(--accent-color);
     }
-    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#d4af37;}
-    .form-group input.err,.form-group select.err{border-color:#e74c3c;}
-    .err-msg{color:#e74c3c;font-size:0.78rem;margin-top:0.3rem;display:none;}
-    .has-error .err-msg{display:block;}
-    .required{color:#e74c3c;}
-
-    /* Buttons */
-    .btn-row{display:flex;gap:1rem;justify-content:flex-end;margin-top:1.5rem;}
-    .btn{padding:0.8rem 2rem;border:none;border-radius:10px;font-weight:bold;cursor:pointer;font-size:0.95rem;transition:all 0.3s;}
-    .btn-primary{background:linear-gradient(135deg,#d4af37,#b8941f);color:#1a3b5c;}
-    .btn-primary:hover{background:linear-gradient(135deg,#1a3b5c,#2c5282);color:white;transform:translateY(-1px);}
-    .btn-secondary{background:#f0f2f5;color:#555;border:2px solid #e9ecef;}
-    .btn-secondary:hover{border-color:#1a3b5c;color:#1a3b5c;}
-
-    /* Section pages */
-    .reg-section{display:none;}
-    .reg-section.active{display:block;}
-
-    /* Success */
-    .success-box{
-      text-align:center;padding:3rem 2rem;
-      background:white;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.08);
+    
+    .step-indicator:last-child::after {
+        display: none;
     }
-    .success-icon{font-size:4rem;margin-bottom:1rem;}
-    .success-box h2{color:#1a3b5c;margin-bottom:0.5rem;}
-    .success-box p{color:#666;margin-bottom:1.5rem;}
-    .reg-id{
-      background:#fef9e7;border:2px solid #d4af37;border-radius:10px;
-      padding:1rem;font-size:1.3rem;font-weight:bold;color:#1a3b5c;
-      letter-spacing:2px;margin:1rem 0;
+    
+    .btn-advanced {
+        background: linear-gradient(135deg, var(--accent-color), #b8941f);
+        color: var(--primary-color);
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
     }
-
-    @media(max-width:600px){
-      .form-row{grid-template-columns:1fr;}
-      .reg-hero h2{font-size:1.5rem;}
-      .reg-card{padding:1.2rem;}
-      .steps{gap:0;}
+    
+    .btn-advanced:hover {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+    }
+    
+    .form-input {
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        padding: 12px 16px;
+        color: white;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+    
+    .form-input:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    }
+    
+    .form-input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .form-input.error {
+        border-color: var(--error-color);
+        background: rgba(239, 68, 68, 0.1);
+    }
+    
+    .error-message {
+        color: #fca5a5;
+        font-size: 14px;
+        margin-top: 4px;
+        display: none;
+    }
+    
+    .error-message.show {
+        display: block;
+    }
+    
+    .success-animation {
+        animation: successPulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes successPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+    
+    .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    
+    .language-switcher {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+    
+    .language-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        padding: 8px 12px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0 2px;
+    }
+    
+    .language-btn:hover, .language-btn.active {
+        background: var(--accent-color);
+        color: var(--primary-color);
+        transform: translateY(-2px);
     }
   </style>
 </head>
 <body>
 
-<div class="reg-header">
-  <img src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo">
-  <h1>Waldaa Duuka Bu'ootaa</h1>
-  <a href="index.html">← Duubatti Deebi'i</a>
-</div>
-
-<div class="reg-hero">
-  <h2>👥 Miseensa Ta'uuf Galmaa'i</h2>
-  <p>Waldaa Duuka Bu'ootaa keessatti miseensa ta'uuf foormii armaan gadii guuti.</p>
-</div>
-
-<div class="reg-container">
-
-  <!-- Steps indicator -->
-  <div class="steps" id="stepsBar">
-    <div class="step active" id="step1"><div class="step-num">1</div><div class="step-label">Odeeffannoo</div></div>
-    <div class="step" id="step2"><div class="step-num">2</div><div class="step-label">Amantaa</div></div>
-    <div class="step" id="step3"><div class="step-num">3</div><div class="step-label">Mirkaneessi</div></div>
+  <!-- Language Switcher -->
+  <div class="language-switcher">
+    <button class="language-btn active" onclick="switchLanguage('or')" data-lang="or">🇪🇹 Oromoo</button>
+    <button class="language-btn" onclick="switchLanguage('en')" data-lang="en">🇬🇧 English</button>
+    <button class="language-btn" onclick="switchLanguage('am')" data-lang="am">🇪🇹 አማርኛ</button>
+    <button class="language-btn" onclick="switchLanguage('ti')" data-lang="ti">🇪🇹 ትግርኛ</button>
   </div>
 
-  <!-- ── SECTION 1: Personal Info ── -->
-  <div class="reg-section active" id="sec1">
-    <div class="reg-card">
-      <h3>👤 Odeeffannoo Dhuunfaa</h3>
-      <div class="form-row">
-        <div class="form-group" id="fg-fname">
-          <label>Maqaa Jalqabaa <span class="required">*</span></label>
-          <input type="text" id="fname" placeholder="Maqaa...">
-          <div class="err-msg">Maqaa barreessi</div>
+  <!-- Header -->
+  <header class="glass-morphism fixed w-full top-0 z-40">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <img src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo" class="w-12 h-12 rounded-full shadow-lg">
+          <div>
+            <h1 class="text-xl font-bold text-white" data-translate="registration-title">
+              👥 Miseensa Ta'uuf Galmaa'i
+            </h1>
+            <p class="text-sm text-white opacity-80">Waldaa Duuka Bu'ootaa (WDB)</p>
+          </div>
         </div>
-        <div class="form-group" id="fg-lname">
-          <label>Maqaa Abbaa <span class="required">*</span></label>
-          <input type="text" id="lname" placeholder="Maqaa abbaa...">
-          <div class="err-msg">Maqaa abbaa barreessi</div>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group" id="fg-gender">
-          <label>Saala <span class="required">*</span></label>
-          <select id="gender">
-            <option value="">Filadhu...</option>
-            <option>Dhiira</option>
-            <option>Dubartii</option>
-          </select>
-          <div class="err-msg">Saala filadhu</div>
-        </div>
-        <div class="form-group" id="fg-dob">
-          <label>Guyyaa Dhalootaa</label>
-          <input type="date" id="dob">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group" id="fg-phone">
-          <label>Lakkoofsa Bilbilaa <span class="required">*</span></label>
-          <input type="tel" id="phone" placeholder="+251 9XX XXX XXX">
-          <div class="err-msg">Lakkoofsa bilbilaa barreessi</div>
-        </div>
-        <div class="form-group" id="fg-email">
-          <label>Imeelii</label>
-          <input type="email" id="email" placeholder="imeelii@keessan.com">
-        </div>
-      </div>
-      <div class="form-group" id="fg-address">
-        <label>Teessoo (Magaalaa/Aanaa) <span class="required">*</span></label>
-        <input type="text" id="address" placeholder="Finfinnee, Oromiyaa...">
-        <div class="err-msg">Teessoo barreessi</div>
+        <a href="index.html" class="text-white opacity-80 hover:opacity-100 transition-opacity">
+          <i class="fas fa-arrow-left mr-2"></i>
+          <span data-translate="back-home">← Duubatti Deebi'i</span>
+        </a>
       </div>
     </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="goToSec2()">Itti Aanaa →</button>
+  </header>
+
+  <!-- Main Content -->
+  <main class="pt-24 pb-12 px-6">
+    <div class="max-w-4xl mx-auto">
+      
+      <!-- Hero Section -->
+      <div class="text-center mb-12" data-aos="fade-up">
+        <div class="glass-card rounded-3xl p-8 mb-8">
+          <div class="mb-6">
+            <img src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo" class="w-24 h-24 mx-auto rounded-full shadow-2xl">
+          </div>
+          <h2 class="text-4xl font-bold text-white mb-4" data-translate="welcome-title">
+            👥 Baga Nagaan Dhuftan
+          </h2>
+          <p class="text-xl text-white opacity-90 mb-6" data-translate="welcome-subtitle">
+            Waldaa Duuka Bu'ootaa keessatti miseensa ta'uuf foormii armaan gadii guuti.
+          </p>
+          <div class="glass-card p-6 rounded-2xl">
+            <p class="text-lg font-semibold text-white mb-2" data-translate="spiritual-opening">
+              Maqaa Abbaa, Kan Ilmaa, Kan Hafuura Qulqulluu, Waaqa Tokko. Ameen.
+            </p>
+            <p class="text-white opacity-80" data-translate="spiritual-translation">
+              In the Name of the Father, the Son, and the Holy Spirit, One God. Amen.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Steps -->
+      <div class="flex justify-center mb-12" data-aos="fade-up" data-aos-delay="200">
+        <div class="glass-card rounded-2xl p-6">
+          <div class="flex items-center space-x-8">
+            <div class="step-indicator completed flex flex-col items-center" id="step1">
+              <div class="w-12 h-12 rounded-full bg-yellow-400 text-gray-800 flex items-center justify-center font-bold text-lg mb-2">
+                1
+              </div>
+              <span class="text-white text-sm font-medium" data-translate="step-personal">Odeeffannoo</span>
+            </div>
+            <div class="step-indicator flex flex-col items-center" id="step2">
+              <div class="w-12 h-12 rounded-full bg-white bg-opacity-30 text-white flex items-center justify-center font-bold text-lg mb-2">
+                2
+              </div>
+              <span class="text-white text-sm font-medium" data-translate="step-faith">Amantaa</span>
+            </div>
+            <div class="step-indicator flex flex-col items-center" id="step3">
+              <div class="w-12 h-12 rounded-full bg-white bg-opacity-30 text-white flex items-center justify-center font-bold text-lg mb-2">
+                3
+              </div>
+              <span class="text-white text-sm font-medium" data-translate="step-review">Mirkaneessi</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Registration Form -->
+      <form id="registrationForm" class="space-y-8">
+        
+        <!-- Step 1: Personal Information -->
+        <div class="registration-step active" id="personalStep" data-aos="fade-up" data-aos-delay="400">
+          <div class="glass-card rounded-3xl p-8">
+            <h3 class="text-2xl font-bold text-white mb-8 flex items-center">
+              <i class="fas fa-user text-yellow-400 mr-3"></i>
+              <span data-translate="personal-info">👤 Odeeffannoo Dhuunfaa</span>
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="form-group">
+                <label class="block text-white font-medium mb-2" data-translate="first-name">
+                  Maqaa Jalqabaa <span class="text-red-400">*</span>
+                </label>
+                <input type="text" id="fname" name="fname" class="form-input" 
+                       placeholder="Maqaa keessan galchaa..." required>
+                <div class="error-message" id="fname-error">Maqaa barreessi</div>
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-white font-medium mb-2" data-translate="last-name">
+                  Maqaa Abbaa <span class="text-red-400">*</span>
+                </label>
+                <input type="text" id="lname" name="lname" class="form-input" 
+                       placeholder="Maqaa abbaa keessan galchaa..." required>
+                <div class="error-message" id="lname-error">Maqaa abbaa barreessi</div>
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-white font-medium mb-2" data-translate="gender">
+                  Saala <span class="text-red-400">*</span>
+                </label>
+                <select id="gender" name="gender" class="form-input" required>
+                  <option value="" data-translate="select-gender">Filadhu...</option>
+                  <option value="Dhiira">Dhiira</option>
+                  <option value="Dubartii">Dubartii</option>
+                </select>
+                <div class="error-message" id="gender-error">Saala filadhu</div>
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-white font-medium mb-2" data-translate="birth-date">
+                  Guyyaa Dhalootaa
+                </label>
+                <input type="date" id="dob" name="dob" class="form-input">
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-white font-medium mb-2" data-translate="phone">
+                  Lakkoofsa Bilbilaa <span class="text-red-400">*</span>
+                </label>
+                <input type="tel" id="phone" name="phone" class="form-input" 
+                       placeholder="+251 9XX XXX XXX" required>
+                <div class="error-message" id="phone-error">Lakkoofsa bilbilaa barreessi</div>
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-white font-medium mb-2" data-translate="email">
+                  Imeelii
+                </label>
+                <input type="email" id="email" name="email" class="form-input" 
+                       placeholder="imeelii@keessan.com">
+              </div>
+            </div>
+            
+            <div class="form-group mt-6">
+              <label class="block text-white font-medium mb-2" data-translate="address">
+                Teessoo (Magaalaa/Aanaa) <span class="text-red-400">*</span>
+              </label>
+              <input type="text" id="address" name="address" class="form-input" 
+                     placeholder="Finfinnee, Oromiyaa..." required>
+              <div class="error-message" id="address-error">Teessoo barreessi</div>
+            </div>
+            
+            <div class="flex justify-end mt-8">
+              <button type="button" class="btn-advanced" onclick="nextStep(2)">
+                <span data-translate="next">Itti Aanaa</span> →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Faith Information -->
+        <div class="registration-step" id="faithStep" data-aos="fade-up" data-aos-delay="400">
+          <div class="glass-card rounded-3xl p-8">
+            <h3 class="text-2xl font-bold text-white mb-8 flex items-center">
+              <i class="fas fa-cross text-yellow-400 mr-3"></i>
+              <span data-translate="faith-info">✝️ Odeeffannoo Amantaa</span>
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="form-group">
+                <label class="block text-white font-medium mb-2" data-translate="current-church">
+                  Mana Kiristaanaa Ammaa
+                </label>
+                <input type="text" id="currentChurch" name="currentChurch" class="form-input" 
+                       placeholder="Mana kiristaanaa jirtu...">
+              </div>
+              
+              <div class="form-group">
+                <label class="block text-white font-medium mb-2" data-translate="baptized">
+                  Cuuphaa Fudhattee? <span class="text-red-400">*</span>
+                </label>
+                <select id="baptized" name="baptized" class="form-input" required>
+                  <option value="" data-translate="select-option">Filadhu...</option>
+                  <option value="eeyyee">Eeyyee</option>
+                  <option value="lakki">Lakki</option>
+                </select>
+                <div class="error-message" id="baptized-error">Deebii filadhu</div>
+              </div>
+            </div>
+            
+            <div class="form-group mt-6">
+              <label class="block text-white font-medium mb-2" data-translate="service-interest">
+                Tajaajila Waldaa Keessatti Barbaaddu
+              </label>
+              <select id="service" name="service" class="form-input">
+                <option value="" data-translate="select-option">Filadhu...</option>
+                <option value="Faarfannaa">Faarfannaa</option>
+                <option value="Barnoota Macaafaa">Barnoota Macaafaa</option>
+                <option value="Kadhannaa">Kadhannaa</option>
+                <option value="Gargaarsa Hawaasaa">Gargaarsa Hawaasaa</option>
+                <option value="Hogganummaa">Hogganummaa</option>
+                <option value="Biroo">Biroo</option>
+              </select>
+            </div>
+            
+            <div class="form-group mt-6">
+              <label class="block text-white font-medium mb-2" data-translate="how-heard">
+                Waa'ee Waldichaa Akkamitti Dhagahatte?
+              </label>
+              <select id="howHeard" name="howHeard" class="form-input">
+                <option value="" data-translate="select-option">Filadhu...</option>
+                <option value="Hiriyaa/Maatii">Hiriyaa/Maatii</option>
+                <option value="Facebook">Facebook</option>
+                <option value="YouTube">YouTube</option>
+                <option value="TikTok">TikTok</option>
+                <option value="Biroo">Biroo</option>
+              </select>
+            </div>
+            
+            <div class="form-group mt-6">
+              <label class="block text-white font-medium mb-2" data-translate="additional-notes">
+                Yaada Dabalataa
+              </label>
+              <textarea id="notes" name="notes" rows="4" class="form-input" 
+                        placeholder="Yaada ykn gaaffii qabduu..."></textarea>
+            </div>
+            
+            <div class="flex justify-between mt-8">
+              <button type="button" class="btn-secondary" onclick="previousStep(1)">
+                ← <span data-translate="previous">Duubatti</span>
+              </button>
+              <button type="button" class="btn-advanced" onclick="nextStep(3)">
+                <span data-translate="review">Mirkaneessi</span> →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Review -->
+        <div class="registration-step" id="reviewStep" data-aos="fade-up" data-aos-delay="400">
+          <div class="glass-card rounded-3xl p-8">
+            <h3 class="text-2xl font-bold text-white mb-8 flex items-center">
+              <i class="fas fa-check-circle text-yellow-400 mr-3"></i>
+              <span data-translate="review-info">✅ Odeeffannoo Mirkaneessi</span>
+            </h3>
+            
+            <div id="reviewContent" class="space-y-4 mb-8">
+              <!-- Review content will be populated by JavaScript -->
+            </div>
+            
+            <div class="glass-card p-6 rounded-2xl mb-8 border-l-4 border-yellow-400">
+              <div class="flex items-start">
+                <i class="fas fa-shield-alt text-yellow-400 text-xl mr-3 mt-1"></i>
+                <div>
+                  <h4 class="text-white font-semibold mb-2" data-translate="privacy-title">
+                    🔒 Nageenya Odeeffannoo
+                  </h4>
+                  <p class="text-white opacity-90 text-sm" data-translate="privacy-text">
+                    Odeeffannoon keessan nageenya qabeessa ta'ee eegama. Waldaa Duuka Bu'ootaa qofaaf fayyadamama.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex justify-between">
+              <button type="button" class="btn-secondary" onclick="previousStep(2)">
+                ← <span data-translate="previous">Duubatti</span>
+              </button>
+              <button type="submit" class="btn-advanced" id="submitBtn">
+                <i class="fas fa-paper-plane mr-2"></i>
+                <span data-translate="submit">📋 Galmaa'i ✓</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success Step -->
+        <div class="registration-step" id="successStep" data-aos="fade-up" data-aos-delay="400">
+          <div class="glass-card rounded-3xl p-12 text-center success-animation">
+            <div class="mb-8">
+              <i class="fas fa-check-circle text-6xl text-green-400 mb-4"></i>
+              <h2 class="text-4xl font-bold text-white mb-4" data-translate="success-title">
+                🎉 Baga Galmoofte!
+              </h2>
+              <p class="text-xl text-white opacity-90 mb-6" data-translate="success-message">
+                Baga nagaan Gara Waldaa Duuka Bu'ootaatti dhufte. Galmaa'inni keessan milkaa'inaan xumurame.
+              </p>
+            </div>
+            
+            <div class="glass-card p-6 rounded-2xl mb-8 border-2 border-yellow-400">
+              <h3 class="text-white font-semibold mb-2" data-translate="member-id-title">
+                Lakkoofsa Miseensummaa Keessan:
+              </h3>
+              <div class="text-3xl font-bold text-yellow-400 tracking-wider" id="memberIdDisplay">
+                <!-- Member ID will be populated by JavaScript -->
+              </div>
+            </div>
+            
+            <p class="text-white opacity-80 mb-8" data-translate="save-id-message">
+              Lakkoofsa galmaa'inaa kana olkaa'i. Gaaffii yoo qabaatte nu quunnamuu dandeessa.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="index.html" class="btn-advanced inline-flex items-center justify-center">
+                <i class="fas fa-home mr-2"></i>
+                <span data-translate="back-home">🏠 Mana Deebi'i</span>
+              </a>
+              <button type="button" class="btn-secondary" onclick="printRegistration()">
+                <i class="fas fa-print mr-2"></i>
+                <span data-translate="print">🖨️ Maxxansi</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+    <div class="glass-card rounded-2xl p-8 text-center">
+      <div class="loading-spinner mx-auto mb-4"></div>
+      <p class="text-white text-lg" data-translate="processing">Adeemsifamaa jira...</p>
     </div>
   </div>
 
-  <!-- ── SECTION 2: Faith Info ── -->
-  <div class="reg-section" id="sec2">
-    <div class="reg-card">
-      <h3>✝️ Odeeffannoo Amantaa</h3>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Mana Kiristaanaa Ammaa</label>
-          <input type="text" id="currentChurch" placeholder="Mana kiristaanaa jirtu...">
+  <!-- Notification Toast -->
+  <div id="notificationToast" class="fixed top-4 right-4 z-50 hidden">
+    <div class="glass-card rounded-xl p-4 max-w-sm">
+      <div class="flex items-center">
+        <div id="toastIcon" class="mr-3 text-xl"></div>
+        <div>
+          <div id="toastTitle" class="text-white font-semibold"></div>
+          <div id="toastMessage" class="text-white opacity-80 text-sm"></div>
         </div>
-        <div class="form-group" id="fg-baptized">
-          <label>Cuuphaa Fudhattee? <span class="required">*</span></label>
-          <select id="baptized">
-            <option value="">Filadhu...</option>
-            <option value="eeyyee">Eeyyee</option>
-            <option value="lakki">Lakki</option>
-          </select>
-          <div class="err-msg">Deebii filadhu</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Tajaajila Waldaa Keessatti Barbaaddu</label>
-        <select id="service">
-          <option value="">Filadhu...</option>
-          <option>Faarfannaa</option>
-          <option>Barnoota Macaafaa</option>
-          <option>Kadhannaa</option>
-          <option>Gargaarsa Hawaasaa</option>
-          <option>Hogganummaa</option>
-          <option>Biroo</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Waa'ee Waldichaa Akkamitti Dhagahatte?</label>
-        <select id="howHeard">
-          <option value="">Filadhu...</option>
-          <option>Hiriyaa/Maatii</option>
-          <option>Facebook</option>
-          <option>YouTube</option>
-          <option>TikTok</option>
-          <option>Biroo</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Yaada Dabalataa</label>
-        <textarea id="notes" rows="3" placeholder="Yaada ykn gaaffii qabduu..."></textarea>
-      </div>
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-secondary" onclick="goToSec1()">← Duubatti</button>
-      <button class="btn btn-primary" onclick="goToSec3()">Mirkaneessi →</button>
-    </div>
-  </div>
-
-  <!-- ── SECTION 3: Review ── -->
-  <div class="reg-section" id="sec3">
-    <div class="reg-card">
-      <h3>✅ Odeeffannoo Mirkaneessi</h3>
-      <div id="reviewContent" style="font-size:0.95rem;line-height:2;"></div>
-      <div style="background:#fef9e7;border-left:4px solid #d4af37;padding:1rem;border-radius:8px;margin-top:1rem;font-size:0.88rem;color:#555;">
-        🔒 Odeeffannoon keessan nageenya qabeessa ta'ee eegama. Waldaa Duuka Bu'ootaa qofaaf fayyadamama.
-      </div>
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-secondary" onclick="goToSec2()">← Duubatti</button>
-      <button class="btn btn-primary" onclick="submitRegistration()">📋 Galmaa'i ✓</button>
-    </div>
-  </div>
-
-  <!-- ── SUCCESS ── -->
-  <div class="reg-section" id="secSuccess">
-    <div class="success-box">
-      <div class="success-icon">🎉</div>
-      <h2>Baga Galmoofte!</h2>
-      <p>Baga nagaan Gara Waldaa Duuka Bu'ootaatti dhufte. Galmaa'inni keessan milkaa'inaan xumurame.</p>
-      <div class="reg-id" id="regIdDisplay"></div>
-      <p style="font-size:0.85rem;color:#888;">Lakkoofsa galmaa'inaa kana olkaa'i. Gaaffii yoo qabaatte nu quunnamuu dandeessa.</p>
-      <div style="margin-top:2rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
-        <a href="index.html" class="btn btn-primary">🏠 Mana Deebi'i</a>
-        <button class="btn btn-secondary" onclick="printReg()">🖨️ Maxxansi</button>
+        <button onclick="hideNotification()" class="ml-4 text-white opacity-60 hover:opacity-100">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
     </div>
   </div>
 
-</div><!-- /reg-container -->
-
-<script>
-const MEMBERS_KEY = 'wdb_members';
-let currentSec = 1;
-
-function setStep(n) {
-  currentSec = n;
-  [1,2,3].forEach(i => {
-    document.getElementById('sec'+i).classList.toggle('active', i===n);
-    const s = document.getElementById('step'+i);
-    s.classList.remove('active','done');
-    if (i < n) s.classList.add('done');
-    if (i === n) s.classList.add('active');
-  });
-  document.getElementById('secSuccess').classList.remove('active');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function validate1() {
-  let ok = true;
-  function chk(fgId, inputId, fn) {
-    const fg = document.getElementById(fgId);
-    const v  = document.getElementById(inputId).value.trim();
-    if (!fn(v)) { fg.classList.add('has-error'); ok = false; }
-    else fg.classList.remove('has-error');
-  }
-  chk('fg-fname',   'fname',   v => v.length > 1);
-  chk('fg-lname',   'lname',   v => v.length > 1);
-  chk('fg-gender',  'gender',  v => v !== '');
-  chk('fg-phone',   'phone',   v => v.length > 6);
-  chk('fg-address', 'address', v => v.length > 2);
-  return ok;
-}
-
-function validate2() {
-  let ok = true;
-  const fg = document.getElementById('fg-baptized');
-  if (!document.getElementById('baptized').value) {
-    fg.classList.add('has-error'); ok = false;
-  } else fg.classList.remove('has-error');
-  return ok;
-}
-
-function goToSec1() { setStep(1); }
-function goToSec2() { if (validate1()) setStep(2); }
-function goToSec3() {
-  if (!validate2()) return;
-  // Build review
-  const data = collectData();
-  document.getElementById('reviewContent').innerHTML = `
-    <table style="width:100%;border-collapse:collapse;">
-      ${row('👤 Maqaa Guutuu', data.fname + ' ' + data.lname)}
-      ${row('⚧ Saala', data.gender)}
-      ${row('📅 Guyyaa Dhalootaa', data.dob || '—')}
-      ${row('📞 Bilbila', data.phone)}
-      ${row('📧 Imeelii', data.email || '—')}
-      ${row('📍 Teessoo', data.address)}
-      ${row('⛪ Mana Kiristaanaa', data.currentChurch || '—')}
-      ${row('✝️ Cuuphaa', data.baptized)}
-      ${row('🙏 Tajaajila', data.service || '—')}
-      ${row('📣 Akkamitti Dhagahatte', data.howHeard || '—')}
-    </table>`;
-  setStep(3);
-}
-
-function row(label, val) {
-  return `<tr>
-    <td style="padding:0.4rem 0.8rem 0.4rem 0;color:#888;font-size:0.85rem;white-space:nowrap;">${label}</td>
-    <td style="padding:0.4rem 0;font-weight:600;color:#1a3b5c;">${val}</td>
-  </tr>`;
-}
-
-function collectData() {
-  return {
-    fname:         document.getElementById('fname').value.trim(),
-    lname:         document.getElementById('lname').value.trim(),
-    gender:        document.getElementById('gender').value,
-    dob:           document.getElementById('dob').value,
-    phone:         document.getElementById('phone').value.trim(),
-    email:         document.getElementById('email').value.trim(),
-    address:       document.getElementById('address').value.trim(),
-    currentChurch: document.getElementById('currentChurch').value.trim(),
-    baptized:      document.getElementById('baptized').value,
-    service:       document.getElementById('service').value,
-    howHeard:      document.getElementById('howHeard').value,
-    notes:         document.getElementById('notes').value.trim(),
-  };
-}
-
-function submitRegistration() {
-  const data     = collectData();
-  const regId    = 'WDB-' + Date.now().toString().slice(-6);
-  const members  = JSON.parse(localStorage.getItem(MEMBERS_KEY) || '[]');
-  members.push({ ...data, regId, date: new Date().toISOString(), status: 'haaraa' });
-  localStorage.setItem(MEMBERS_KEY, JSON.stringify(members));
-
-  // Show success
-  [1,2,3].forEach(i => document.getElementById('sec'+i).classList.remove('active'));
-  document.getElementById('secSuccess').classList.add('active');
-  document.getElementById('regIdDisplay').textContent = regId;
-  [1,2,3].forEach(i => document.getElementById('step'+i).classList.add('done'));
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function printReg() { window.print(); }
-</script>
+  <!-- Include the modern JavaScript implementation -->
+  <script src="js/registration.js"></script>
 </body>
 </html>

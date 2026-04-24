@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Waldaa Duuka Bu'ootaa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        :root {
+            --primary-color: #1a3b5c;
+            --secondary-color: #2c5282;
+            --accent-color: #d4af37;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+        }
+        
+        .glass-morphism {
+            backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glass-card {
+            backdrop-filter: blur(25px) saturate(200%);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .glass-card:hover {
+            backdrop-filter: blur(30px) saturate(220%);
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .sidebar {
+            width: 280px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar.collapsed {
+            width: 80px;
+        }
+        
+        .sidebar-item {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            margin: 4px 0;
+        }
+        
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+        
+        .sidebar-item.active {
+            background: var(--accent-color);
+            color: var(--primary-color);
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-color), #b8941f);
+            color: var(--primary-color);
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .table-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .table th {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 600;
+            padding: 16px;
+            text-align: left;
+        }
+        
+        .table td {
+            padding: 12px 16px;
+            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-active { background: #10b981; color: white; }
+        .status-pending { background: #f59e0b; color: white; }
+        .status-inactive { background: #6b7280; color: white; }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="fixed left-0 top-0 h-full sidebar glass-morphism z-40" id="sidebar">
+        <div class="p-6">
+            <div class="flex items-center space-x-3 mb-8">
+                <img src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo" class="w-12 h-12 rounded-full">
+                <div class="sidebar-text">
+                    <h2 class="text-white font-bold text-lg">WDB Admin</h2>
+                    <p class="text-white opacity-70 text-sm">Dashboard</p>
+                </div>
+            </div>
+            
+            <nav class="space-y-2">
+                <a href="#dashboard" class="sidebar-item active flex items-center space-x-3 p-3 text-white" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt w-5"></i>
+                    <span class="sidebar-text">Dashboard</span>
+                </a>
+                <a href="#members" class="sidebar-item flex items-center space-x-3 p-3 text-white" onclick="showSection('members')">
+                    <i class="fas fa-users w-5"></i>
+                    <span class="sidebar-text">Members</span>
+                </a>
+                <a href="#registrations" class="sidebar-item flex items-center space-x-3 p-3 text-white" onclick="showSection('registrations')">
+                    <i class="fas fa-user-plus w-5"></i>
+                    <span class="sidebar-text">New Registrations</span>
+                </a>
+                <a href="#announcements" class="sidebar-item flex items-center space-x-3 p-3 text-white" onclick="showSection('announcements')">
+                    <i class="fas fa-bullhorn w-5"></i>
+                    <span class="sidebar-text">Announcements</span>
+                </a>
+                <a href="#contributions" class="sidebar-item flex items-center space-x-3 p-3 text-white" onclick="showSection('contributions')">
+                    <i class="fas fa-donate w-5"></i>
+                    <span class="sidebar-text">Contributions</span>
+                </a>
+                <a href="#reports" class="sidebar-item flex items-center space-x-3 p-3 text-white" onclick="showSection('reports')">
+                    <i class="fas fa-chart-bar w-5"></i>
+                    <span class="sidebar-text">Reports</span>
+                </a>
+                <a href="#settings" class="sidebar-item flex items-center space-x-3 p-3 text-white" onclick="showSection('settings')">
+                    <i class="fas fa-cog w-5"></i>
+                    <span class="sidebar-text">Settings</span>
+                </a>
+            </nav>
+        </div>
+        
+        <div class="absolute bottom-6 left-6 right-6">
+            <div class="glass-card p-4 rounded-xl">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-gray-800"></i>
+                    </div>
+                    <div class="sidebar-text">
+                        <p class="text-white font-medium text-sm">Admin User</p>
+                        <p class="text-white opacity-70 text-xs">Administrator</p>
+                    </div>
+                </div>
+                <button class="mt-3 w-full btn-primary text-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    <span class="sidebar-text">Logout</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="ml-80 min-h-screen" id="mainContent">
+        <!-- Header -->
+        <header class="glass-morphism p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleSidebar()" class="text-white hover:text-yellow-400 transition-colors">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <h1 class="text-2xl font-bold text-white" id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Search members..." 
+                               class="bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg px-4 py-2 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:border-yellow-400">
+                        <i class="fas fa-search absolute right-3 top-3 text-white opacity-70"></i>
+                    </div>
+                    <button class="text-white hover:text-yellow-400 transition-colors relative">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="section active px-6">
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="stat-card rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-white opacity-70 text-sm">Total Members</p>
+                            <p class="text-3xl font-bold text-white" id="totalMembers">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-users text-white"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-white opacity-70 text-sm">Pending Registrations</p>
+                            <p class="text-3xl font-bold text-white" id="pendingRegistrations">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user-clock text-white"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-white opacity-70 text-sm">Active Members</p>
+                            <p class="text-3xl font-bold text-white" id="activeMembers">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user-check text-white"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card rounded-xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-white opacity-70 text-sm">This Month</p>
+                            <p class="text-3xl font-bold text-white" id="monthlyRegistrations">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-calendar-plus text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                        <i class="fas fa-clock text-yellow-400 mr-3"></i>
+                        Recent Registrations
+                    </h3>
+                    <div id="recentRegistrations" class="space-y-3">
+                        <!-- Recent registrations will be loaded here -->
+                    </div>
+                </div>
+                
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                        <i class="fas fa-chart-line text-yellow-400 mr-3"></i>
+                        Quick Stats
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-white opacity-70">Male Members</span>
+                            <span class="text-white font-semibold" id="maleCount">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-white opacity-70">Female Members</span>
+                            <span class="text-white font-semibold" id="femaleCount">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-white opacity-70">Baptized Members</span>
+                            <span class="text-white font-semibold" id="baptizedCount">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-white opacity-70">Average Age</span>
+                            <span class="text-white font-semibold" id="averageAge">N/A</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Members Section -->
+        <div id="members-section" class="section px-6" style="display: none;">
+            <div class="glass-card rounded-xl p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-white">All Members</h3>
+                    <div class="flex space-x-3">
+                        <button class="btn-primary" onclick="exportMembers()">
+                            <i class="fas fa-download mr-2"></i>Export
+                        </button>
+                        <button class="btn-primary" onclick="addMember()">
+                            <i class="fas fa-plus mr-2"></i>Add Member
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="table w-full">
+                        <thead>
+                            <tr>
+                                <th>Member ID</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Status</th>
+                                <th>Registered</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="membersTableBody">
+                            <!-- Members will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other sections would be implemented similarly -->
+        <div id="registrations-section" class="section px-6" style="display: none;">
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-6">Pending Registrations</h3>
+                <div id="pendingRegistrationsTable">
+                    <!-- Pending registrations table -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 'dashboard';
+        let sidebarCollapsed = false;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+            loadMembers();
+        });
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            sidebarCollapsed = !sidebarCollapsed;
+            
+            if (sidebarCollapsed) {
+                sidebar.classList.add('collapsed');
+                mainContent.style.marginLeft = '80px';
+                document.querySelectorAll('.sidebar-text').forEach(el => el.style.display = 'none');
+            } else {
+                sidebar.classList.remove('collapsed');
+                mainContent.style.marginLeft = '280px';
+                document.querySelectorAll('.sidebar-text').forEach(el => el.style.display = 'block');
+            }
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').style.display = 'block';
+            
+            // Update active sidebar item
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.sidebar-item').classList.add('active');
+            
+            // Update page title
+            const titles = {
+                'dashboard': 'Dashboard',
+                'members': 'Members',
+                'registrations': 'New Registrations',
+                'announcements': 'Announcements',
+                'contributions': 'Contributions',
+                'reports': 'Reports',
+                'settings': 'Settings'
+            };
+            document.getElementById('pageTitle').textContent = titles[sectionName] || 'Dashboard';
+            
+            currentSection = sectionName;
+        }
+
+        async function loadDashboardData() {
+            try {
+                // This would normally fetch from API
+                // For now, using mock data
+                const stats = {
+                    totalMembers: 156,
+                    pendingRegistrations: 8,
+                    activeMembers: 142,
+                    monthlyRegistrations: 23,
+                    maleCount: 89,
+                    femaleCount: 67,
+                    baptizedCount: 134,
+                    averageAge: 32
+                };
+                
+                document.getElementById('totalMembers').textContent = stats.totalMembers;
+                document.getElementById('pendingRegistrations').textContent = stats.pendingRegistrations;
+                document.getElementById('activeMembers').textContent = stats.activeMembers;
+                document.getElementById('monthlyRegistrations').textContent = stats.monthlyRegistrations;
+                document.getElementById('maleCount').textContent = stats.maleCount;
+                document.getElementById('femaleCount').textContent = stats.femaleCount;
+                document.getElementById('baptizedCount').textContent = stats.baptizedCount;
+                document.getElementById('averageAge').textContent = stats.averageAge;
+                
+                loadRecentRegistrations();
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+
+        function loadRecentRegistrations() {
+            const recentContainer = document.getElementById('recentRegistrations');
+            const mockRecent = [
+                { name: 'Abebe Kebede', time: '2 hours ago', status: 'pending' },
+                { name: 'Fatuma Ahmed', time: '5 hours ago', status: 'approved' },
+                { name: 'Dawit Tesfaye', time: '1 day ago', status: 'pending' },
+                { name: 'Hanan Mohammed', time: '2 days ago', status: 'approved' }
+            ];
+            
+            recentContainer.innerHTML = mockRecent.map(reg => `
+                <div class="flex items-center justify-between p-3 bg-white bg-opacity-10 rounded-lg">
+                    <div>
+                        <p class="text-white font-medium">${reg.name}</p>
+                        <p class="text-white opacity-70 text-sm">${reg.time}</p>
+                    </div>
+                    <span class="status-badge status-${reg.status}">${reg.status}</span>
+                </div>
+            `).join('');
+        }
+
+        async function loadMembers() {
+            try {
+                // This would normally fetch from API
+                const mockMembers = [
+                    { id: 'WDB-2024-0001', name: 'Abebe Kebede', phone: '+251911234567', status: 'active', registered: '2024-01-15' },
+                    { id: 'WDB-2024-0002', name: 'Fatuma Ahmed', phone: '+251922345678', status: 'active', registered: '2024-01-20' },
+                    { id: 'WDB-2024-0003', name: 'Dawit Tesfaye', phone: '+251933456789', status: 'pending', registered: '2024-02-01' }
+                ];
+                
+                const tbody = document.getElementById('membersTableBody');
+                tbody.innerHTML = mockMembers.map(member => `
+                    <tr>
+                        <td>${member.id}</td>
+                        <td>${member.name}</td>
+                        <td>${member.phone}</td>
+                        <td><span class="status-badge status-${member.status}">${member.status}</span></td>
+                        <td>${member.registered}</td>
+                        <td>
+                            <button class="text-blue-400 hover:text-blue-300 mr-2" onclick="viewMember('${member.id}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="text-green-400 hover:text-green-300 mr-2" onclick="editMember('${member.id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="text-red-400 hover:text-red-300" onclick="deleteMember('${member.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading members:', error);
+            }
+        }
+
+        function viewMember(memberId) {
+            alert('View member: ' + memberId);
+        }
+
+        function editMember(memberId) {
+            alert('Edit member: ' + memberId);
+        }
+
+        function deleteMember(memberId) {
+            if (confirm('Are you sure you want to delete this member?')) {
+                alert('Delete member: ' + memberId);
+            }
+        }
+
+        function addMember() {
+            alert('Add new member functionality');
+        }
+
+        function exportMembers() {
+            alert('Export members functionality');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'admin-login.html';
+            }
+        }
+    </script>
+</body>
+</html>
