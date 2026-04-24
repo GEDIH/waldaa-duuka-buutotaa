@@ -802,6 +802,54 @@
       #lightbox-next { right: 5px; }
       .chat-icon { padding: 0.7rem 1rem; font-size: 0.85rem; }
     }
+
+    /* ── Ticker Animation ── */
+    @keyframes ticker {
+      0%   { transform: translateX(100vw); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* ── Announcements Section ── */
+    .announcements-section { background:#fff8e7;padding:3rem 0;border-top:3px solid #d4af37; }
+    .announcement-card {
+      background:white;border-radius:12px;padding:1.2rem 1.5rem;
+      border-left:4px solid #d4af37;box-shadow:0 3px 10px rgba(0,0,0,0.07);
+      margin-bottom:1rem;display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;
+    }
+    .announcement-card.urgent { border-left-color:#e74c3c; }
+    .announcement-card.urgent .ann-badge { background:#fde8e8;color:#e74c3c; }
+    .ann-badge { background:#fef9e7;color:#b8941f;padding:0.2rem 0.7rem;border-radius:20px;font-size:0.75rem;font-weight:bold;white-space:nowrap; }
+    .ann-title { font-weight:bold;color:#1a3b5c;margin-bottom:0.3rem; }
+    .ann-body  { color:#555;font-size:0.9rem;line-height:1.5; }
+    .ann-date  { font-size:0.78rem;color:#aaa;margin-top:0.4rem; }
+
+    /* ── Event Calendar ── */
+    .calendar-section { background:#f8f9fa;padding:3rem 0; }
+    .calendar-wrap { background:white;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.08);overflow:hidden; }
+    .cal-header { background:#1a3b5c;color:white;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center; }
+    .cal-header h3 { margin:0;font-size:1.1rem; }
+    .cal-nav { background:rgba(255,255,255,0.15);border:none;color:white;padding:0.4rem 0.8rem;border-radius:8px;cursor:pointer;font-size:1rem;transition:background 0.2s; }
+    .cal-nav:hover { background:rgba(255,255,255,0.3); }
+    .cal-grid { display:grid;grid-template-columns:repeat(7,1fr);text-align:center; }
+    .cal-day-name { background:#f0f2f5;padding:0.5rem;font-size:0.75rem;font-weight:bold;color:#666; }
+    .cal-day { padding:0.5rem 0.3rem;min-height:50px;border:1px solid #f0f2f5;font-size:0.85rem;cursor:default;position:relative;transition:background 0.2s; }
+    .cal-day.other-month { color:#ccc; }
+    .cal-day.today { background:#fef9e7;font-weight:bold;color:#1a3b5c; }
+    .cal-day.has-event { background:#e8f0fe;cursor:pointer; }
+    .cal-day.has-event:hover { background:#d4e0fc; }
+    .cal-event-dot { width:6px;height:6px;background:#d4af37;border-radius:50%;margin:2px auto 0; }
+    .cal-events-list { padding:1rem 1.5rem;border-top:1px solid #f0f2f5;max-height:200px;overflow-y:auto; }
+    .cal-event-item { display:flex;align-items:center;gap:0.8rem;padding:0.6rem 0;border-bottom:1px solid #f8f9fa;font-size:0.9rem; }
+    .cal-event-item:last-child { border-bottom:none; }
+    .cal-event-date-badge { background:#1a3b5c;color:white;border-radius:8px;padding:0.3rem 0.6rem;font-size:0.75rem;font-weight:bold;white-space:nowrap; }
+    .cal-event-type { background:#fef9e7;color:#b8941f;border-radius:20px;padding:0.15rem 0.6rem;font-size:0.72rem;font-weight:bold; }
+
+    /* ── Member Registration CTA ── */
+    .member-cta { background:linear-gradient(135deg,#1a3b5c,#2c5282);color:white;padding:3rem 0;text-align:center; }
+    .member-cta h2 { font-size:2rem;margin-bottom:1rem;color:#d4af37; }
+    .member-cta p { font-size:1.05rem;opacity:0.9;margin-bottom:2rem;max-width:600px;margin-left:auto;margin-right:auto; }
+    .member-cta .btn-gold { background:#d4af37;color:#1a3b5c;padding:1rem 2.5rem;font-size:1.1rem;border-radius:30px;font-weight:bold;text-decoration:none;display:inline-block;transition:all 0.3s; }
+    .member-cta .btn-gold:hover { background:white;transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.2); }
   </style>
 </head>
 <body>
@@ -845,6 +893,18 @@
   </a>
   <button onclick="document.getElementById('tiktokBanner').style.display='none'"
      style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;">×</button>
+</div>
+
+<!-- Announcements Ticker -->
+<div id="announcementTicker" style="display:none;background:#d4af37;color:#1a3b5c;padding:0.5rem 0;overflow:hidden;position:relative;">
+  <div style="display:flex;align-items:center;">
+    <span style="background:#1a3b5c;color:#d4af37;padding:0.3rem 1rem;font-weight:bold;font-size:0.85rem;white-space:nowrap;flex-shrink:0;">📢 Beeksisa</span>
+    <div style="overflow:hidden;flex:1;margin:0 1rem;">
+      <div id="tickerContent" style="white-space:nowrap;animation:ticker 20s linear infinite;display:inline-block;font-weight:600;font-size:0.9rem;"></div>
+    </div>
+    <button onclick="document.getElementById('announcementTicker').style.display='none'"
+      style="background:none;border:none;color:#1a3b5c;font-size:1.2rem;cursor:pointer;padding:0 1rem;flex-shrink:0;">×</button>
+  </div>
 </div>
 
 <section class="hero">
@@ -1130,7 +1190,7 @@
         </div>
         <div class="service-card" id="tiktokCard">
           <h3>🎵 Sagantaa TikTok</h3>
-          <p>Sanbata galgala sa'aatii 2:00 irraa eegalee.</p>
+          <p>Guyyaa Sanbata galgala sa'aatii 2:00 irraa eegalee ni taphata.</p>
           <div id="tiktokCountdown" style="background:rgba(212,175,55,0.15);border-radius:8px;padding:0.6rem;margin:0.8rem 0;font-size:0.85rem;color:#d4af37;font-weight:bold;text-align:center;"></div>
           <a href="https://www.tiktok.com/@tvsagaleedhugaa" target="_blank" rel="noopener" style="color:#d4af37;font-weight:bold;">@tvsagaleedhugaa →</a>
           <div style="margin-top:0.8rem;">
@@ -1263,6 +1323,47 @@
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ══ ANNOUNCEMENTS SECTION ══ -->
+  <section class="announcements-section" id="announcements">
+    <div class="container">
+      <h2 style="color:#1a3b5c;font-size:2rem;margin-bottom:0.5rem;text-align:center;">📢 Beeksisaalee</h2>
+      <p style="text-align:center;color:#888;margin-bottom:2rem;font-size:0.95rem;">Odeeffannoo haaraa fi beeksisaalee waldichaa</p>
+      <div id="announcementsList">
+        <p style="text-align:center;color:#aaa;padding:2rem;">Beeksisa hin jiru.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ EVENT CALENDAR ══ -->
+  <section class="calendar-section" id="calendar">
+    <div class="container">
+      <h2 style="color:#1a3b5c;font-size:2rem;margin-bottom:0.5rem;text-align:center;">📅 Sagantaa Taateewwanii</h2>
+      <p style="text-align:center;color:#888;margin-bottom:2rem;font-size:0.95rem;">Taateewwan waldichaa ji'a kanaa</p>
+      <div class="calendar-wrap">
+        <div class="cal-header">
+          <button class="cal-nav" onclick="calNav(-1)">&#8249;</button>
+          <h3 id="calMonthTitle"></h3>
+          <button class="cal-nav" onclick="calNav(1)">&#8250;</button>
+        </div>
+        <div class="cal-grid" id="calDayNames"></div>
+        <div class="cal-grid" id="calDays"></div>
+        <div class="cal-events-list" id="calEventsList">
+          <p style="color:#aaa;text-align:center;font-size:0.9rem;">Taatee hin jiru.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ MEMBER REGISTRATION CTA ══ -->
+  <section class="member-cta" id="reserve">
+    <div class="container">
+      <h2>👥 Miseensa Waldichaa Ta'i</h2>
+      <p>Waldaa Duuka Bu'ootaa keessatti miseensa ta'uuf galmaa'i. Tajaajila afuurawaa Afaan Oromoon argachuuf nu waliin ta'i.</p>
+      <a href="member-registration.html" class="btn-gold">📋 Amma Galmaa'i →</a>
+      <p style="margin-top:1rem;font-size:0.85rem;opacity:0.6;">Galmaa'uun bilisaa fi salphaa dha</p>
     </div>
   </section>
 
@@ -4006,6 +4107,159 @@ document.addEventListener('keydown', function(e) {
   if (e.ctrlKey && e.shiftKey && e.key === 'A') {
     window.location.href = 'admin.html';
   }
+});
+</script>
+
+<script>
+// ══════════════════════════════════════════
+//  ANNOUNCEMENTS
+// ══════════════════════════════════════════
+function loadAnnouncements() {
+  const list = JSON.parse(localStorage.getItem('wdb_announcements') || '[]');
+  const el   = document.getElementById('announcementsList');
+  const ticker = document.getElementById('announcementTicker');
+  const tickerContent = document.getElementById('tickerContent');
+  if (!el) return;
+
+  if (!list.length) {
+    el.innerHTML = '<p style="text-align:center;color:#aaa;padding:2rem;">Beeksisa hin jiru.</p>';
+    return;
+  }
+
+  // Render cards
+  el.innerHTML = list.slice().reverse().map(a => `
+    <div class="announcement-card ${a.urgent ? 'urgent' : ''} fade-in">
+      <div style="flex:1;">
+        <div class="ann-title">${a.title}</div>
+        <div class="ann-body">${a.body}</div>
+        <div class="ann-date">📅 ${fmtAnnDate(a.date)}</div>
+      </div>
+      <span class="ann-badge">${a.urgent ? '🔴 Hatattama' : '📢 Beeksisa'}</span>
+    </div>`).join('');
+
+  // Ticker — show latest 3
+  const tickerItems = list.slice(-3).reverse().map(a => `📢 ${a.title}`).join('   •   ');
+  tickerContent.textContent = tickerItems + '   •   ';
+  ticker.style.display = 'block';
+
+  // Re-observe fade-in
+  el.querySelectorAll('.fade-in').forEach(e => fadeObserver && fadeObserver.observe(e));
+}
+
+function fmtAnnDate(iso) {
+  if (!iso) return '';
+  return new Date(iso).toLocaleDateString('om-ET', {year:'numeric', month:'long', day:'numeric'});
+}
+
+// ══════════════════════════════════════════
+//  EVENT CALENDAR
+// ══════════════════════════════════════════
+let calDate = new Date();
+
+const DAY_NAMES = ['Dil','Wix','Qib','Rob','Kam','Jim','San'];
+const MONTH_NAMES = ['Amajjii','Guraandhala','Bitootessa','Ebla','Caamsaa','Waxabajjii',
+                     'Adoolessa','Hagayya','Fulbaana','Onkoloolessa','Sadaasa','Muddee'];
+
+function renderCalendar() {
+  const events  = JSON.parse(localStorage.getItem('wdb_events') || '[]');
+  const year    = calDate.getFullYear();
+  const month   = calDate.getMonth();
+  const today   = new Date();
+
+  document.getElementById('calMonthTitle').textContent = `${MONTH_NAMES[month]} ${year}`;
+
+  // Day name headers
+  document.getElementById('calDayNames').innerHTML =
+    DAY_NAMES.map(d => `<div class="cal-day-name">${d}</div>`).join('');
+
+  // First day of month & total days
+  const firstDay  = new Date(year, month, 1).getDay();
+  const totalDays = new Date(year, month + 1, 0).getDate();
+  const prevDays  = new Date(year, month, 0).getDate();
+
+  // Build event map: "YYYY-MM-DD" → [events]
+  const evtMap = {};
+  events.forEach(e => {
+    if (!e.date) return;
+    const d = e.date.substring(0, 10);
+    if (!evtMap[d]) evtMap[d] = [];
+    evtMap[d].push(e);
+  });
+
+  let cells = '';
+  // Prev month padding
+  for (let i = firstDay - 1; i >= 0; i--) {
+    cells += `<div class="cal-day other-month">${prevDays - i}</div>`;
+  }
+  // Current month days
+  for (let d = 1; d <= totalDays; d++) {
+    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+    const hasEvt  = evtMap[dateStr] && evtMap[dateStr].length > 0;
+    cells += `<div class="cal-day ${isToday?'today':''} ${hasEvt?'has-event':''}"
+      onclick="showDayEvents('${dateStr}')" title="${hasEvt ? evtMap[dateStr].map(e=>e.title).join(', ') : ''}">
+      ${d}${hasEvt ? '<div class="cal-event-dot"></div>' : ''}
+    </div>`;
+  }
+  // Next month padding
+  const remaining = 42 - firstDay - totalDays;
+  for (let d = 1; d <= remaining; d++) {
+    cells += `<div class="cal-day other-month">${d}</div>`;
+  }
+  document.getElementById('calDays').innerHTML = cells;
+
+  // Show all upcoming events for this month
+  const monthEvents = events.filter(e => {
+    if (!e.date) return false;
+    const ed = new Date(e.date);
+    return ed.getMonth() === month && ed.getFullYear() === year;
+  }).sort((a,b) => new Date(a.date) - new Date(b.date));
+
+  renderCalEventsList(monthEvents);
+}
+
+function showDayEvents(dateStr) {
+  const events = JSON.parse(localStorage.getItem('wdb_events') || '[]');
+  const dayEvts = events.filter(e => e.date && e.date.startsWith(dateStr));
+  renderCalEventsList(dayEvts, dateStr);
+}
+
+function renderCalEventsList(evts, dateStr) {
+  const el = document.getElementById('calEventsList');
+  if (!evts.length) {
+    el.innerHTML = `<p style="color:#aaa;text-align:center;font-size:0.9rem;padding:0.5rem;">
+      ${dateStr ? 'Guyyaa kana taatee hin jiru.' : 'Ji\'a kana taatee hin jiru.'}</p>`;
+    return;
+  }
+  el.innerHTML = evts.map(e => {
+    const d = new Date(e.date);
+    const dateLabel = `${d.getDate()} ${MONTH_NAMES[d.getMonth()]}`;
+    return `<div class="cal-event-item">
+      <span class="cal-event-date-badge">${dateLabel}</span>
+      <div style="flex:1;">
+        <strong style="color:#1a3b5c;">${e.title}</strong>
+        ${e.location ? `<span style="color:#888;font-size:0.8rem;margin-left:0.5rem;">📍 ${e.location}</span>` : ''}
+      </div>
+      <span class="cal-event-type">${e.type || 'Taatee'}</span>
+    </div>`;
+  }).join('');
+}
+
+function calNav(dir) {
+  calDate.setMonth(calDate.getMonth() + dir);
+  renderCalendar();
+}
+
+// Init on load
+document.addEventListener('DOMContentLoaded', () => {
+  loadAnnouncements();
+  renderCalendar();
+});
+
+// Live update when admin adds data
+window.addEventListener('storage', e => {
+  if (e.key === 'wdb_announcements') loadAnnouncements();
+  if (e.key === 'wdb_events')        renderCalendar();
 });
 </script>
 
