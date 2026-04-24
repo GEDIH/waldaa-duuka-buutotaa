@@ -133,7 +133,81 @@
         .status-pending { background: #f59e0b; color: white; }
         .status-inactive { background: #6b7280; color: white; }
 
-        /* ── Member Action Modals ── */
+        /* ── Announcement filter ── */
+        .ann-filter {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: white; padding: 6px 18px; border-radius: 20px;
+            cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.25s;
+        }
+        .ann-filter:hover, .ann-filter.active {
+            background: var(--accent-color); color: var(--primary-color); border-color: var(--accent-color);
+        }
+        /* ── Announcement card ── */
+        .ann-admin-card {
+            background: rgba(255,255,255,0.1); border-left: 4px solid var(--accent-color);
+            border-radius: 12px; padding: 16px 20px; transition: background 0.2s;
+        }
+        .ann-admin-card.urgent { border-left-color: #ef4444; }
+        .ann-admin-card:hover  { background: rgba(255,255,255,0.16); }
+        .ann-type-badge {
+            display: inline-block; padding: 2px 10px; border-radius: 20px;
+            font-size: 0.72rem; font-weight: 700; text-transform: uppercase; margin-bottom: 6px;
+        }
+        .ann-type-badge.general { background: rgba(212,175,55,0.25); color: #d4af37; }
+        .ann-type-badge.urgent  { background: rgba(239,68,68,0.25);  color: #f87171; }
+
+        /* ── Report cards ── */
+        .report-card {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 16px; padding: 24px; text-align: left; cursor: pointer;
+            transition: all 0.3s; display: flex; flex-direction: column;
+        }
+        .report-card:hover {
+            background: rgba(255,255,255,0.2); transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.15);
+        }
+        .report-export-hint {
+            margin-top: 12px; font-size: 0.78rem; color: rgba(255,255,255,0.5);
+            border-top: 1px solid rgba(255,255,255,0.15); padding-top: 10px;
+        }
+
+        /* ── Export bar ── */
+        .export-bar {
+            display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+            padding: 12px 16px; background: #f8f9fa; border-radius: 10px;
+        }
+        .export-btn {
+            padding: 8px 18px; border-radius: 8px; border: none;
+            font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.25s;
+        }
+        .export-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
+        .export-btn.csv   { background: #28a745; color: white; }
+        .export-btn.excel { background: #1d6f42; color: white; }
+        .export-btn.pdf   { background: #dc3545; color: white; }
+        .export-btn.word  { background: #2b579a; color: white; }
+
+        /* ── Report table ── */
+        .report-table { border-collapse: collapse; font-size: 0.9rem; }
+        .report-table th {
+            background: #1a3b5c; color: white; padding: 10px 14px;
+            text-align: left; font-weight: 600;
+        }
+        .report-table td {
+            padding: 10px 14px; border-bottom: 1px solid #e9ecef; color: #333;
+        }
+        .report-table tr:hover td { background: #f0f4ff; }
+
+        /* ── Modal inputs ── */
+        .modal-input {
+            width: 100%; padding: 10px 14px;
+            border: 2px solid rgba(26,59,92,0.2); border-radius: 10px;
+            font-size: 0.95rem; color: #1a3b5c; background: rgba(255,255,255,0.8);
+            transition: border-color 0.25s;
+        }
+        .modal-input:focus { outline: none; border-color: var(--accent-color); background: #fff; }
+        .modal-label { display: block; font-size: 0.85rem; font-weight: 600; color: #1a3b5c; margin-bottom: 6px; }
+        .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        @media(max-width:500px){ .form-row-2 { grid-template-columns: 1fr; } }
         .modal-overlay {
             position: fixed; inset: 0;
             background: rgba(0,0,0,0.75);
@@ -553,31 +627,28 @@
             <div class="glass-card rounded-xl p-6">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-xl font-bold text-white">Announcements</h3>
-                    <button class="btn-primary" onclick="showAddAnnouncementModal()">
+                    <button class="btn-primary" onclick="showAnnouncementModal()">
                         <i class="fas fa-plus mr-2"></i>New Announcement
                     </button>
                 </div>
-                <div id="announcementsList" class="space-y-4">
-                    <div class="bg-white bg-opacity-10 rounded-xl p-4">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="text-white font-semibold">Sunday Service Schedule</h4>
-                                <p class="text-white opacity-70 text-sm mt-1">Service starts at 9:00 AM every Sunday.</p>
-                                <p class="text-white opacity-50 text-xs mt-2">Posted: 2 days ago</p>
-                            </div>
-                            <div class="flex gap-2">
-                                <button class="text-yellow-400 hover:text-yellow-300" onclick="editAnnouncement(1)"><i class="fas fa-edit"></i></button>
-                                <button class="text-red-400 hover:text-red-300" onclick="deleteAnnouncement(1)"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Filter bar -->
+                <div class="flex gap-2 mb-5 flex-wrap">
+                    <button class="ann-filter active" data-f="all"     onclick="filterAdminAnn('all')">All</button>
+                    <button class="ann-filter"         data-f="urgent"  onclick="filterAdminAnn('urgent')">Urgent</button>
+                    <button class="ann-filter"         data-f="general" onclick="filterAdminAnn('general')">General</button>
                 </div>
+                <div id="adminAnnouncementsList" class="space-y-4"></div>
             </div>
         </div>
 
         <div id="contributions-section" class="section px-6" style="display: none;">
             <div class="glass-card rounded-xl p-6">
-                <h3 class="text-xl font-bold text-white mb-6">Contributions</h3>
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-white">Contributions</h3>
+                    <button class="btn-primary" onclick="showContribModal()">
+                        <i class="fas fa-plus mr-2"></i>Record Contribution
+                    </button>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                     <div class="stat-card rounded-xl p-5 text-center">
                         <p class="text-white opacity-70 text-sm mb-1">Total Collected</p>
@@ -592,33 +663,44 @@
                         <p class="text-2xl font-bold text-blue-400">94</p>
                     </div>
                 </div>
-                <p class="text-white opacity-60 text-center py-4">Detailed contribution records coming soon.</p>
+                <div class="table-container">
+                    <table class="table w-full">
+                        <thead><tr>
+                            <th>Member</th><th>Type</th><th>Amount</th><th>Date</th><th>Status</th><th>Actions</th>
+                        </tr></thead>
+                        <tbody id="contribTableBody"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <div id="reports-section" class="section px-6" style="display: none;">
             <div class="glass-card rounded-xl p-6">
                 <h3 class="text-xl font-bold text-white mb-6">Reports</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <button class="bg-white bg-opacity-10 hover:bg-opacity-20 rounded-xl p-5 text-left transition-all" onclick="generateReport('members')">
-                        <i class="fas fa-users text-yellow-400 text-2xl mb-3"></i>
-                        <h4 class="text-white font-semibold">Member Report</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <button class="report-card" onclick="openReport('members')">
+                        <i class="fas fa-users text-yellow-400 text-3xl mb-3"></i>
+                        <h4 class="text-white font-semibold text-lg">Member Report</h4>
                         <p class="text-white opacity-60 text-sm mt-1">Full list of all registered members</p>
+                        <div class="report-export-hint">Click to view &amp; export</div>
                     </button>
-                    <button class="bg-white bg-opacity-10 hover:bg-opacity-20 rounded-xl p-5 text-left transition-all" onclick="generateReport('registrations')">
-                        <i class="fas fa-user-plus text-green-400 text-2xl mb-3"></i>
-                        <h4 class="text-white font-semibold">Registration Report</h4>
+                    <button class="report-card" onclick="openReport('registrations')">
+                        <i class="fas fa-user-plus text-green-400 text-3xl mb-3"></i>
+                        <h4 class="text-white font-semibold text-lg">Registration Report</h4>
                         <p class="text-white opacity-60 text-sm mt-1">New registrations by date range</p>
+                        <div class="report-export-hint">Click to view &amp; export</div>
                     </button>
-                    <button class="bg-white bg-opacity-10 hover:bg-opacity-20 rounded-xl p-5 text-left transition-all" onclick="generateReport('contributions')">
-                        <i class="fas fa-donate text-blue-400 text-2xl mb-3"></i>
-                        <h4 class="text-white font-semibold">Contribution Report</h4>
+                    <button class="report-card" onclick="openReport('contributions')">
+                        <i class="fas fa-donate text-blue-400 text-3xl mb-3"></i>
+                        <h4 class="text-white font-semibold text-lg">Contribution Report</h4>
                         <p class="text-white opacity-60 text-sm mt-1">Financial contributions summary</p>
+                        <div class="report-export-hint">Click to view &amp; export</div>
                     </button>
-                    <button class="bg-white bg-opacity-10 hover:bg-opacity-20 rounded-xl p-5 text-left transition-all" onclick="generateReport('activity')">
-                        <i class="fas fa-chart-line text-purple-400 text-2xl mb-3"></i>
-                        <h4 class="text-white font-semibold">Activity Report</h4>
+                    <button class="report-card" onclick="openReport('activity')">
+                        <i class="fas fa-chart-line text-purple-400 text-3xl mb-3"></i>
+                        <h4 class="text-white font-semibold text-lg">Activity Report</h4>
                         <p class="text-white opacity-60 text-sm mt-1">System activity and audit log</p>
+                        <div class="report-export-hint">Click to view &amp; export</div>
                     </button>
                 </div>
             </div>
@@ -655,6 +737,112 @@
                         <button class="btn-primary w-full" onclick="changePassword()">Update Password</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Announcement Modal (Create / Edit) ── -->
+    <div id="announcementModal" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+            <div class="modal-box-header">
+                <h3 id="annModalTitle"><i class="fas fa-bullhorn mr-2"></i>New Announcement</h3>
+                <button onclick="closeModal('announcementModal')">×</button>
+            </div>
+            <div class="modal-box-body">
+                <input type="hidden" id="annEditId">
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold mb-1" style="color:#1a3b5c;">Title *</label>
+                    <input type="text" id="annTitle" placeholder="Announcement title..." class="modal-input">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold mb-1" style="color:#1a3b5c;">Type *</label>
+                    <select id="annType" class="modal-input">
+                        <option value="general">General</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold mb-1" style="color:#1a3b5c;">Body *</label>
+                    <textarea id="annBody" rows="4" placeholder="Announcement content..." class="modal-input"></textarea>
+                </div>
+                <div class="mb-2">
+                    <label class="block text-sm font-semibold mb-1" style="color:#1a3b5c;">Date</label>
+                    <input type="date" id="annDate" class="modal-input">
+                </div>
+            </div>
+            <div class="modal-box-footer">
+                <button class="btn-cancel" onclick="closeModal('announcementModal')">Cancel</button>
+                <button class="btn-primary" onclick="saveAnnouncement()"><i class="fas fa-save mr-1"></i>Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Contribution Modal (Create) ── -->
+    <div id="contribModal" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+            <div class="modal-box-header">
+                <h3><i class="fas fa-donate mr-2"></i>Record Contribution</h3>
+                <button onclick="closeModal('contribModal')">×</button>
+            </div>
+            <div class="modal-box-body">
+                <div class="form-row-2">
+                    <div>
+                        <label class="modal-label">Member Name *</label>
+                        <input type="text" id="cMember" placeholder="Member name..." class="modal-input">
+                    </div>
+                    <div>
+                        <label class="modal-label">Type *</label>
+                        <select id="cType" class="modal-input">
+                            <option value="Tithe">Tithe</option>
+                            <option value="Offering">Offering</option>
+                            <option value="Special">Special Donation</option>
+                            <option value="Building">Building Fund</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row-2 mt-3">
+                    <div>
+                        <label class="modal-label">Amount (ETB) *</label>
+                        <input type="number" id="cAmount" placeholder="0.00" min="1" class="modal-input">
+                    </div>
+                    <div>
+                        <label class="modal-label">Date *</label>
+                        <input type="date" id="cDate" class="modal-input">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-box-footer">
+                <button class="btn-cancel" onclick="closeModal('contribModal')">Cancel</button>
+                <button class="btn-primary" onclick="saveContrib()"><i class="fas fa-save mr-1"></i>Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Report Viewer Modal ── -->
+    <div id="reportModal" class="modal-overlay" style="display:none;">
+        <div class="modal-box" style="max-width:900px;width:95%;">
+            <div class="modal-box-header">
+                <h3 id="reportModalTitle"><i class="fas fa-chart-bar mr-2"></i>Report</h3>
+                <button onclick="closeModal('reportModal')">×</button>
+            </div>
+            <div class="modal-box-body">
+                <!-- Export buttons -->
+                <div class="export-bar">
+                    <span class="text-sm font-semibold" style="color:#1a3b5c;">Export as:</span>
+                    <button class="export-btn csv"   onclick="exportReport('csv')">  <i class="fas fa-file-csv mr-1"></i>CSV</button>
+                    <button class="export-btn excel" onclick="exportReport('excel')"><i class="fas fa-file-excel mr-1"></i>Excel</button>
+                    <button class="export-btn pdf"   onclick="exportReport('pdf')">  <i class="fas fa-file-pdf mr-1"></i>PDF</button>
+                    <button class="export-btn word"  onclick="exportReport('word')"> <i class="fas fa-file-word mr-1"></i>Word</button>
+                </div>
+                <div class="overflow-x-auto mt-4">
+                    <table class="report-table w-full" id="reportTable">
+                        <thead id="reportTableHead"></thead>
+                        <tbody id="reportTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-box-footer">
+                <button class="btn-cancel" onclick="closeModal('reportModal')">Close</button>
             </div>
         </div>
     </div>
@@ -696,10 +884,37 @@
         let currentSection = 'dashboard';
         let sidebarCollapsed = false;
 
+        // ── Shared data ───────────────────────────────────────
+        let adminAnnouncements = [
+            { id:1, type:'urgent',  title:"Yaa'ii Ji'aa – Dilbata Jalqabaa",    body:"Ji'a kanaa Dilbata jalqabaa yaa'ii ji'aa ni qopheeffama. Sa'a 2:00 irraa eegalee argamuu barbaachisa.", date:'2026-04-22' },
+            { id:2, type:'general', title:'Kadhannaa Walii – Roobii',            body:"Torban hunda Roobii sa'a 12:00 booda kadhannaa walii ni qabna. Hirmaannaan keessan barbaachisaa dha.",   date:'2026-04-20' },
+            { id:3, type:'general', title:'Barnoota Macaafaa – Sanbata',         body:"Sanbata hunda sa'a 9:00 irraa eegalee barnoota Macaafaa Qulqulluu Afaan Oromoon ni kennina.",            date:'2026-04-18' },
+            { id:4, type:'urgent',  title:'Gumaacha Ijaarsa – Yeroo Dheeraate', body:'Gumaacha ijaarsa mana waldichaa walitti qabuu itti fufna. Lakkoofsa herregaa CBE: 1000673662262.',       date:'2026-04-15' },
+        ];
+
+        let adminContributions = [
+            { id:1, member:'Abebe Kebede',  type:'Tithe',    amount:'ETB 200', date:'2026-04-20', status:'confirmed' },
+            { id:2, member:'Fatuma Ahmed',  type:'Offering', amount:'ETB 100', date:'2026-03-15', status:'confirmed' },
+            { id:3, member:'Dawit Tesfaye', type:'Special',  amount:'ETB 500', date:'2026-02-10', status:'confirmed' },
+            { id:4, member:'Hanan Mohammed',type:'Building', amount:'ETB 300', date:'2025-12-01', status:'confirmed' },
+        ];
+
+        const allMembers = [
+            { id:'WDB-2024-0001', name:'Abebe Kebede',  gender:'Male',   phone:'+251911234567', address:'Addis Ababa', status:'active',  registered:'2024-01-15' },
+            { id:'WDB-2024-0002', name:'Fatuma Ahmed',  gender:'Female', phone:'+251922345678', address:'Adama',       status:'active',  registered:'2024-01-20' },
+            { id:'WDB-2024-0003', name:'Dawit Tesfaye', gender:'Male',   phone:'+251933456789', address:'Jimma',       status:'pending', registered:'2024-02-01' },
+            { id:'WDB-2024-0004', name:'Hanan Mohammed',gender:'Female', phone:'+251944567890', address:'Harar',       status:'active',  registered:'2024-03-10' },
+        ];
+
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
             loadDashboardData();
             loadMembers();
+            renderAdminAnnouncements();
+            renderContribTable();
+            if (!sessionStorage.getItem('wdb_admin_logged_in')) {
+                window.location.href = 'admin-login.html';
+            }
         });
 
         function toggleSidebar() {
@@ -897,22 +1112,261 @@
             }, 1000);
         }
 
-        function showAddAnnouncementModal() {
-            showNotification('info', 'Announcements', 'Announcement editor coming soon.');
+        function showAddAnnouncementModal() { showAnnouncementModal(); }
+        function showAnnouncementModal(ann = null) {
+            document.getElementById('annEditId').value  = ann ? ann.id : '';
+            document.getElementById('annTitle').value   = ann ? ann.title : '';
+            document.getElementById('annType').value    = ann ? ann.type  : 'general';
+            document.getElementById('annBody').value    = ann ? ann.body  : '';
+            document.getElementById('annDate').value    = ann ? ann.date  : new Date().toISOString().split('T')[0];
+            document.getElementById('annModalTitle').innerHTML =
+                `<i class="fas fa-bullhorn mr-2"></i>${ann ? 'Edit' : 'New'} Announcement`;
+            openModal('announcementModal');
+        }
+
+        function saveAnnouncement() {
+            const id    = document.getElementById('annEditId').value;
+            const title = document.getElementById('annTitle').value.trim();
+            const type  = document.getElementById('annType').value;
+            const body  = document.getElementById('annBody').value.trim();
+            const date  = document.getElementById('annDate').value;
+            if (!title || !body) { showNotification('error','Validation','Title and body are required.'); return; }
+
+            if (id) {
+                const idx = adminAnnouncements.findIndex(a => a.id == id);
+                if (idx > -1) adminAnnouncements[idx] = { id: parseInt(id), title, type, body, date };
+                showNotification('success','Updated','Announcement updated successfully.');
+            } else {
+                const newId = adminAnnouncements.length ? Math.max(...adminAnnouncements.map(a=>a.id))+1 : 1;
+                adminAnnouncements.unshift({ id: newId, title, type, body, date });
+                showNotification('success','Created','Announcement created successfully.');
+            }
+            closeModal('announcementModal');
+            renderAdminAnnouncements();
         }
 
         function editAnnouncement(id) {
-            showNotification('info', 'Edit', `Editing announcement #${id}`);
+            const ann = adminAnnouncements.find(a => a.id === id);
+            if (ann) showAnnouncementModal(ann);
         }
 
         function deleteAnnouncement(id) {
-            showNotification('success', 'Deleted', `Announcement #${id} removed.`);
+            const modal = document.getElementById('deleteConfirmModal');
+            openModal('deleteConfirmModal');
+            document.getElementById('confirmDeleteBtn').onclick = function() {
+                adminAnnouncements = adminAnnouncements.filter(a => a.id !== id);
+                closeModal('deleteConfirmModal');
+                renderAdminAnnouncements();
+                showNotification('success','Deleted','Announcement removed.');
+            };
         }
 
-        function generateReport(type) {
-            showNotification('info', 'Generating Report', `Preparing ${type} report...`);
-            setTimeout(() => showNotification('success', 'Report Ready', `${type.charAt(0).toUpperCase()+type.slice(1)} report is ready.`), 1500);
+        function filterAdminAnn(filter) {
+            document.querySelectorAll('.ann-filter').forEach(b =>
+                b.classList.toggle('active', b.dataset.f === filter));
+            renderAdminAnnouncements(filter);
         }
+
+        function renderAdminAnnouncements(filter = 'all') {
+            const list = document.getElementById('adminAnnouncementsList');
+            if (!list) return;
+            const data = filter === 'all' ? adminAnnouncements : adminAnnouncements.filter(a => a.type === filter);
+            if (!data.length) { list.innerHTML = '<p class="text-white opacity-60 text-center py-6">No announcements found.</p>'; return; }
+            list.innerHTML = data.map(a => `
+                <div class="ann-admin-card ${a.type}">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <span class="ann-type-badge ${a.type}">${a.type}</span>
+                            <h4 class="text-white font-semibold text-base mb-1">${a.title}</h4>
+                            <p class="text-white opacity-80 text-sm leading-relaxed">${a.body}</p>
+                            <p class="text-white opacity-50 text-xs mt-2"><i class="fas fa-calendar mr-1"></i>${a.date}</p>
+                        </div>
+                        <div class="flex gap-3 ml-4 flex-shrink-0">
+                            <button class="text-yellow-400 hover:text-yellow-200 text-lg" onclick="editAnnouncement(${a.id})" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="text-red-400 hover:text-red-200 text-lg" onclick="deleteAnnouncement(${a.id})" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+
+        // ── Contributions CRUD ────────────────────────────────
+        function showContribModal() {
+            document.getElementById('cMember').value = '';
+            document.getElementById('cAmount').value = '';
+            document.getElementById('cDate').value   = new Date().toISOString().split('T')[0];
+            openModal('contribModal');
+        }
+
+        function saveContrib() {
+            const member = document.getElementById('cMember').value.trim();
+            const type   = document.getElementById('cType').value;
+            const amount = document.getElementById('cAmount').value;
+            const date   = document.getElementById('cDate').value;
+            if (!member || !amount || amount <= 0) {
+                showNotification('error','Validation','Member name and amount are required.'); return;
+            }
+            const newId = adminContributions.length ? Math.max(...adminContributions.map(c=>c.id))+1 : 1;
+            adminContributions.unshift({ id: newId, member, type, amount: `ETB ${parseFloat(amount).toLocaleString()}`, date, status: 'confirmed' });
+            closeModal('contribModal');
+            renderContribTable();
+            showNotification('success','Saved',`Contribution of ETB ${amount} recorded.`);
+        }
+
+        function deleteContrib(id) {
+            openModal('deleteConfirmModal');
+            document.getElementById('confirmDeleteBtn').onclick = function() {
+                adminContributions = adminContributions.filter(c => c.id !== id);
+                closeModal('deleteConfirmModal');
+                renderContribTable();
+                showNotification('success','Deleted','Contribution record removed.');
+            };
+        }
+
+        function renderContribTable() {
+            const tbody = document.getElementById('contribTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = adminContributions.map(c => `
+                <tr>
+                    <td>${c.member}</td>
+                    <td><span class="status-badge" style="background:rgba(212,175,55,0.3);color:#d4af37;">${c.type}</span></td>
+                    <td class="font-semibold" style="color:#d4af37;">${c.amount}</td>
+                    <td>${c.date}</td>
+                    <td><span class="status-badge status-active">${c.status}</span></td>
+                    <td>
+                        <button class="text-red-400 hover:text-red-200" onclick="deleteContrib(${c.id})" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>`).join('');
+        }
+
+        // ── Reports ───────────────────────────────────────────
+        const reportConfigs = {
+            members: {
+                title: 'Member Report',
+                headers: ['Member ID','Full Name','Gender','Phone','Address','Status','Registered'],
+                rows: () => allMembers.map(m => [m.id, m.name, m.gender, m.phone, m.address, m.status, m.registered])
+            },
+            registrations: {
+                title: 'Registration Report',
+                headers: ['Member ID','Full Name','Phone','Status','Registered Date'],
+                rows: () => allMembers.filter(m => m.status === 'pending').map(m => [m.id, m.name, m.phone, m.status, m.registered])
+            },
+            contributions: {
+                title: 'Contribution Report',
+                headers: ['Member','Type','Amount','Date','Status'],
+                rows: () => adminContributions.map(c => [c.member, c.type, c.amount, c.date, c.status])
+            },
+            activity: {
+                title: 'Activity Report',
+                headers: ['Action','Details','Date','Time'],
+                rows: () => [
+                    ['Member Registered','Abebe Kebede – WDB-2024-0001','2024-01-15','09:32 AM'],
+                    ['Member Registered','Fatuma Ahmed – WDB-2024-0002','2024-01-20','11:15 AM'],
+                    ['Announcement Created','Sunday Service Schedule','2024-04-22','02:10 PM'],
+                    ['Member Status Updated','Dawit Tesfaye → active','2024-02-05','03:45 PM'],
+                    ['Contribution Recorded','Abebe Kebede – ETB 200','2024-04-20','10:00 AM'],
+                ]
+            }
+        };
+
+        let currentReportType = 'members';
+
+        function openReport(type) {
+            currentReportType = type;
+            const cfg = reportConfigs[type];
+            document.getElementById('reportModalTitle').innerHTML =
+                `<i class="fas fa-chart-bar mr-2"></i>${cfg.title}`;
+            // Build table
+            document.getElementById('reportTableHead').innerHTML =
+                `<tr>${cfg.headers.map(h=>`<th>${h}</th>`).join('')}</tr>`;
+            const rows = cfg.rows();
+            document.getElementById('reportTableBody').innerHTML = rows.length
+                ? rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')
+                : `<tr><td colspan="${cfg.headers.length}" style="text-align:center;padding:20px;color:#888;">No data available</td></tr>`;
+            openModal('reportModal');
+        }
+
+        function exportReport(format) {
+            const cfg  = reportConfigs[currentReportType];
+            const rows = cfg.rows();
+            const title = cfg.title;
+
+            if (format === 'csv') {
+                const csv = [cfg.headers.join(','), ...rows.map(r => r.map(c=>`"${c}"`).join(','))].join('\n');
+                downloadBlob(csv, `${title}.csv`, 'text/csv');
+
+            } else if (format === 'excel') {
+                // Build a simple HTML table that Excel can open
+                const html = `<html><head><meta charset="UTF-8"></head><body>
+                    <h2>${title}</h2>
+                    <table border="1">
+                        <thead><tr>${cfg.headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+                        <tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody>
+                    </table></body></html>`;
+                downloadBlob(html, `${title}.xls`, 'application/vnd.ms-excel');
+
+            } else if (format === 'pdf') {
+                const win = window.open('', '_blank');
+                win.document.write(`<!DOCTYPE html><html><head>
+                    <title>${title}</title>
+                    <style>
+                        body{font-family:Arial,sans-serif;padding:30px;color:#1a3b5c;}
+                        h2{color:#1a3b5c;border-bottom:3px solid #d4af37;padding-bottom:8px;}
+                        table{width:100%;border-collapse:collapse;margin-top:16px;}
+                        th{background:#1a3b5c;color:white;padding:10px 12px;text-align:left;}
+                        td{padding:9px 12px;border-bottom:1px solid #e0e0e0;}
+                        tr:nth-child(even) td{background:#f8f9fa;}
+                        .footer{margin-top:30px;font-size:0.8rem;color:#888;text-align:center;}
+                    </style></head><body>
+                    <h2>${title}</h2>
+                    <p style="color:#888;font-size:0.85rem;">Generated: ${new Date().toLocaleString()} | Waldaa Duuka Bu'ootaa</p>
+                    <table>
+                        <thead><tr>${cfg.headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+                        <tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody>
+                    </table>
+                    <div class="footer">Waldaa Duuka Bu'ootaa – Confidential</div>
+                    <script>window.onload=()=>{window.print();}<\/script>
+                </body></html>`);
+                win.document.close();
+
+            } else if (format === 'word') {
+                const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
+                    xmlns:w="urn:schemas-microsoft-com:office:word"
+                    xmlns="http://www.w3.org/TR/REC-html40">
+                    <head><meta charset="UTF-8">
+                    <style>
+                        body{font-family:Calibri,sans-serif;padding:30px;}
+                        h2{color:#1a3b5c;}
+                        table{width:100%;border-collapse:collapse;}
+                        th{background:#1a3b5c;color:white;padding:8px 10px;}
+                        td{padding:7px 10px;border:1px solid #ccc;}
+                    </style></head><body>
+                    <h2>${title}</h2>
+                    <p>Generated: ${new Date().toLocaleString()} | Waldaa Duuka Bu'ootaa</p>
+                    <table>
+                        <thead><tr>${cfg.headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+                        <tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody>
+                    </table>
+                </body></html>`;
+                downloadBlob(html, `${title}.doc`, 'application/msword');
+            }
+            showNotification('success','Export Complete',`${title} exported as ${format.toUpperCase()}.`);
+        }
+
+        function downloadBlob(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url  = URL.createObjectURL(blob);
+            const a    = document.createElement('a');
+            a.href = url; a.download = filename; a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function generateReport(type) { openReport(type); }
 
         function changePassword() {
             showNotification('success', 'Password Updated', 'Your admin password has been changed.');
