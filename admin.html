@@ -281,6 +281,7 @@
       <div class="sidebar-section">Bulchiinsa</div>
       <div class="nav-item" onclick="showPage('messages',this)">✉️ Ergaalee <span class="nav-badge" id="msgBadge">0</span></div>
       <div class="nav-item" onclick="showPage('subscribers',this)">👥 Miseensota</div>
+      <div class="nav-item" onclick="showPage('members',this)">📋 Galmaa'ina</div>
       <div class="nav-item" onclick="showPage('announcements',this)">📢 Beeksisaalee</div>
       <div class="nav-item" onclick="showPage('events',this)">📅 Taateewwan</div>
       <div class="nav-item" onclick="showPage('sermons',this)">🎵 Lallaba</div>
@@ -360,6 +361,26 @@
             <table>
               <thead><tr><th>#</th><th>Imeelii</th><th>Guyyaa Galmaa'e</th><th>Hojii</th></tr></thead>
               <tbody id="subscribersBody"><tr><td colspan="4" style="text-align:center;color:#888;padding:2rem;">Miseensa hin jiru.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MEMBERS ── -->
+      <div class="page" id="page-members">
+        <div class="page-title">📋 Galmaa'ina Miseensotaa</div>
+        <div class="page-sub">Warri websaayitii irraa galmaa'an</div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+            <span id="memberCount" style="color:#888;font-size:0.9rem;"></span>
+            <button class="btn btn-primary btn-sm" onclick="exportMembers()">📥 CSV Buufadhu</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>ID</th><th>Maqaa</th><th>Bilbila</th><th>Teessoo</th><th>Cuuphaa</th><th>Guyyaa</th><th>Haala</th><th>Hojii</th></tr></thead>
+              <tbody id="membersBody">
+                <tr><td colspan="8" style="text-align:center;color:#888;padding:2rem;">Miseensa hin jiru.</td></tr>
+              </tbody>
             </table>
           </div>
         </div>
@@ -703,7 +724,7 @@ function showPage(id, el) {
     if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${id}'`)) b.classList.add('active');
   });
   const loaders = { dashboard: refreshDashboard, subscribers: renderSubscribers,
-    messages: renderMessages, announcements: renderAnnouncements,
+    messages: renderMessages, members: renderMembers, announcements: renderAnnouncements,
     events: renderEvents, sermons: renderSermons, gallery: renderGallery };
   if (loaders[id]) loaders[id]();
 }
@@ -825,6 +846,53 @@ function exportSubscribers() {
   const a = document.createElement('a');
   a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
   a.download = 'miseensota.csv';
+  a.click();
+  toast('CSV buufatame!');
+}
+
+// ══════════════════════════════════════════
+//  MEMBERS
+// ══════════════════════════════════════════
+function renderMembers() {
+  const members = JSON.parse(localStorage.getItem('wdb_members') || '[]');
+  document.getElementById('memberCount').textContent = `Miseensota ${members.length} galmaa'aniiru`;
+  const tbody = document.getElementById('membersBody');
+  if (!members.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#888;padding:2rem;">Miseensa hin jiru.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = members.slice().reverse().map((m, i) => `
+    <tr>
+      <td style="font-size:0.8rem;color:#d4af37;font-weight:bold;">${m.regId||'—'}</td>
+      <td><strong>${m.fname} ${m.lname}</strong></td>
+      <td>${m.phone||'—'}</td>
+      <td style="font-size:0.85rem;">${m.address||'—'}</td>
+      <td><span class="badge ${m.baptized==='eeyyee'?'badge-new':'badge-read'}">${m.baptized==='eeyyee'?'✝️ Eeyyee':'Lakki'}</span></td>
+      <td style="font-size:0.8rem;color:#888;">${m.date ? new Date(m.date).toLocaleDateString() : '—'}</td>
+      <td><span class="badge badge-pending">${m.status||'Haaraa'}</span></td>
+      <td><button class="btn btn-sm btn-danger" onclick="deleteMember(${members.length-1-i})">🗑</button></td>
+    </tr>`).join('');
+}
+
+function deleteMember(i) {
+  if (!confirm('Miseensa kana haquuf mirkaneessi?')) return;
+  const members = JSON.parse(localStorage.getItem('wdb_members') || '[]');
+  members.splice(i, 1);
+  localStorage.setItem('wdb_members', JSON.stringify(members));
+  renderMembers();
+  toast('Miseensi haqame.');
+}
+
+function exportMembers() {
+  const members = JSON.parse(localStorage.getItem('wdb_members') || '[]');
+  if (!members.length) { toast('Miseensa hin jiru.', 'error'); return; }
+  const headers = 'ID,Maqaa,Bilbila,Imeelii,Teessoo,Cuuphaa,Tajaajila,Guyyaa';
+  const rows = members.map(m =>
+    `${m.regId},"${m.fname} ${m.lname}",${m.phone},${m.email||''},${m.address},${m.baptized},${m.service||''},${m.date?new Date(m.date).toLocaleDateString():''}`
+  ).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(headers + '\n' + rows);
+  a.download = 'miseensota-galmaa.csv';
   a.click();
   toast('CSV buufatame!');
 }
