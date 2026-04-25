@@ -246,9 +246,9 @@
                 <div class="text-6xl mb-4">🎉</div>
                 <h3 class="text-white font-bold text-2xl mb-3">Account Created!</h3>
                 <p class="text-white opacity-80 mb-2">Your member account has been created successfully.</p>
-                <p class="text-white opacity-60 text-sm mb-6">You can now login with your username and password.</p>
-                <button class="btn-gold" onclick="switchTab('login')">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Go to Login
+                <p class="text-white opacity-60 text-sm mb-6">Please complete your membership form to activate your account.</p>
+                <button class="btn-gold" onclick="goToMembershipForm()">
+                    <i class="fas fa-file-alt mr-2"></i>Complete Membership Form
                 </button>
             </div>
         </div>
@@ -361,7 +361,18 @@
                     else          localStorage.removeItem('wdb_member_remember');
 
                     btn.innerHTML = '✅ Success! Redirecting...';
-                    setTimeout(() => { window.location.href = 'member-dashboard.html'; }, 800);
+
+                    // If membership form not yet completed, send there first
+                    const membershipComplete = localStorage.getItem('wdb_membership_form_complete');
+                    const pendingMemberId    = localStorage.getItem('wdb_pending_member_id');
+                    setTimeout(() => {
+                        if (membershipComplete === 'false' || (membershipComplete === null && pendingMemberId)) {
+                            const mid = pendingMemberId || account.memberId || '';
+                            window.location.href = 'wdb-membership-form.html?member_id=' + encodeURIComponent(mid) + '&new_registration=true';
+                        } else {
+                            window.location.href = 'member-dashboard.html';
+                        }
+                    }, 800);
                 } else {
                     btn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Login to Dashboard';
                     btn.disabled  = false;
@@ -408,9 +419,16 @@
                 });
                 saveAccounts(accounts);
 
-                btn.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Create Account';
-                btn.disabled  = false;
-                switchTab('success');
+                // Mark membership form as pending so login/dashboard guards enforce it
+                localStorage.setItem('wdb_pending_member_id', newId);
+                localStorage.setItem('wdb_membership_form_complete', 'false');
+
+                btn.innerHTML = '✅ Account created! Redirecting...';
+
+                // Redirect straight to the membership form
+                setTimeout(() => {
+                    window.location.href = 'wdb-membership-form.html?member_id=' + encodeURIComponent(newId) + '&new_registration=true';
+                }, 800);
             }, 1200);
         }
 
@@ -455,12 +473,25 @@
             }
         }
 
+        // ── Go to membership form ─────────────────────────────
+        function goToMembershipForm() {
+            const pendingId = localStorage.getItem('wdb_pending_member_id') || '';
+            window.location.href = 'wdb-membership-form.html?member_id=' + encodeURIComponent(pendingId) + '&new_registration=true';
+        }
+
         // ── Init ─────────────────────────────────────────────
         seedDemoAccount();
 
         // If already logged in, redirect
         if (sessionStorage.getItem('wdb_member_logged_in')) {
-            window.location.href = 'member-dashboard.html';
+            const membershipComplete = localStorage.getItem('wdb_membership_form_complete');
+            const pendingMemberId    = localStorage.getItem('wdb_pending_member_id');
+            if (membershipComplete === 'false' || (membershipComplete === null && pendingMemberId)) {
+                const mid = pendingMemberId || '';
+                window.location.href = 'wdb-membership-form.html?member_id=' + encodeURIComponent(mid) + '&new_registration=true';
+            } else {
+                window.location.href = 'member-dashboard.html';
+            }
         }
 
         // Pre-fill remembered username
