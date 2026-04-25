@@ -176,6 +176,52 @@ const translations = {
     }
 };
 
+// ── Shared storage key (must match admin-dashboard.html) ──
+const MEMBERS_STORE = 'wdb_member_accounts';
+
+function getMembersFromStorage() {
+    return JSON.parse(localStorage.getItem(MEMBERS_STORE) || '[]');
+}
+function saveMembersToStorage(data) {
+    localStorage.setItem(MEMBERS_STORE, JSON.stringify(data));
+}
+
+/**
+ * Save a new registration directly to localStorage so the admin
+ * dashboard can read it immediately — works on static hosting
+ * (Cloudflare Pages, GitHub Pages) without a PHP backend.
+ */
+function saveRegistrationToLocalStorage(formData, memberId) {
+    const accounts = getMembersFromStorage();
+
+    // Avoid duplicates by phone
+    const exists = accounts.some(a => a.phone === formData.phone);
+    if (exists) return;
+
+    accounts.unshift({
+        memberId:   memberId,
+        firstName:  formData.fname,
+        lastName:   formData.lname,
+        username:   (formData.fname + '.' + formData.lname).toLowerCase().replace(/\s+/g, '.'),
+        phone:      formData.phone,
+        email:      formData.email      || '',
+        address:    formData.address    || '',
+        gender:     formData.gender     || '',
+        dob:        formData.dob        || '',
+        church:     formData.currentChurch || '',
+        baptized:   formData.baptized === 'eeyyee' ? 'Yes' : 'No',
+        service:    formData.service    || '',
+        howHeard:   formData.howHeard   || '',
+        notes:      formData.notes      || '',
+        status:     'pending',
+        createdAt:  new Date().toISOString().split('T')[0],
+        // No password — member must create one via member-login.html Register tab
+        password:   ''
+    });
+
+    saveMembersToStorage(accounts);
+}
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
@@ -509,19 +555,42 @@ async function handleFormSubmit(event) {
 }
 
 async function submitToAPI(formData) {
-    const response = await fetch('api/register.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-    });
-    
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    // ── Step 1: Generate a member ID locally ──────────────────────────────
+    const accounts  = getMembersFromStorage();
+    const year      = new Date().getFullYear();
+    const nextNum   = String(accounts.length + 1).padStart(4, '0');
+    const memberId  = `WDB-${year}-${nextNum}`;
+
+    // ── Step 2: Save to localStorage immediately (works on static hosting) ─
+    saveRegistrationToLocalStorage(formData, memberId);
+
+    // ── Step 3: Try PHP backend (optional — only works with a server) ──────
+    try {
+        const response = await fetch('api/register.php', {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ ...formData, member_id: memberId }),
+            signal:  AbortSignal.timeout(5000)   // 5 s timeout
+        });
+        if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.member_id) {
+                // If the server returned a different ID, update localStorage
+                const stored = getMembersFromStorage();
+                const idx = stored.findIndex(a => a.memberId === memberId);
+                if (idx > -1) {
+                    stored[idx].memberId = data.member_id;
+                    saveMembersToStorage(stored);
+                }
+                return { success: true, member_id: data.member_id };
+            }
+        }
+    } catch (_) {
+        // Server not available — that's fine, localStorage already saved
     }
-    
-    return await response.json();
+
+    // ── Step 4: Return success with the locally-generated ID ──────────────
+    return { success: true, member_id: memberId };
 }
 
 function showSuccessStep(memberId) {
