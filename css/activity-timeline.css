@@ -1,0 +1,399 @@
+/**
+ * Activity Timeline Widget Styles
+ * Enhanced styles for the activity timeline component
+ */
+
+/* Custom scrollbar for activity timeline */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.3);
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.5);
+}
+
+/* Activity timeline widget enhancements */
+.activity-timeline-widget {
+    position: relative;
+    overflow: hidden;
+}
+
+.activity-timeline-widget::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #8B5CF6, #3B82F6);
+    opacity: 0.8;
+}
+
+/* Activity item enhancements */
+.activity-item {
+    position: relative;
+    transition: all 0.2s ease;
+    border-radius: 0.75rem;
+}
+
+.activity-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.activity-item.expanded {
+    background: rgba(15, 23, 42, 0.6);
+    border-color: var(--accent-blue, #3B82F6);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.activity-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: transparent;
+    transition: background-color 0.2s ease;
+    border-radius: 1px;
+}
+
+.activity-item:hover::before {
+    background: var(--accent-blue, #3B82F6);
+}
+
+.activity-item.expanded::before {
+    background: var(--accent-blue, #3B82F6);
+    width: 3px;
+}
+
+/* Activity expansion animations */
+.activity-expansion {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.activity-expansion.expanding {
+    animation: expandIn 0.3s ease-out forwards;
+}
+
+.activity-expansion.collapsing {
+    animation: expandOut 0.3s ease-in forwards;
+}
+
+@keyframes expandIn {
+    from {
+        max-height: 0;
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        max-height: 500px;
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes expandOut {
+    from {
+        max-height: 500px;
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        max-height: 0;
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+/* Activity actions styling */
+.activity-actions {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.activity-item:hover .activity-actions {
+    opacity: 1;
+}
+
+.activity-actions button {
+    transition: all 0.2s ease;
+}
+
+.activity-actions button:hover {
+    transform: scale(1.1);
+}
+
+/* Quick action buttons in expansion */
+.activity-quick-action {
+    transition: all 0.2s ease;
+}
+
+.activity-quick-action:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Activity type specific hover effects */
+.activity-item[data-activity-type="login"]:hover::before {
+    background: #10B981; /* green */
+}
+
+.activity-item[data-activity-type="logout"]:hover::before {
+    background: #6B7280; /* gray */
+}
+
+.activity-item[data-activity-type="data_change"]:hover::before {
+    background: #3B82F6; /* blue */
+}
+
+.activity-item[data-activity-type="system"]:hover::before {
+    background: #F59E0B; /* yellow */
+}
+
+.activity-item[data-activity-type="security"]:hover::before {
+    background: #EF4444; /* red */
+}
+
+/* Activity icon animations */
+.activity-item .w-10 {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.activity-item:hover .w-10 {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Activity metadata styling */
+.activity-item .bg-dark-border {
+    background: rgba(51, 65, 85, 0.5);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+/* Real-time activity animations */
+.activity-new {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+    background: rgba(59, 130, 246, 0.1);
+    border-left-color: #3B82F6 !important;
+    border-left-width: 3px;
+}
+
+.activity-animate-in {
+    animation: newActivitySlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes newActivitySlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    50% {
+        opacity: 0.7;
+        transform: translateY(-5px) scale(1.02);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* New activity highlight effect */
+.activity-new::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    animation: newActivityGlow 2s ease-in-out;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+@keyframes newActivityGlow {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Live indicator enhancements */
+.activity-timeline-widget .animate-pulse {
+    animation: livePulse 2s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+}
+
+/* Real-time status indicators */
+.live-status-active {
+    color: #10B981;
+}
+
+.live-status-inactive {
+    color: #6B7280;
+}
+
+/* Refresh button spin animation */
+.fa-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Activity update notification */
+.activity-update-notification {
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Staggered animation for multiple new activities */
+.activity-new:nth-child(1) { animation-delay: 0ms; }
+.activity-new:nth-child(2) { animation-delay: 100ms; }
+.activity-new:nth-child(3) { animation-delay: 200ms; }
+.activity-new:nth-child(4) { animation-delay: 300ms; }
+.activity-new:nth-child(5) { animation-delay: 400ms; }
+
+/* Activity type legend enhancements */
+.activity-timeline-widget .bg-dark-bg {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(8px);
+}
+
+/* Filter panel enhancements */
+#activityFiltersPanel {
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+#activityFiltersPanel select:focus,
+#activityFiltersPanel input:focus {
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Modal enhancements */
+.activity-details-modal {
+    backdrop-filter: blur(8px);
+}
+
+.activity-details-modal .bg-dark-card {
+    background: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+/* Button hover effects */
+.activity-timeline-widget button {
+    transition: all 0.2s ease;
+}
+
+.activity-timeline-widget button:hover {
+    transform: translateY(-1px);
+}
+
+.activity-timeline-widget button:active {
+    transform: translateY(0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .activity-timeline-widget {
+        padding: 1rem;
+    }
+    
+    .activity-item {
+        padding: 0.75rem;
+    }
+    
+    .activity-item .w-10 {
+        width: 2rem;
+        height: 2rem;
+    }
+    
+    .activity-item .w-10 i {
+        font-size: 0.75rem;
+    }
+    
+    #activityFiltersPanel {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Dark mode specific adjustments */
+.dark .activity-timeline-widget {
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(12px);
+}
+
+.dark .activity-item:hover {
+    background: rgba(15, 23, 42, 0.8);
+}
+
+/* Focus states for accessibility */
+.activity-item:focus-within {
+    outline: 2px solid #3B82F6;
+    outline-offset: 2px;
+}
+
+.activity-timeline-widget button:focus {
+    outline: 2px solid #3B82F6;
+    outline-offset: 2px;
+}
+
+/* Timeline connector line (optional visual enhancement) */
+.activity-timeline-list {
+    position: relative;
+}
+
+.activity-timeline-list::before {
+    content: '';
+    position: absolute;
+    left: 1.25rem; /* Align with activity icons */
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(148, 163, 184, 0.2), transparent);
+    z-index: 0;
+}
+
+.activity-item {
+    position: relative;
+    z-index: 1;
+}

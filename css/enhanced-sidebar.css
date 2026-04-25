@@ -1,0 +1,337 @@
+/**
+ * Enhanced Sidebar Navigation Styles
+ * Requirements: 9.1, 9.2, 9.3, 9.6, 9.7, 9.8, 13.1
+ */
+
+/* Sidebar Animation and Transitions */
+.sidebar {
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: width;
+}
+
+.sidebar.collapsed {
+    width: 64px;
+}
+
+.sidebar.collapsed .sidebar-text {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.sidebar:not(.collapsed) .sidebar-text {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+}
+
+/* Main Content Adjustment */
+#mainContent {
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: margin-left;
+}
+
+/* Navigation Badges */
+.nav-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    transition: all 0.2s ease;
+    animation: fadeIn 0.3s ease;
+}
+
+.nav-badge.animate-pulse {
+    animation: pulse 1s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Collapsed Sidebar Badge Positioning */
+.sidebar.collapsed .nav-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+}
+
+/* Tooltip Enhancements for Collapsed Sidebar */
+.sidebar.collapsed .tooltip {
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 12px;
+    padding: 8px 12px;
+    background: #1E293B;
+    color: #F1F5F9;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.sidebar.collapsed .sidebar-item:hover .tooltip,
+.sidebar.collapsed .sidebar-item:focus .tooltip {
+    opacity: 1;
+    transform: translateY(-50%) translateX(4px);
+}
+
+/* Tooltip Arrow */
+.sidebar.collapsed .tooltip::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -4px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 4px 4px 4px 0;
+    border-color: transparent #1E293B transparent transparent;
+}
+
+/* Mobile Sidebar Styles */
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 1000;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 280px !important;
+    }
+    
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+    
+    #mainContent {
+        margin-left: 0 !important;
+    }
+    
+    #mobileOverlay {
+        transition: opacity 0.3s ease;
+    }
+    
+    #mobileOverlay:not(.hidden) {
+        opacity: 1;
+    }
+}
+
+/* Sidebar Item Enhancements */
+.sidebar-item {
+    position: relative;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    margin: 2px 0;
+}
+
+.sidebar-item:hover {
+    background: rgba(59, 130, 246, 0.1);
+    transform: translateX(4px);
+}
+
+.sidebar-item.active {
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, transparent 100%);
+    border-left: 3px solid #3B82F6;
+    transform: translateX(0);
+}
+
+.sidebar-item:focus {
+    outline: 2px solid #3B82F6;
+    outline-offset: 2px;
+}
+
+/* Submenu Styles */
+.sidebar-item.has-submenu .fa-chevron-down {
+    transition: transform 0.2s ease;
+}
+
+.sidebar-item[aria-expanded="true"] .fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+/* Submenu Animation */
+.nav-submenu {
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-submenu.hidden {
+    max-height: 0;
+}
+
+.nav-submenu:not(.hidden) {
+    max-height: 200px; /* Adjust based on content */
+}
+
+/* Role-based Styling */
+.sidebar-item.role-admin {
+    border-left: 2px solid rgba(34, 197, 94, 0.3);
+}
+
+.sidebar-item.role-superadmin {
+    border-left: 2px solid rgba(168, 85, 247, 0.3);
+}
+
+/* Keyboard Navigation Focus Indicators */
+.sidebar-item:focus-visible {
+    outline: 2px solid #3B82F6;
+    outline-offset: 2px;
+    background: rgba(59, 130, 246, 0.1);
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .sidebar-item:hover,
+    .sidebar-item:focus {
+        background: rgba(59, 130, 246, 0.3);
+        border: 2px solid #3B82F6;
+    }
+    
+    .nav-badge {
+        border: 1px solid currentColor;
+    }
+    
+    .tooltip {
+        border: 2px solid #3B82F6;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .sidebar,
+    .sidebar-item,
+    .nav-badge,
+    .tooltip,
+    #mainContent {
+        transition: none;
+    }
+    
+    .nav-badge.animate-pulse {
+        animation: none;
+    }
+}
+
+/* Dark Mode Adjustments */
+.dark .tooltip {
+    background: #0F172A;
+    border-color: rgba(148, 163, 184, 0.3);
+}
+
+.dark .tooltip::before {
+    border-color: transparent #0F172A transparent transparent;
+}
+
+/* Loading State for Badges */
+.nav-badge.loading {
+    background: rgba(148, 163, 184, 0.3);
+    color: transparent;
+    position: relative;
+}
+
+.nav-badge.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border: 1px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Accessibility Improvements */
+.sidebar[aria-hidden="true"] {
+    visibility: hidden;
+}
+
+.sidebar-item[aria-hidden="true"] {
+    display: none;
+}
+
+/* Screen Reader Only Content */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus Management */
+.sidebar:focus-within .sidebar-item:not(:focus) {
+    opacity: 0.7;
+}
+
+/* Badge Color Variants */
+.nav-badge.members {
+    background: #3B82F6;
+}
+
+.nav-badge.contributions {
+    background: #8B5CF6;
+}
+
+.nav-badge.announcements {
+    background: #F59E0B;
+}
+
+.nav-badge.notifications {
+    background: #EF4444;
+}
+
+/* Hover Effects for Badges */
+.sidebar-item:hover .nav-badge {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Collapsed Sidebar Icon Centering */
+.sidebar.collapsed .sidebar-item {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.sidebar.collapsed .sidebar-item i {
+    margin: 0;
+}
+
+/* Smooth Transitions for All Interactive Elements */
+.sidebar * {
+    transition-property: color, background-color, border-color, transform, opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+}

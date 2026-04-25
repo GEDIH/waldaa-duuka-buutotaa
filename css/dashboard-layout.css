@@ -1,0 +1,486 @@
+/**
+ * Dashboard Layout Customization Styles
+ * Supports drag-and-drop, widget visibility, resizing, and layout presets
+ * Requirements: 15.1, 15.2, 15.3, 15.5, 15.6
+ */
+
+/* Drag Handle Styles */
+.drag-handle {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+    display: none; /* Hidden by default, shown in layout mode */
+    cursor: grab;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+}
+
+.drag-handle:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.drag-handle-content {
+    background: rgba(59, 130, 246, 0.9);
+    color: white;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.drag-handle-content i {
+    font-size: 14px;
+}
+
+/* Layout Mode Active State */
+.layout-mode-active .drag-handle {
+    display: block !important;
+}
+
+.layout-mode-active [data-widget-id].customizable {
+    position: relative;
+    border: 2px dashed rgba(59, 130, 246, 0.3);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.layout-mode-active [data-widget-id].customizable:hover {
+    border-color: rgba(59, 130, 246, 0.6);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+}
+
+.layout-mode-active [data-widget-id].customizable::before {
+    content: 'Drag to reorder';
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(59, 130, 246, 0.9);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 20;
+}
+
+.layout-mode-active [data-widget-id].customizable:hover::before {
+    opacity: 1;
+}
+
+/* Dragging State */
+.dragging {
+    opacity: 0.5;
+    transform: rotate(5deg) scale(0.95);
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.drag-active {
+    cursor: grabbing;
+}
+
+.drag-active * {
+    pointer-events: none;
+}
+
+/* Drop Zone Overlay */
+.drop-zone-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    pointer-events: none;
+}
+
+.drop-zone {
+    position: absolute;
+    border: 2px dashed rgba(59, 130, 246, 0.4);
+    border-radius: 12px;
+    background: rgba(59, 130, 246, 0.05);
+    pointer-events: all;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+
+.drop-zone-active {
+    border-color: rgba(59, 130, 246, 0.8);
+    background: rgba(59, 130, 246, 0.15);
+    opacity: 1;
+    transform: scale(1.02);
+}
+
+.drop-zone-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: rgba(59, 130, 246, 0.8);
+    font-size: 14px;
+    font-weight: 600;
+    pointer-events: none;
+}
+
+.drop-zone-indicator i {
+    display: block;
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.drop-zone-final {
+    border-style: solid;
+    background: rgba(34, 197, 94, 0.05);
+    border-color: rgba(34, 197, 94, 0.4);
+}
+
+.drop-zone-final.drop-zone-active {
+    border-color: rgba(34, 197, 94, 0.8);
+    background: rgba(34, 197, 94, 0.15);
+}
+
+.drop-zone-final .drop-zone-indicator {
+    color: rgba(34, 197, 94, 0.8);
+}
+
+/* Layout Controls */
+.layout-controls {
+    position: relative;
+}
+
+.layout-controls-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.layout-control-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 8px;
+    color: #94a3b8;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+}
+
+.layout-control-btn:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #3b82f6;
+}
+
+.layout-control-btn i {
+    font-size: 14px;
+}
+
+.layout-mode-controls {
+    display: flex;
+    gap: 8px;
+    margin-left: 8px;
+    padding-left: 8px;
+    border-left: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+/* Widget Visibility Controls (for subtask 17.2) */
+.widget-visibility-panel {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    width: 300px;
+    background: rgba(30, 41, 59, 0.95);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    z-index: 50;
+}
+
+.widget-visibility-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.widget-visibility-item:last-child {
+    border-bottom: none;
+}
+
+.widget-visibility-label {
+    color: #f1f5f9;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.widget-visibility-toggle {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background: rgba(148, 163, 184, 0.3);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.widget-visibility-toggle.active {
+    background: #3b82f6;
+}
+
+.widget-visibility-toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.widget-visibility-toggle.active::after {
+    transform: translateX(20px);
+}
+
+/* Widget Size Controls (for subtask 17.3) */
+.widget-size-controls {
+    position: absolute;
+    top: 40px;
+    right: 8px;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 15;
+}
+
+.layout-mode-active .widget-size-controls {
+    display: flex;
+}
+
+.widget-size-btn {
+    width: 24px;
+    height: 24px;
+    background: rgba(59, 130, 246, 0.9);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.widget-size-btn:hover {
+    background: rgba(59, 130, 246, 1);
+    transform: scale(1.1);
+}
+
+.widget-size-btn.active {
+    background: rgba(34, 197, 94, 0.9);
+}
+
+/* Widget Size Classes */
+.widget-small {
+    grid-column: span 1;
+    min-height: 200px;
+}
+
+.widget-medium {
+    grid-column: span 1;
+    min-height: 300px;
+}
+
+.widget-large {
+    grid-column: span 2;
+    min-height: 400px;
+}
+
+/* Layout Presets (for subtask 17.4) */
+.layout-presets-panel {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    width: 250px;
+    background: rgba(30, 41, 59, 0.95);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    z-index: 50;
+}
+
+.layout-preset-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.layout-preset-item:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.layout-preset-item.active {
+    background: rgba(59, 130, 246, 0.2);
+    border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+.layout-preset-name {
+    color: #f1f5f9;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.layout-preset-description {
+    color: #94a3b8;
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.layout-preset-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.layout-preset-action {
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.layout-preset-action:hover {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .drag-handle {
+        top: 4px;
+        right: 4px;
+    }
+    
+    .drag-handle-content {
+        padding: 4px 6px;
+        font-size: 11px;
+    }
+    
+    .layout-controls-content {
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .layout-control-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    .widget-visibility-panel,
+    .layout-presets-panel {
+        width: calc(100vw - 32px);
+        left: 16px;
+        right: 16px;
+    }
+    
+    .widget-large {
+        grid-column: span 1; /* Force single column on mobile */
+    }
+}
+
+/* Animation for layout changes */
+@keyframes layoutChange {
+    0% {
+        opacity: 0.7;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.layout-changing [data-widget-id] {
+    animation: layoutChange 0.3s ease-out;
+}
+
+/* Focus styles for accessibility */
+.drag-handle:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.layout-control-btn:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.widget-visibility-toggle:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .drop-zone {
+        border-width: 3px;
+        border-color: #000;
+    }
+    
+    .drag-handle-content {
+        background: #000;
+        border: 2px solid #fff;
+    }
+    
+    .layout-control-btn {
+        border-width: 2px;
+        border-color: #000;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .drag-handle,
+    .drop-zone,
+    .layout-control-btn,
+    .widget-visibility-toggle,
+    [data-widget-id] {
+        transition: none;
+    }
+    
+    .layout-changing [data-widget-id] {
+        animation: none;
+    }
+}

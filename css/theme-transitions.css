@@ -1,0 +1,484 @@
+/**
+ * Theme Transitions CSS
+ * 
+ * Smooth animations and transitions for theme changes in the Administrator Dashboard.
+ * Includes CSS transitions, animations, and theme icon updates.
+ * 
+ * @version 1.0.0
+ */
+
+/* ===== THEME TRANSITION CORE ===== */
+
+/* Base transition class applied during theme changes */
+.theme-transitioning,
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition: 
+    background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) !important,
+    color 300ms cubic-bezier(0.4, 0, 0.2, 1) !important,
+    border-color 300ms cubic-bezier(0.4, 0, 0.2, 1) !important,
+    box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) !important,
+    opacity 300ms cubic-bezier(0.4, 0, 0.2, 1) !important,
+    fill 300ms cubic-bezier(0.4, 0, 0.2, 1) !important,
+    stroke 300ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Prevent layout shifts during transitions */
+.theme-transitioning {
+  overflow-x: hidden;
+}
+
+/* ===== THEME TOGGLE BUTTON ANIMATIONS ===== */
+
+/* Theme toggle button base styles */
+#themeToggle {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* Theme toggle icon animations */
+#themeToggle i {
+  transition: 
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s ease,
+    color 0.3s ease;
+  transform-origin: center;
+}
+
+/* Icon rotation animation on theme change */
+.theme-icon-changing {
+  animation: iconRotate 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes iconRotate {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: rotate(180deg) scale(0.8);
+    opacity: 0.3;
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Theme toggle hover effects */
+#themeToggle:hover {
+  transform: scale(1.1);
+  background-color: rgba(59, 130, 246, 0.1);
+  border-radius: 50%;
+}
+
+#themeToggle:hover i {
+  color: var(--color-primary);
+  text-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+}
+
+/* Theme toggle active state */
+#themeToggle:active {
+  transform: scale(0.95);
+}
+
+/* ===== COMPONENT TRANSITION ANIMATIONS ===== */
+
+/* Card transitions */
+.modern-card,
+.kpi-card,
+.metric-card {
+  transition: 
+    background 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Sidebar transitions */
+.sidebar {
+  transition: 
+    background 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-item {
+  transition: 
+    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Header transitions */
+header {
+  transition: 
+    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Button transitions */
+.modern-button,
+.wdb-btn {
+  transition: 
+    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Form element transitions */
+.wdb-input,
+.wdb-select,
+.wdb-textarea {
+  transition: 
+    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== THEME CHANGE ANIMATIONS ===== */
+
+/* Fade in animation for theme changes */
+.theme-fade-in {
+  animation: themeChangeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes themeChangeIn {
+  0% {
+    opacity: 0.8;
+    transform: translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide animation for sidebar theme change */
+.sidebar.theme-changing {
+  animation: sidebarThemeChange 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes sidebarThemeChange {
+  0% {
+    transform: translateX(-2px);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateX(1px);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Card theme change animation */
+.kpi-card.theme-changing,
+.modern-card.theme-changing,
+.metric-card.theme-changing {
+  animation: cardThemeChange 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes cardThemeChange {
+  0% {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.01);
+    opacity: 0.95;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===== CHART TRANSITION ANIMATIONS ===== */
+
+/* Chart container theme transitions */
+.chart-container {
+  transition: 
+    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Chart canvas fade transition */
+.chart-container canvas {
+  transition: 
+    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Chart updating animation */
+.chart-updating {
+  position: relative;
+}
+
+.chart-updating::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 130, 246, 0.1),
+    transparent
+  );
+  animation: chartUpdateShimmer 1s ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes chartUpdateShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ===== NOTIFICATION TRANSITION ANIMATIONS ===== */
+
+/* Notification dropdown theme transitions */
+#notificationDropdown {
+  transition: 
+    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Notification item transitions */
+.notification-item {
+  transition: 
+    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== SEARCH COMPONENT TRANSITIONS ===== */
+
+/* Search suggestions transitions */
+#searchSuggestions {
+  transition: 
+    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-suggestion {
+  transition: 
+    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== PROGRESS BAR TRANSITIONS ===== */
+
+/* Progress bar theme transitions */
+.progress-bar {
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-fill {
+  transition: 
+    background 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== STATUS BADGE TRANSITIONS ===== */
+
+/* Status badge theme transitions */
+.status-badge {
+  transition: 
+    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== MODAL TRANSITIONS ===== */
+
+/* Modal theme transitions */
+.modal,
+.fixed.inset-0 > div {
+  transition: 
+    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== TABLE TRANSITIONS ===== */
+
+/* Table theme transitions */
+table {
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+th {
+  transition: 
+    background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+td {
+  transition: 
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+tr {
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== SCROLLBAR TRANSITIONS ===== */
+
+/* Scrollbar theme transitions */
+::-webkit-scrollbar-track {
+  transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::-webkit-scrollbar-thumb {
+  transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== SPECIAL EFFECTS ===== */
+
+/* Glow effect during theme transition */
+.theme-glow {
+  animation: themeGlow 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes themeGlow {
+  0% {
+    box-shadow: 0 0 0 rgba(59, 130, 246, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+/* Ripple effect for theme toggle */
+.theme-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.3);
+  transform: translate(-50%, -50%);
+  animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+  }
+}
+
+/* ===== ACCESSIBILITY CONSIDERATIONS ===== */
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .theme-transitioning,
+  .theme-transitioning *,
+  .theme-transitioning *::before,
+  .theme-transitioning *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  #themeToggle i {
+    transition: color 0.1s ease !important;
+  }
+  
+  .theme-fade-in,
+  .theme-changing,
+  .theme-glow,
+  .theme-ripple::after {
+    animation: none !important;
+  }
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+  .theme-transitioning,
+  .theme-transitioning * {
+    transition-duration: 150ms !important;
+  }
+}
+
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+
+/* Use GPU acceleration for smooth transitions */
+.theme-transitioning {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimize repaints during transitions */
+.theme-transitioning .kpi-card,
+.theme-transitioning .modern-card,
+.theme-transitioning .metric-card {
+  will-change: background-color, border-color, box-shadow;
+}
+
+/* Clean up will-change after transition */
+.theme-transition-complete .kpi-card,
+.theme-transition-complete .modern-card,
+.theme-transition-complete .metric-card {
+  will-change: auto;
+}
+
+/* ===== MOBILE OPTIMIZATIONS ===== */
+
+@media (max-width: 768px) {
+  .theme-transitioning,
+  .theme-transitioning * {
+    transition-duration: 200ms !important;
+  }
+  
+  .theme-fade-in,
+  .theme-changing {
+    animation-duration: 0.3s !important;
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+
+@media print {
+  .theme-transitioning,
+  .theme-transitioning *,
+  .theme-fade-in,
+  .theme-changing,
+  .theme-glow,
+  .theme-ripple::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

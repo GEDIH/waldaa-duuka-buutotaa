@@ -1,0 +1,194 @@
+/* WDB Background Themes System */
+
+/* Base Background Styles */
+.wdb-background-base {
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Background Theme 1: Waldaa (Church/Traditional) */
+.wdb-bg-waldaa {
+    background-image: url('../images/waldaa.png');
+}
+
+.wdb-bg-waldaa::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.1) 0%, rgba(255, 255, 255, 0.85) 100%);
+    z-index: -1;
+}
+
+/* Background Theme 2: SADAASA (Cultural) */
+.wdb-bg-sadaasa {
+    background-image: url('../images/SADAASA.png');
+}
+
+.wdb-bg-sadaasa::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(255, 255, 255, 0.9) 100%);
+    z-index: -1;
+}
+
+/* Background Theme 3: IMG_4569 (Modern) */
+.wdb-bg-modern {
+    background-image: url('../images/IMG_4569.png');
+}
+
+.wdb-bg-modern::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(255, 255, 255, 0.8) 100%);
+    z-index: -1;
+}
+
+/* Background Theme 4: Ergaa Fi Ergama (Spiritual) */
+.wdb-bg-spiritual {
+    background-image: url('../images/Ergaa_Fi_Ergama.jpg');
+}
+
+.wdb-bg-spiritual::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(255, 255, 255, 0.9) 100%);
+    z-index: -1;
+}
+
+/* Background Theme 5: Fannoo (Artistic) */
+.wdb-bg-artistic {
+    background-image: url('../images/fannoo.png');
+}
+
+.wdb-bg-artistic::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(255, 255, 255, 0.85) 100%);
+    z-index: -1;
+}
+
+/* Background Theme 6: Clean/Minimal */
+.wdb-bg-clean {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #dbeafe 100%);
+}
+
+/* Background Theme 7: WDB Branded */
+.wdb-bg-branded {
+    background-image: url('../images/WDB1.png'), url('../images/WDB2.png'), url('../images/WDB3.png');
+    background-size: 300px, 250px, 200px;
+    background-position: top left, top right, bottom center;
+    background-repeat: no-repeat;
+    background-color: #f8fafc;
+}
+
+.wdb-bg-branded::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 249, 255, 0.9) 100%);
+    z-index: -1;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .wdb-background-base {
+        background-attachment: scroll;
+    }
+    
+    .wdb-bg-branded {
+        background-size: 200px, 150px, 100px;
+    }
+}
+
+/* Animation Effects */
+.wdb-bg-animated {
+    animation: backgroundShift 20s ease-in-out infinite;
+}
+
+@keyframes backgroundShift {
+    0%, 100% { background-position: center center; }
+    25% { background-position: center top; }
+    50% { background-position: center bottom; }
+    75% { background-position: center center; }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .wdb-bg-waldaa::before,
+    .wdb-bg-sadaasa::before,
+    .wdb-bg-modern::before,
+    .wdb-bg-spiritual::before,
+    .wdb-bg-artistic::before {
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%);
+    }
+}
+
+/* Background Selector Widget */
+.background-selector {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.background-selector button {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    margin: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-size: cover;
+    background-position: center;
+}
+
+.background-selector button:hover {
+    transform: scale(1.1);
+    border-color: #3b82f6;
+}
+
+.background-selector button.active {
+    border-color: #1d4ed8;
+    box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.3);
+}
+
+/* Theme Preview Buttons */
+.bg-preview-waldaa { background-image: url('../images/waldaa.png'); }
+.bg-preview-sadaasa { background-image: url('../images/SADAASA.png'); }
+.bg-preview-modern { background-image: url('../images/IMG_4569.png'); }
+.bg-preview-spiritual { background-image: url('../images/Ergaa_Fi_Ergama.jpg'); }
+.bg-preview-artistic { background-image: url('../images/fannoo.png'); }
+.bg-preview-clean { background: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%); }
+.bg-preview-branded { background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); }

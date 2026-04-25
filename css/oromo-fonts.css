@@ -1,0 +1,660 @@
+/**
+ * Oromo Language Font Support
+ * 
+ * This stylesheet provides comprehensive font support for Oromo (Afaan Oromoo) text display.
+ * Ensures proper rendering of Oromo characters with UTF-8 encoding across all browsers.
+ * 
+ * Requirements: 8.1, 8.3
+ * Property 14: Oromo text encoding and display
+ */
+
+/* ============================================
+   UTF-8 Encoding Declaration
+   ============================================ */
+@charset "UTF-8";
+
+/* ============================================
+   Oromo Font Stack
+   ============================================ */
+
+/**
+ * Primary font stack for Oromo text
+ * Prioritizes fonts with excellent Oromo character support
+ */
+.oromo-text,
+[lang="om"],
+.lang-om,
+html[lang="om"] body {
+    font-family: 
+        /* System fonts with Oromo support */
+        'Noto Sans Ethiopic',
+        'Abyssinica SIL',
+        'Nyala',
+        
+        /* Fallback to Unicode-compliant fonts */
+        'Segoe UI',
+        'Roboto',
+        'Arial Unicode MS',
+        'Lucida Sans Unicode',
+        
+        /* Generic fallbacks */
+        sans-serif;
+    
+    /* Ensure UTF-8 encoding */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* ============================================
+   Oromo Character Support
+   ============================================ */
+
+/**
+ * Special handling for Oromo-specific characters
+ * Includes: ā, ē, ī, ō, ū, ch', ph', ts', etc.
+ */
+.oromo-special-chars {
+    /* Enhanced rendering for special characters */
+    font-feature-settings: "liga" 1, "calt" 1;
+    font-variant-ligatures: common-ligatures contextual;
+}
+
+/* ============================================
+   Text Direction and Alignment
+   ============================================ */
+
+/**
+ * Oromo uses left-to-right (LTR) text direction
+ */
+[lang="om"],
+.lang-om {
+    direction: ltr;
+    text-align: left;
+}
+
+/* ============================================
+   Font Sizes and Line Heights
+   ============================================ */
+
+/**
+ * Optimized typography for Oromo text readability
+ */
+.oromo-text {
+    /* Slightly larger font size for better readability */
+    font-size: 1em;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+}
+
+.oromo-text-large {
+    font-size: 1.2em;
+    line-height: 1.7;
+}
+
+.oromo-text-small {
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+/* ============================================
+   Headings in Oromo
+   ============================================ */
+
+[lang="om"] h1,
+.lang-om h1,
+h1.oromo-text {
+    font-size: 2.5rem;
+    line-height: 1.3;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+[lang="om"] h2,
+.lang-om h2,
+h2.oromo-text {
+    font-size: 2rem;
+    line-height: 1.35;
+    font-weight: 600;
+    margin-bottom: 0.875rem;
+}
+
+[lang="om"] h3,
+.lang-om h3,
+h3.oromo-text {
+    font-size: 1.75rem;
+    line-height: 1.4;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+[lang="om"] h4,
+.lang-om h4,
+h4.oromo-text {
+    font-size: 1.5rem;
+    line-height: 1.45;
+    font-weight: 500;
+    margin-bottom: 0.625rem;
+}
+
+[lang="om"] h5,
+.lang-om h5,
+h5.oromo-text {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+[lang="om"] h6,
+.lang-om h6,
+h6.oromo-text {
+    font-size: 1rem;
+    line-height: 1.55;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   Paragraph and Body Text
+   ============================================ */
+
+[lang="om"] p,
+.lang-om p,
+p.oromo-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+[lang="om"] .lead,
+.lang-om .lead,
+.lead.oromo-text {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    font-weight: 300;
+}
+
+/* ============================================
+   Form Elements with Oromo Text
+   ============================================ */
+
+[lang="om"] input,
+[lang="om"] textarea,
+[lang="om"] select,
+.lang-om input,
+.lang-om textarea,
+.lang-om select,
+input.oromo-text,
+textarea.oromo-text,
+select.oromo-text {
+    font-family: 
+        'Noto Sans Ethiopic',
+        'Abyssinica SIL',
+        'Nyala',
+        'Segoe UI',
+        'Roboto',
+        sans-serif;
+    
+    /* Ensure proper character rendering in form fields */
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Placeholder text in Oromo */
+[lang="om"] input::placeholder,
+[lang="om"] textarea::placeholder,
+.lang-om input::placeholder,
+.lang-om textarea::placeholder,
+input.oromo-text::placeholder,
+textarea.oromo-text::placeholder {
+    font-family: inherit;
+    opacity: 0.6;
+}
+
+/* ============================================
+   Buttons and Interactive Elements
+   ============================================ */
+
+[lang="om"] button,
+[lang="om"] .btn,
+.lang-om button,
+.lang-om .btn,
+button.oromo-text,
+.btn.oromo-text {
+    font-family: 
+        'Noto Sans Ethiopic',
+        'Abyssinica SIL',
+        'Segoe UI',
+        'Roboto',
+        sans-serif;
+    
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+/* ============================================
+   Tables with Oromo Content
+   ============================================ */
+
+[lang="om"] table,
+.lang-om table,
+table.oromo-text {
+    font-family: inherit;
+}
+
+[lang="om"] th,
+[lang="om"] td,
+.lang-om th,
+.lang-om td,
+th.oromo-text,
+td.oromo-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    padding: 0.75rem;
+}
+
+/* ============================================
+   Lists in Oromo
+   ============================================ */
+
+[lang="om"] ul,
+[lang="om"] ol,
+.lang-om ul,
+.lang-om ol,
+ul.oromo-text,
+ol.oromo-text {
+    padding-left: 2rem;
+    margin-bottom: 1rem;
+}
+
+[lang="om"] li,
+.lang-om li,
+li.oromo-text {
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   Code and Preformatted Text
+   ============================================ */
+
+/**
+ * Monospace fonts for code blocks
+ * Note: Code blocks typically don't need Oromo-specific fonts
+ */
+[lang="om"] code,
+[lang="om"] pre,
+.lang-om code,
+.lang-om pre {
+    font-family: 
+        'Consolas',
+        'Monaco',
+        'Courier New',
+        monospace;
+}
+
+/* ============================================
+   Emphasis and Strong Text
+   ============================================ */
+
+[lang="om"] em,
+[lang="om"] i,
+.lang-om em,
+.lang-om i,
+em.oromo-text,
+i.oromo-text {
+    font-style: italic;
+}
+
+[lang="om"] strong,
+[lang="om"] b,
+.lang-om strong,
+.lang-om b,
+strong.oromo-text,
+b.oromo-text {
+    font-weight: 700;
+}
+
+/* ============================================
+   Quotes and Citations
+   ============================================ */
+
+[lang="om"] blockquote,
+.lang-om blockquote,
+blockquote.oromo-text {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    font-style: italic;
+    padding: 1rem 1.5rem;
+    border-left: 4px solid #667eea;
+    margin: 1.5rem 0;
+}
+
+[lang="om"] q,
+.lang-om q,
+q.oromo-text {
+    quotes: "\"" "\"" "'" "'";
+}
+
+/* ============================================
+   Navigation and Menus
+   ============================================ */
+
+[lang="om"] nav,
+[lang="om"] .nav,
+[lang="om"] .navbar,
+.lang-om nav,
+.lang-om .nav,
+.lang-om .navbar {
+    font-family: inherit;
+}
+
+[lang="om"] .nav-link,
+.lang-om .nav-link,
+.nav-link.oromo-text {
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+/* ============================================
+   Alerts and Messages
+   ============================================ */
+
+[lang="om"] .alert,
+.lang-om .alert,
+.alert.oromo-text {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* ============================================
+   Cards and Panels
+   ============================================ */
+
+[lang="om"] .card,
+.lang-om .card,
+.card.oromo-text {
+    font-family: inherit;
+}
+
+[lang="om"] .card-title,
+.lang-om .card-title,
+.card-title.oromo-text {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+[lang="om"] .card-text,
+.lang-om .card-text,
+.card-text.oromo-text {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* ============================================
+   Modals and Dialogs
+   ============================================ */
+
+[lang="om"] .modal-title,
+.lang-om .modal-title,
+.modal-title.oromo-text {
+    font-size: 1.5rem;
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+[lang="om"] .modal-body,
+.lang-om .modal-body,
+.modal-body.oromo-text {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* ============================================
+   Tooltips and Popovers
+   ============================================ */
+
+[lang="om"] .tooltip,
+.lang-om .tooltip,
+.tooltip.oromo-text {
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+/* ============================================
+   Badges and Labels
+   ============================================ */
+
+[lang="om"] .badge,
+.lang-om .badge,
+.badge.oromo-text {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+/* ============================================
+   Breadcrumbs
+   ============================================ */
+
+[lang="om"] .breadcrumb,
+.lang-om .breadcrumb,
+.breadcrumb.oromo-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* ============================================
+   Pagination
+   ============================================ */
+
+[lang="om"] .pagination,
+.lang-om .pagination,
+.pagination.oromo-text {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* ============================================
+   Print Styles for Oromo Text
+   ============================================ */
+
+@media print {
+    [lang="om"],
+    .lang-om,
+    .oromo-text {
+        font-family: 
+            'Noto Sans Ethiopic',
+            'Times New Roman',
+            serif;
+        
+        /* Optimize for print */
+        color: #000;
+        background: #fff;
+    }
+    
+    [lang="om"] h1,
+    [lang="om"] h2,
+    [lang="om"] h3,
+    [lang="om"] h4,
+    [lang="om"] h5,
+    [lang="om"] h6 {
+        page-break-after: avoid;
+    }
+    
+    [lang="om"] p,
+    [lang="om"] blockquote {
+        orphans: 3;
+        widows: 3;
+    }
+}
+
+/* ============================================
+   Responsive Typography for Oromo
+   ============================================ */
+
+/* Mobile devices */
+@media (max-width: 576px) {
+    [lang="om"] h1,
+    .lang-om h1,
+    h1.oromo-text {
+        font-size: 2rem;
+    }
+    
+    [lang="om"] h2,
+    .lang-om h2,
+    h2.oromo-text {
+        font-size: 1.75rem;
+    }
+    
+    [lang="om"] h3,
+    .lang-om h3,
+    h3.oromo-text {
+        font-size: 1.5rem;
+    }
+    
+    [lang="om"] p,
+    .lang-om p,
+    p.oromo-text {
+        font-size: 0.95rem;
+    }
+}
+
+/* Tablets */
+@media (min-width: 577px) and (max-width: 992px) {
+    [lang="om"] h1,
+    .lang-om h1,
+    h1.oromo-text {
+        font-size: 2.25rem;
+    }
+    
+    [lang="om"] h2,
+    .lang-om h2,
+    h2.oromo-text {
+        font-size: 1.875rem;
+    }
+}
+
+/* ============================================
+   Accessibility Enhancements
+   ============================================ */
+
+/**
+ * High contrast mode support
+ */
+@media (prefers-contrast: high) {
+    [lang="om"],
+    .lang-om,
+    .oromo-text {
+        font-weight: 500;
+        letter-spacing: 0.02em;
+    }
+}
+
+/**
+ * Reduced motion support
+ */
+@media (prefers-reduced-motion: reduce) {
+    [lang="om"] *,
+    .lang-om *,
+    .oromo-text * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ============================================
+   Dark Mode Support
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+    [lang="om"],
+    .lang-om,
+    .oromo-text {
+        /* Slightly increase letter spacing for better readability in dark mode */
+        letter-spacing: 0.015em;
+    }
+}
+
+/* ============================================
+   Browser-Specific Fixes
+   ============================================ */
+
+/* Firefox */
+@-moz-document url-prefix() {
+    [lang="om"],
+    .lang-om,
+    .oromo-text {
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Safari */
+@supports (-webkit-appearance: none) {
+    [lang="om"],
+    .lang-om,
+    .oromo-text {
+        -webkit-font-smoothing: antialiased;
+    }
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.oromo-font-weight-light {
+    font-weight: 300;
+}
+
+.oromo-font-weight-normal {
+    font-weight: 400;
+}
+
+.oromo-font-weight-medium {
+    font-weight: 500;
+}
+
+.oromo-font-weight-semibold {
+    font-weight: 600;
+}
+
+.oromo-font-weight-bold {
+    font-weight: 700;
+}
+
+.oromo-text-uppercase {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.oromo-text-lowercase {
+    text-transform: lowercase;
+}
+
+.oromo-text-capitalize {
+    text-transform: capitalize;
+}
+
+/* ============================================
+   Character Encoding Verification
+   ============================================ */
+
+/**
+ * Test class to verify Oromo character rendering
+ * Usage: Add class to element to test character display
+ */
+.oromo-char-test::before {
+    content: "Afaan Oromoo: ā ē ī ō ū ch' ph' ts'";
+    display: block;
+    padding: 10px;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-family: inherit;
+}

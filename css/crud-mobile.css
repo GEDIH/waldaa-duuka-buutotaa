@@ -1,0 +1,776 @@
+/**
+ * Mobile-Responsive CRUD Interface Styles
+ * Optimizes CRUD table, form, and modal components for mobile devices
+ * Includes touch-friendly controls and swipe gesture support
+ */
+
+/* ============================================
+   Mobile Breakpoints
+   ============================================ */
+:root {
+    --mobile-breakpoint: 768px;
+    --small-mobile-breakpoint: 480px;
+    --touch-target-size: 44px;
+    --swipe-threshold: 50px;
+}
+
+/* ============================================
+   Mobile CRUD Table Optimizations
+   ============================================ */
+
+/* Responsive table wrapper */
+@media (max-width: 768px) {
+    .crud-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 -15px;
+        padding: 0 15px;
+    }
+
+    /* Card-based table layout for mobile */
+    .crud-table.mobile-cards {
+        display: block;
+        border: none;
+    }
+
+    .crud-table.mobile-cards thead {
+        display: none;
+    }
+
+    .crud-table.mobile-cards tbody {
+        display: block;
+    }
+
+    .crud-table.mobile-cards tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        position: relative;
+        padding: 15px;
+    }
+
+    .crud-table.mobile-cards td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border: none;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .crud-table.mobile-cards td:last-child {
+        border-bottom: none;
+    }
+
+    .crud-table.mobile-cards td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #555;
+        flex: 0 0 40%;
+        font-size: 14px;
+    }
+
+    .crud-table.mobile-cards td .cell-content {
+        flex: 1;
+        text-align: right;
+        font-size: 14px;
+    }
+
+    /* Swipe indicator */
+    .crud-table.mobile-cards tr.swipeable {
+        touch-action: pan-y;
+        transition: transform 0.3s ease;
+    }
+
+    .crud-table.mobile-cards tr.swiping {
+        transition: none;
+    }
+
+    .crud-table.mobile-cards tr .swipe-actions {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 0 10px;
+        background: #f8f9fa;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .crud-table.mobile-cards tr.swiped .swipe-actions {
+        transform: translateX(0);
+    }
+}
+
+/* ============================================
+   Touch-Friendly Form Controls
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Form container */
+    .crud-form {
+        padding: 20px 15px;
+    }
+
+    /* Form groups with better spacing */
+    .crud-form .form-group {
+        margin-bottom: 20px;
+    }
+
+    /* Labels */
+    .crud-form label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 15px;
+        color: #333;
+    }
+
+    /* Input fields - larger touch targets */
+    .crud-form input[type="text"],
+    .crud-form input[type="email"],
+    .crud-form input[type="tel"],
+    .crud-form input[type="number"],
+    .crud-form input[type="date"],
+    .crud-form input[type="password"],
+    .crud-form select,
+    .crud-form textarea {
+        width: 100%;
+        min-height: var(--touch-target-size);
+        padding: 12px 15px;
+        font-size: 16px; /* Prevents zoom on iOS */
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        box-sizing: border-box;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    .crud-form input:focus,
+    .crud-form select:focus,
+    .crud-form textarea:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    }
+
+    /* Select dropdowns */
+    .crud-form select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+        padding-right: 40px;
+    }
+
+    /* Checkboxes and radio buttons - larger touch targets */
+    .crud-form input[type="checkbox"],
+    .crud-form input[type="radio"] {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
+    .crud-form .checkbox-label,
+    .crud-form .radio-label {
+        display: flex;
+        align-items: center;
+        min-height: var(--touch-target-size);
+        padding: 10px 0;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+    /* Buttons - touch-friendly */
+    .crud-form button,
+    .crud-form .btn {
+        min-height: var(--touch-target-size);
+        padding: 12px 24px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        width: 100%;
+        margin-bottom: 10px;
+        touch-action: manipulation;
+    }
+
+    .crud-form .btn-primary {
+        background: #007bff;
+        color: white;
+    }
+
+    .crud-form .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+
+    .crud-form .btn-danger {
+        background: #dc3545;
+        color: white;
+    }
+
+    /* Button groups */
+    .crud-form .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    /* File upload */
+    .crud-form input[type="file"] {
+        padding: 10px;
+        border: 2px dashed #ddd;
+        border-radius: 8px;
+        width: 100%;
+        min-height: 60px;
+        cursor: pointer;
+    }
+
+    /* Textarea */
+    .crud-form textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+}
+
+/* ============================================
+   Mobile Modal Optimizations
+   ============================================ */
+
+@media (max-width: 768px) {
+    .crud-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1050;
+        display: none;
+    }
+
+    .crud-modal.active {
+        display: flex;
+        align-items: flex-end;
+    }
+
+    .crud-modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(2px);
+    }
+
+    .crud-modal-content {
+        position: relative;
+        width: 100%;
+        max-height: 90vh;
+        background: white;
+        border-radius: 20px 20px 0 0;
+        overflow: hidden;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .crud-modal.active .crud-modal-content {
+        transform: translateY(0);
+    }
+
+    .crud-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 1;
+    }
+
+    .crud-modal-header h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .crud-modal-close {
+        width: 36px;
+        height: 36px;
+        border: none;
+        background: #f0f0f0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 20px;
+        color: #666;
+    }
+
+    .crud-modal-body {
+        padding: 20px;
+        overflow-y: auto;
+        max-height: calc(90vh - 140px);
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .crud-modal-footer {
+        padding: 15px 20px;
+        border-top: 1px solid #eee;
+        position: sticky;
+        bottom: 0;
+        background: white;
+    }
+}
+
+/* ============================================
+   Mobile Action Buttons
+   ============================================ */
+
+@media (max-width: 768px) {
+    .crud-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .crud-action-btn {
+        min-width: var(--touch-target-size);
+        min-height: var(--touch-target-size);
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        background: #f8f9fa;
+        color: #333;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        font-size: 14px;
+        font-weight: 500;
+        touch-action: manipulation;
+    }
+
+    .crud-action-btn.edit {
+        background: #e7f3ff;
+        color: #007bff;
+    }
+
+    .crud-action-btn.delete {
+        background: #ffe7e7;
+        color: #dc3545;
+    }
+
+    .crud-action-btn.view {
+        background: #e7f9f0;
+        color: #28a745;
+    }
+
+    /* Icon-only buttons for compact display */
+    .crud-action-btn.icon-only {
+        min-width: 40px;
+        padding: 10px;
+    }
+
+    .crud-action-btn.icon-only span {
+        display: none;
+    }
+}
+
+/* ============================================
+   Mobile Pagination
+   ============================================ */
+
+@media (max-width: 768px) {
+    .crud-pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        padding: 20px 0;
+        flex-wrap: wrap;
+    }
+
+    .crud-pagination button {
+        min-width: var(--touch-target-size);
+        min-height: var(--touch-target-size);
+        padding: 10px;
+        border: 1px solid #ddd;
+        background: white;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        touch-action: manipulation;
+    }
+
+    .crud-pagination button.active {
+        background: #007bff;
+        color: white;
+        border-color: #007bff;
+    }
+
+    .crud-pagination button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Simplified pagination for very small screens */
+    @media (max-width: 480px) {
+        .crud-pagination .page-number:not(.active) {
+            display: none;
+        }
+
+        .crud-pagination .page-number.active {
+            display: inline-block;
+        }
+    }
+}
+
+/* ============================================
+   Mobile Search and Filters
+   ============================================ */
+
+@media (max-width: 768px) {
+    .crud-search-bar {
+        margin-bottom: 15px;
+    }
+
+    .crud-search-input {
+        width: 100%;
+        min-height: var(--touch-target-size);
+        padding: 12px 40px 12px 15px;
+        font-size: 16px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+
+    .crud-search-icon {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+    }
+
+    .crud-filters {
+        margin-bottom: 15px;
+    }
+
+    .crud-filter-toggle {
+        width: 100%;
+        min-height: var(--touch-target-size);
+        padding: 12px 15px;
+        background: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    .crud-filter-panel {
+        margin-top: 10px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        display: none;
+    }
+
+    .crud-filter-panel.active {
+        display: block;
+    }
+
+    .crud-filter-group {
+        margin-bottom: 15px;
+    }
+
+    .crud-filter-group:last-child {
+        margin-bottom: 0;
+    }
+}
+
+/* ============================================
+   Swipe Gesture Support
+   ============================================ */
+
+.swipe-container {
+    position: relative;
+    overflow: hidden;
+    touch-action: pan-y;
+}
+
+.swipe-item {
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.swipe-item.swiping {
+    transition: none;
+}
+
+.swipe-actions-left,
+.swipe-actions-right {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 10px;
+}
+
+.swipe-actions-left {
+    left: 0;
+    background: linear-gradient(to right, #28a745, #20c997);
+}
+
+.swipe-actions-right {
+    right: 0;
+    background: linear-gradient(to left, #dc3545, #e74c3c);
+}
+
+.swipe-action-btn {
+    min-width: 60px;
+    height: 40px;
+    border: none;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* ============================================
+   Loading States
+   ============================================ */
+
+@media (max-width: 768px) {
+    .crud-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    .crud-loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #007bff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .crud-loading-text {
+        margin-top: 15px;
+        font-size: 15px;
+        color: #666;
+    }
+}
+
+/* ============================================
+   Empty States
+   ============================================ */
+
+@media (max-width: 768px) {
+    .crud-empty-state {
+        padding: 60px 20px;
+        text-align: center;
+    }
+
+    .crud-empty-icon {
+        font-size: 48px;
+        color: #ccc;
+        margin-bottom: 15px;
+    }
+
+    .crud-empty-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .crud-empty-message {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .crud-empty-action {
+        min-height: var(--touch-target-size);
+        padding: 12px 24px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+}
+
+/* ============================================
+   Accessibility Enhancements
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Focus visible for keyboard navigation */
+    .crud-form *:focus-visible,
+    .crud-action-btn:focus-visible,
+    .crud-pagination button:focus-visible {
+        outline: 3px solid #007bff;
+        outline-offset: 2px;
+    }
+
+    /* Skip to content link */
+    .skip-to-content {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: #007bff;
+        color: white;
+        padding: 8px;
+        text-decoration: none;
+        z-index: 100;
+    }
+
+    .skip-to-content:focus {
+        top: 0;
+    }
+
+    /* Screen reader only text */
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0,0,0,0);
+        white-space: nowrap;
+        border-width: 0;
+    }
+}
+
+/* ============================================
+   Small Mobile Optimizations (< 480px)
+   ============================================ */
+
+@media (max-width: 480px) {
+    .crud-form {
+        padding: 15px 10px;
+    }
+
+    .crud-form .form-group {
+        margin-bottom: 15px;
+    }
+
+    .crud-form label {
+        font-size: 14px;
+    }
+
+    .crud-form input,
+    .crud-form select,
+    .crud-form textarea {
+        font-size: 16px;
+        padding: 10px 12px;
+    }
+
+    .crud-modal-header h3 {
+        font-size: 16px;
+    }
+
+    .crud-action-btn {
+        font-size: 13px;
+        padding: 8px;
+    }
+}
+
+/* ============================================
+   Landscape Orientation Adjustments
+   ============================================ */
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .crud-modal-content {
+        max-height: 95vh;
+    }
+
+    .crud-modal-body {
+        max-height: calc(95vh - 140px);
+    }
+
+    .crud-form .button-group {
+        flex-direction: row;
+    }
+
+    .crud-form button,
+    .crud-form .btn {
+        width: auto;
+        flex: 1;
+    }
+}
+
+/* ============================================
+   Dark Mode Support
+   ============================================ */
+
+@media (max-width: 768px) and (prefers-color-scheme: dark) {
+    .crud-table.mobile-cards tr {
+        background: #1e1e1e;
+        border-color: #333;
+    }
+
+    .crud-table.mobile-cards td {
+        border-bottom-color: #333;
+    }
+
+    .crud-table.mobile-cards td::before {
+        color: #aaa;
+    }
+
+    .crud-form input,
+    .crud-form select,
+    .crud-form textarea {
+        background: #1e1e1e;
+        color: #fff;
+        border-color: #333;
+    }
+
+    .crud-modal-content,
+    .crud-modal-header,
+    .crud-modal-footer {
+        background: #1e1e1e;
+        color: #fff;
+    }
+
+    .crud-action-btn {
+        background: #2a2a2a;
+        color: #fff;
+    }
+}

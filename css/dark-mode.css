@@ -1,0 +1,532 @@
+/**
+ * Dark Mode CSS Variables and Styles
+ * 
+ * Comprehensive dark mode implementation for the Administrator Dashboard Enhancement.
+ * Includes color palette, component styles, and chart color adjustments.
+ * 
+ * @version 1.0.0
+ */
+
+/* ===== ROOT VARIABLES ===== */
+:root {
+  /* Light Theme Variables (Default) */
+  --color-primary: #3b82f6;
+  --color-primary-dark: #2563eb;
+  --color-primary-light: #60a5fa;
+  --color-secondary: #8b5cf6;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #06b6d4;
+  
+  /* Background Colors */
+  --color-background: #ffffff;
+  --color-background-secondary: #f9fafb;
+  --color-background-tertiary: #f3f4f6;
+  
+  /* Surface Colors */
+  --color-surface: #ffffff;
+  --color-surface-hover: #f9fafb;
+  --color-surface-active: #f3f4f6;
+  
+  /* Text Colors */
+  --color-text-primary: #111827;
+  --color-text-secondary: #6b7280;
+  --color-text-tertiary: #9ca3af;
+  --color-text-inverse: #ffffff;
+  --color-text-muted: #d1d5db;
+  
+  /* Border Colors */
+  --color-border: #e5e7eb;
+  --color-border-light: #f3f4f6;
+  --color-border-dark: #d1d5db;
+  
+  /* Shadow Variables */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  /* Gradient Variables */
+  --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  --gradient-secondary: linear-gradient(135deg, var(--color-secondary) 0%, #7c3aed 100%);
+  --gradient-success: linear-gradient(135deg, var(--color-success) 0%, #059669 100%);
+  --gradient-warning: linear-gradient(135deg, var(--color-warning) 0%, #d97706 100%);
+  --gradient-error: linear-gradient(135deg, var(--color-error) 0%, #dc2626 100%);
+  --gradient-card: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-hover) 100%);
+  --gradient-accent: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  
+  /* Transition Variables */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  --transition-bounce: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Spacing Variables */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 0.75rem;
+  --space-lg: 1rem;
+  --space-xl: 1.5rem;
+  --space-2xl: 2rem;
+  --space-3xl: 3rem;
+  
+  /* Border Radius Variables */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+  
+  /* Accent Colors */
+  --accent-blue: #3b82f6;
+  --accent-green: #10b981;
+  --accent-red: #ef4444;
+  --accent-yellow: #f59e0b;
+  --accent-purple: #8b5cf6;
+  --accent-pink: #ec4899;
+  --accent-indigo: #6366f1;
+  --accent-teal: #14b8a6;
+}
+
+/* ===== DARK MODE VARIABLES ===== */
+.dark,
+html.dark {
+  /* Primary Colors - Adjusted for dark mode */
+  --color-primary: #60a5fa;
+  --color-primary-dark: #3b82f6;
+  --color-primary-light: #93c5fd;
+  --color-secondary: #a78bfa;
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-error: #f87171;
+  --color-info: #22d3ee;
+  
+  /* Background Colors - Dark theme */
+  --color-background: #0f172a;
+  --color-background-secondary: #1e293b;
+  --color-background-tertiary: #334155;
+  
+  /* Surface Colors - Dark theme */
+  --color-surface: #1e293b;
+  --color-surface-hover: #334155;
+  --color-surface-active: #475569;
+  
+  /* Text Colors - Dark theme */
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-tertiary: #94a3b8;
+  --color-text-inverse: #0f172a;
+  --color-text-muted: #64748b;
+  
+  /* Border Colors - Dark theme */
+  --color-border: #334155;
+  --color-border-light: #475569;
+  --color-border-dark: #1e293b;
+  
+  /* Shadow Variables - Enhanced for dark mode */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  
+  /* Gradient Variables - Dark theme */
+  --gradient-card: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-hover) 100%);
+  --gradient-accent: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  
+  /* Accent Colors - Adjusted for dark mode */
+  --accent-blue: #60a5fa;
+  --accent-green: #34d399;
+  --accent-red: #f87171;
+  --accent-yellow: #fbbf24;
+  --accent-purple: #a78bfa;
+  --accent-pink: #f472b6;
+  --accent-indigo: #818cf8;
+  --accent-teal: #2dd4bf;
+  
+  /* Dark mode specific variables */
+  --dark-bg: #0f172a;
+  --dark-card: #1e293b;
+  --dark-border: #334155;
+  --dark-text: #f1f5f9;
+  --dark-text-secondary: #cbd5e1;
+  --dark-text-muted: #94a3b8;
+}
+
+/* ===== THEME TRANSITION STYLES ===== */
+.theme-transitioning,
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition: 
+    background-color var(--transition-normal) !important,
+    color var(--transition-normal) !important,
+    border-color var(--transition-normal) !important,
+    box-shadow var(--transition-normal) !important,
+    opacity var(--transition-normal) !important;
+}
+
+/* ===== COMPONENT STYLES ===== */
+
+/* Body and HTML */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* Cards */
+.modern-card,
+.kpi-card,
+.metric-card {
+  background: var(--gradient-card);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.modern-card:hover,
+.kpi-card:hover,
+.metric-card:hover {
+  box-shadow: var(--shadow-xl);
+  border-color: var(--color-primary);
+}
+
+/* Sidebar */
+.sidebar {
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-background-secondary) 100%);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-lg);
+}
+
+.sidebar-item {
+  color: var(--color-text-secondary);
+}
+
+.sidebar-item:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--color-text-primary);
+}
+
+.sidebar-item.active {
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, transparent 100%);
+  color: var(--color-primary);
+  border-left-color: var(--color-primary);
+}
+
+/* Header */
+header {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+/* Buttons */
+.modern-button,
+.wdb-btn {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+.wdb-btn-primary {
+  background: var(--gradient-primary);
+  color: var(--color-text-inverse);
+  border: none;
+}
+
+.wdb-btn-secondary {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
+}
+
+.wdb-btn:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+/* Form Elements */
+.wdb-input,
+.wdb-select,
+.wdb-textarea {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+.wdb-input:focus,
+.wdb-select:focus,
+.wdb-textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Search Components */
+#searchSuggestions {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-xl);
+}
+
+.search-suggestion {
+  color: var(--color-text-primary);
+}
+
+.search-suggestion:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.search-suggestion.keyboard-selected {
+  background-color: rgba(59, 130, 246, 0.15);
+  border-left-color: var(--color-primary);
+}
+
+/* Notification Components */
+#notificationDropdown {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-2xl);
+}
+
+.notification-item {
+  border-color: var(--color-border);
+}
+
+.notification-item:hover {
+  background-color: var(--color-surface-hover);
+}
+
+/* Progress Bars */
+.progress-bar {
+  background-color: rgba(148, 163, 184, 0.2);
+}
+
+.progress-fill {
+  background: var(--gradient-primary);
+}
+
+/* Status Badges */
+.status-badge {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-secondary);
+}
+
+.status-badge.bg-blue-500 {
+  background-color: rgba(59, 130, 246, 0.2) !important;
+  color: var(--accent-blue) !important;
+}
+
+.status-badge.bg-green-500 {
+  background-color: rgba(16, 185, 129, 0.2) !important;
+  color: var(--accent-green) !important;
+}
+
+.status-badge.bg-red-500 {
+  background-color: rgba(239, 68, 68, 0.2) !important;
+  color: var(--accent-red) !important;
+}
+
+.status-badge.bg-yellow-500 {
+  background-color: rgba(245, 158, 11, 0.2) !important;
+  color: var(--accent-yellow) !important;
+}
+
+.status-badge.bg-purple-500 {
+  background-color: rgba(139, 92, 246, 0.2) !important;
+  color: var(--accent-purple) !important;
+}
+
+/* Chart Containers */
+.chart-container {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border);
+}
+
+/* Modals */
+.modal,
+.fixed.inset-0 > div {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+/* Tables */
+table {
+  background-color: var(--color-surface);
+}
+
+th {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
+}
+
+td {
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+tr:hover {
+  background-color: var(--color-surface-hover);
+}
+
+/* Tooltips */
+.tooltip {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-dark);
+}
+
+/* ===== CHART COLOR ADJUSTMENTS ===== */
+.dark .chart-container canvas {
+  filter: brightness(1.1) contrast(0.9);
+}
+
+/* Chart.js specific adjustments */
+.dark .chartjs-tooltip {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-border) !important;
+}
+
+/* ===== ANIMATION KEYFRAMES ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* ===== UTILITY CLASSES ===== */
+.theme-transition {
+  transition: all var(--transition-normal);
+}
+
+.dark-mode-hidden {
+  display: block;
+}
+
+.dark .dark-mode-hidden {
+  display: none;
+}
+
+.light-mode-hidden {
+  display: none;
+}
+
+.dark .light-mode-hidden {
+  display: block;
+}
+
+/* ===== RESPONSIVE ADJUSTMENTS ===== */
+@media (max-width: 768px) {
+  .dark .sidebar {
+    background: var(--color-background);
+  }
+  
+  .dark .modern-card,
+  .dark .kpi-card,
+  .dark .metric-card {
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* ===== HIGH CONTRAST MODE SUPPORT ===== */
+@media (prefers-contrast: high) {
+  .dark {
+    --color-border: #ffffff;
+    --color-text-secondary: #ffffff;
+    --shadow-md: 0 0 0 1px #ffffff;
+    --shadow-lg: 0 0 0 2px #ffffff;
+    --shadow-xl: 0 0 0 3px #ffffff;
+  }
+}
+
+/* ===== REDUCED MOTION SUPPORT ===== */
+@media (prefers-reduced-motion: reduce) {
+  .theme-transitioning,
+  .theme-transitioning *,
+  .theme-transitioning *::before,
+  .theme-transitioning *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .modern-card:hover,
+  .kpi-card:hover,
+  .metric-card:hover {
+    transform: none !important;
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  .dark {
+    --color-background: #ffffff;
+    --color-text-primary: #000000;
+    --color-text-secondary: #333333;
+    --color-surface: #ffffff;
+    --color-border: #cccccc;
+  }
+  
+  .sidebar,
+  .theme-toggle,
+  .notification-dropdown {
+    display: none !important;
+  }
+}

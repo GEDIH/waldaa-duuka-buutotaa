@@ -1,0 +1,279 @@
+/* Keyboard Shortcuts CSS */
+
+/* Shortcut activation feedback */
+.shortcut-activated {
+    animation: shortcutPulse 0.3s ease-out;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+@keyframes shortcutPulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(59, 130, 246, 0);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+    }
+    100% {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+    }
+}
+
+/* Shortcut hint highlighting */
+.shortcut-hint-active {
+    position: relative;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+    border-radius: var(--radius-lg);
+    z-index: 10;
+}
+
+.shortcut-hint-active::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    background: linear-gradient(45deg, rgba(59, 130, 246, 0.3), rgba(147, 51, 234, 0.3));
+    border-radius: var(--radius-lg);
+    z-index: -1;
+    animation: shortcutGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes shortcutGlow {
+    0% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0.6;
+        transform: scale(1.02);
+    }
+}
+
+/* Keyboard shortcut hints overlay */
+#shortcutHints {
+    backdrop-filter: blur(2px);
+    transition: opacity 0.2s ease-in-out;
+}
+
+#shortcutHints.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#shortcutHintsList {
+    animation: slideInFromRight 0.3s ease-out;
+}
+
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Keyboard key styling */
+kbd {
+    display: inline-block;
+    padding: 2px 6px;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.75rem;
+    color: var(--text-primary);
+    background-color: var(--dark-bg);
+    border: 1px solid var(--dark-border);
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Enhanced quick action button shortcut display */
+.quick-action-shortcut {
+    transition: all 0.2s ease;
+}
+
+.quick-action-btn:hover .quick-action-shortcut {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.quick-action-btn.shortcut-hint-active .quick-action-shortcut {
+    background: rgba(59, 130, 246, 0.2);
+    border-radius: 4px;
+    padding: 2px 4px;
+    animation: shortcutBlink 1s ease-in-out infinite alternate;
+}
+
+@keyframes shortcutBlink {
+    0% {
+        background: rgba(59, 130, 246, 0.2);
+    }
+    100% {
+        background: rgba(59, 130, 246, 0.4);
+    }
+}
+
+/* Shortcut help modal styling */
+#shortcutHelpModal .bg-dark-card {
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    0% {
+        transform: scale(0.9) translateY(-20px);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Quick export modal styling */
+#quickExportModal .bg-dark-card {
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+#quickExportModal button:hover {
+    transform: translateX(4px);
+    transition: transform 0.2s ease;
+}
+
+/* Notification styling */
+.fixed.top-4.right-4.z-50 {
+    animation: notificationSlideIn 0.3s ease-out;
+}
+
+@keyframes notificationSlideIn {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Action history item styling for keyboard shortcuts */
+.action-history-item .action-history-icon {
+    transition: all 0.2s ease;
+}
+
+.action-history-item:hover .action-history-icon {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #shortcutHintsList {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        right: auto;
+        max-width: 90vw;
+    }
+    
+    .quick-action-shortcut {
+        display: none;
+    }
+    
+    #shortcutHints {
+        display: none;
+    }
+}
+
+/* Focus states for accessibility */
+.quick-action-btn:focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+}
+
+/* Dark mode specific adjustments */
+.dark kbd {
+    background-color: var(--dark-bg);
+    border-color: var(--dark-border);
+    color: var(--text-primary);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.dark .shortcut-activated {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+}
+
+.dark .shortcut-hint-active {
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.6);
+}
+
+/* Smooth transitions for all shortcut-related elements */
+.quick-action-btn,
+.shortcut-hint-active,
+.shortcut-activated {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Loading state for shortcut actions */
+.shortcut-loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.shortcut-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid var(--accent-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Shortcut tooltip styling */
+.shortcut-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--dark-card);
+    color: var(--text-primary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 1000;
+    margin-bottom: 4px;
+}
+
+.shortcut-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--dark-card);
+}
+
+.quick-action-btn:hover .shortcut-tooltip {
+    opacity: 1;
+}
