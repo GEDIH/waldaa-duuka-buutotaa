@@ -1,0 +1,3935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDB Membership Registration Form | Ethiopian Orthodox Tewahedo Church</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="css/tailwind-suppress-warning.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Import Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        /* ULTRA-ADVANCED DESIGN SYSTEM */
+        :root {
+            /* Advanced Color Palette */
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #8b5cf6;
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --primary-glow: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #ffecd2 75%, #fcb69f 100%);
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            
+            /* Advanced Background System */
+            --background-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #ffecd2 75%, #fcb69f 100%);
+            --background-mesh: radial-gradient(circle at 25% 25%, #667eea 0%, transparent 50%), 
+                              radial-gradient(circle at 75% 75%, #764ba2 0%, transparent 50%),
+                              radial-gradient(circle at 50% 50%, #f093fb 0%, transparent 50%);
+            
+            /* 3D & Glass Effects */
+            --card-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            --card-shadow-hover: 0 35px 70px rgba(0, 0, 0, 0.25);
+            --card-shadow-3d: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            --glass-bg: rgba(255, 255, 255, 0.15); /* Increased opacity for better readability over background image */
+            --glass-border: rgba(255, 255, 255, 0.25); /* Increased opacity for better visibility */
+            --glass-blur: blur(25px); /* Increased blur for better glass effect */
+            
+            /* Advanced Geometry */
+            --border-radius: 24px;
+            --border-radius-sm: 12px;
+            --border-radius-lg: 32px;
+            
+            /* Advanced Animations */
+            --transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            --transition-bounce: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --transition-elastic: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            
+            /* Particle System */
+            --particle-color-1: rgba(102, 126, 234, 0.6);
+            --particle-color-2: rgba(118, 75, 162, 0.6);
+            --particle-color-3: rgba(240, 147, 251, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: url('images/IMG_4569.png'), var(--background-gradient);
+            background-size: cover, cover;
+            background-position: center, center;
+            background-repeat: no-repeat, no-repeat;
+            background-attachment: fixed, fixed;
+            background-blend-mode: soft-light;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #1f2937;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* STATIC BACKGROUND SYSTEM - ANIMATIONS REMOVED */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--background-mesh);
+            z-index: -2;
+            opacity: 0.1; /* Reduced opacity to let background image show through */
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 80%, var(--particle-color-1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, var(--particle-color-2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, var(--particle-color-3) 0%, transparent 50%),
+                radial-gradient(circle at 60% 80%, var(--particle-color-1) 0%, transparent 30%),
+                radial-gradient(circle at 90% 60%, var(--particle-color-2) 0%, transparent 40%);
+            z-index: -1;
+            opacity: 0.1; /* Reduced opacity to let background image show through */
+        }
+
+        /* Removed unused animation keyframes: meshFloat and particleFloat */
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* Background Image Overlay for Better Readability */
+        .container::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.05); /* Reduced dark overlay to let background image show */
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* ULTRA-ADVANCED HEADER SECTION */
+        .header-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding: 3rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--card-shadow-3d);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            animation: headerFloat 8s ease-in-out infinite;
+        }
+
+        @keyframes headerFloat {
+            0%, 100% { 
+                transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+            }
+            50% { 
+                transform: translateY(-10px) rotateX(2deg) rotateY(1deg);
+            }
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--primary-glow);
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { 
+                opacity: 0.8;
+                transform: scaleX(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: scaleX(1.02);
+            }
+        }
+
+        .header-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            transform: translateX(-100%);
+            animation: shimmerSweep 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmerSweep {
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .header-logo-left, .header-logo-right {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.2));
+            transition: var(--transition-elastic);
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .header-logo-left::before, .header-logo-right::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: var(--primary-glow);
+            border-radius: 50%;
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+            filter: blur(20px);
+        }
+
+        .header-logo-left:hover, .header-logo-right:hover {
+            transform: scale(1.15) rotateY(15deg) rotateX(5deg);
+            filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.3));
+        }
+
+        .header-logo-left:hover::before, .header-logo-right:hover::before {
+            opacity: 0.6;
+            transform: scale(1.2);
+        }
+
+        .header-logo-left {
+            animation: logoFloat 6s ease-in-out infinite;
+        }
+
+        .header-logo-right {
+            animation: logoFloat 6s ease-in-out infinite reverse;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% { 
+                transform: translateY(-15px) rotate(5deg);
+            }
+        }
+        
+        .form-header-center {
+            text-align: center;
+            flex: 1;
+            margin: 0 2rem;
+        }
+        
+        .form-title {
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--primary-glow);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: titleGlow 4s ease-in-out infinite;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { 
+                filter: brightness(1) contrast(1);
+                transform: translateZ(0px);
+            }
+            50% { 
+                filter: brightness(1.2) contrast(1.1);
+                transform: translateZ(10px);
+            }
+        }
+
+        .form-title::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes textShimmer {
+            0% { transform: translateX(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+        
+        .form-subtitle {
+            font-size: 1.375rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-subtitle + p {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        /* ULTRA-ADVANCED FORM CONTAINER */
+        .form-container {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--card-shadow-3d);
+            padding: 4rem;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition-elastic);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-glow);
+            animation: progressGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes progressGlow {
+            0%, 100% { 
+                opacity: 0.6;
+                transform: scaleX(0.8);
+            }
+            50% { 
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+
+        .form-container::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+            transform: translate(-50%, -50%) rotate(0deg);
+            animation: conicRotate 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes conicRotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .form-container:hover {
+            box-shadow: var(--card-shadow-hover);
+            transform: translateY(-5px) rotateX(2deg);
+        }
+        
+        .form-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #f1f5f9;
+            position: relative;
+            animation: fadeInUp 0.6s ease-out;
+            opacity: 1;
+            transform: translateX(0);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .form-section::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 80px;
+            height: 2px;
+            background: var(--primary-gradient);
+            border-radius: 1px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Enhanced Form Actions */
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #f1f5f9;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: var(--border-radius-sm);
+            font-weight: 600;
+            font-size: 0.875rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            min-width: 140px;
+            justify-content: center;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(100, 116, 139, 0.3);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(100, 116, 139, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Member ID Input Styling */
+        .member-id-input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .member-id-input {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+            border: 2px solid #cbd5e1 !important;
+            color: var(--primary-color) !important;
+            font-family: 'Courier New', monospace !important;
+            font-weight: 700 !important;
+            font-size: 1.1rem !important;
+            letter-spacing: 0.05em !important;
+            text-align: center !important;
+            cursor: default !important;
+            padding-right: 3rem !important;
+        }
+
+        .member-id-input:focus {
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+        }
+
+        .copy-member-id-btn {
+            position: absolute;
+            right: 0.75rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .copy-member-id-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .field-note {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <img src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo" class="header-logo-left">
+            <div class="form-header-center">
+                <h1 class="form-title">Waldaa Duuka Bu'ootaa (WDB)</h1>
+                <h2 class="form-subtitle">Membership Registration Form</h2>
+                <p class="text-sm text-gray-600 mt-2">Ethiopian Orthodox Tewahedo Church</p>
+                
+                <!-- Member ID Display -->
+                <div id="memberIdDisplay" class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg" style="display: none;">
+                    <div class="text-sm font-medium text-blue-800">Your WDB Member ID:</div>
+                    <div class="text-lg font-bold text-blue-900" id="memberIdValue">Loading...</div>
+                </div>
+                
+                <!-- Authentication Required Notice -->
+                <div id="authRequiredNotice" class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg" style="display: none;">
+                    <div class="flex items-center">
+                        <svg class="h-5 w-5 text-yellow-400 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                        <div>
+                            <div class="text-sm font-medium text-yellow-800">Authentication Required</div>
+                            <div class="text-sm text-yellow-700 mt-1">
+                                You must first create your WDB account to receive your Member ID before completing this form.
+                            </div>
+                            <div class="mt-2">
+                                <a href="register.html" class="text-sm font-medium text-yellow-800 underline hover:text-yellow-900">
+                                    Create Account & Get Member ID →
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <img src="images/WDB_LOGO_CIRCLE.png" alt="Church Logo" class="header-logo-right">
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="form-progress">
+            <div class="progress-steps">
+                <div class="step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Personal Info</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Education</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Clergy Status</div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Location</div>
+                </div>
+                <div class="step" data-step="5">
+                    <div class="step-number">5</div>
+                    <div class="step-label">Service Areas</div>
+                </div>
+                <div class="step" data-step="6">
+                    <div class="step-number">6</div>
+                    <div class="step-label">Membership</div>
+                </div>
+            </div>
+            <div class="progress-info">
+                <span class="progress-text">Step <span id="currentStepText">1</span> of 6</span>
+                <span class="progress-percentage"><span id="progressPercentage">17</span>% Complete</span>
+            </div>
+        </div>
+
+        <!-- Main Form -->
+        <form id="wdbMembershipForm" class="form-container">
+            <!-- Error/Success Messages -->
+            <div id="errorMessage" class="error-message hidden"></div>
+            <div id="successMessage" class="success-message hidden"></div>
+            <!-- Section 1: Personal Information -->
+            <div class="form-section" id="section-1">
+                <h3 class="section-title">1. Personal Information</h3>
+                <p class="section-note">Please provide your complete personal information as it appears on official documents.</p>
+                
+                <!-- WDB Member ID Display (Read-only) -->
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="userMemberId">WDB Member ID *</label>
+                        <div class="member-id-input-container">
+                            <input type="text" id="userMemberId" name="userMemberId" readonly 
+                                   placeholder="Your WDB Member ID will appear here"
+                                   class="member-id-input">
+                            <button type="button" class="copy-member-id-btn" onclick="copyMemberIdFromForm()" title="Copy Member ID">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                                    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="field-note">This is your unique WDB Member ID. It cannot be changed.</div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" name="fullName" required 
+                               placeholder="Enter your full legal name">
+                    </div>
+                    <div class="form-group">
+                        <label for="baptismName">Baptism Name</label>
+                        <input type="text" id="baptismName" name="baptismName" 
+                               placeholder="Your baptismal name">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="facebookName">Facebook Name</label>
+                        <input type="text" id="facebookName" name="facebookName" 
+                               placeholder="Your Facebook display name">
+                    </div>
+                    <div class="form-group">
+                        <label for="dateOfBirth">Date of Birth (Guyyaa Dhalootaa) *</label>
+                        <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gender">Gender/Saala *</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male/dhiira</option>
+                            <option value="female">Female/Dubara</option>
+                            <option value="other">Other/kan biroo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="maritalStatus">Marital Status (Haala Gaa'eelaa)*</label>
+                        <select id="maritalStatus" name="maritalStatus" required>
+                            <option value="">Select Status</option>
+                            <option value="single">Single /Kan Hin Fuune/Hin Heerumne</option>
+                            <option value="married">Married /Kan fuudhe/ kan Heerumte</option>
+                            <option value="divorced">Divorced</option>
+                            <option value="widowed">Widowed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row" id="spouseInfo" style="display: none;">
+                    <div class="form-group">
+                        <label for="spouseName">Spouse Name</label>
+                        <input type="text" id="spouseName" name="spouseName" 
+                               placeholder="Your spouse's full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="spousePhone">Spouse Phone</label>
+                        <input type="tel" id="spousePhone" name="spousePhone" 
+                               placeholder="Your spouse's phone number">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="confessionFather">Confession Father (Maqaa abbaa Gaabbii)</label>
+                        <input type="text" id="confessionFather" name="confessionFather" 
+                               placeholder="Name of your confession father">
+                    </div>
+                    <div class="form-group">
+                        <label for="mobilePhone">Mobile Phone *</label>
+                        <input type="tel" id="mobilePhone" name="mobilePhone" required 
+                               placeholder="+251-9XX-XXX-XXX">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required 
+                               placeholder="your.email@example.com">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="currentAddress">Current Address *</label>
+                        <textarea id="currentAddress" name="currentAddress" required rows="3" 
+                                  placeholder="Enter your complete current address"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Education & Occupation -->
+            <div class="form-section" id="section-2" style="display: none;">
+                <h3 class="section-title">2. Education & Occupation</h3>
+                <p class="section-note">Please provide your educational background and current occupation details.</p>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="educationLevel">Education Level *</label>
+                        <select id="educationLevel" name="educationLevel" required>
+                            <option value="">Select Education Level</option>
+                            <option value="primary">Primary School</option>
+                            <option value="secondary">Secondary School</option>
+                            <option value="tvet">TVET/Diploma</option>
+                            <option value="bachelor">Bachelor's Degree</option>
+                            <option value="master">Master's Degree</option>
+                            <option value="phd">PhD/Doctorate</option>
+                            <option value="other">Other/Religious Education</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fieldOfStudy">Field of Study *</label>
+                        <input type="text" id="fieldOfStudy" name="fieldOfStudy" required 
+                               placeholder="Your major field of study">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="university">University/Institution</label>
+                        <input type="text" id="university" name="university" 
+                               placeholder="Name of your university or institution">
+                    </div>
+                    <div class="form-group">
+                        <label for="graduationYear">Graduation Year</label>
+                        <input type="number" id="graduationYear" name="graduationYear" 
+                               min="1950" max="2030" placeholder="YYYY">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="occupation">Current Occupation *</label>
+                        <input type="text" id="occupation" name="occupation" required 
+                               placeholder="Your current job title or profession">
+                    </div>
+                    <div class="form-group">
+                        <label for="organization">Organization/Company</label>
+                        <input type="text" id="organization" name="organization" 
+                               placeholder="Name of your employer or organization">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Clergy Status -->
+            <div class="form-section" id="section-3" style="display: none;">
+                <h3 class="section-title">3. Clergy Status(Haala Aangoo Lubummaa)</h3>
+                <p class="section-note">Please provide information about your ordination status if applicable.</p>
+                
+                <!-- Diaconate Information -->
+                <div class="clergy-subsection">
+                    <h5>Diaconate Information (Odeeffannoo Diyaaqonummaa)</h5>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="diaconateYear">Ordination Year(Bara)</label>
+                            <input type="number" id="diaconateYear" name="diaconateYear" 
+                                   min="1950" max="2030" placeholder="YYYY">
+                        </div>
+                        <div class="form-group">
+                            <label for="diaconateChurch">Church of Ordination(Mana amantaa Itti Fudhattan)</label>
+                            <input type="text" id="diaconateChurch" name="diaconateChurch" 
+                                   placeholder="Name of the church where you were ordained">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="diaconateFather">Ordaining Father(Abba Kennan)</label>
+                            <input type="text" id="diaconateFather" name="diaconateFather" 
+                                   placeholder="Name of the ordaining priest/bishop">
+                        </div>
+                    </div>
+                </div>
+                <!-- Priesthood Information -->
+                <div class="clergy-subsection">
+                    <h5>Priesthood Information(Lubummaa)</h5>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="priesthoodYear">Ordination Year(Bara itti fudhattan)</label>
+                            <input type="number" id="priesthoodYear" name="priesthoodYear" 
+                                   min="1950" max="2030" placeholder="YYYY">
+                        </div>
+                        <div class="form-group">
+                            <label for="priesthoodChurch">Church of Ordination(Mana amantaa)</label>
+                            <input type="text" id="priesthoodChurch" name="priesthoodChurch" 
+                                   placeholder="Name of the church where you were ordained">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="priesthoodFather">Ordaining Father(Abbaa Kennaan)</label>
+                            <input type="text" id="priesthoodFather" name="priesthoodFather" 
+                                   placeholder="Name of the ordaining bishop">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monasticism Information -->
+                <div class="clergy-subsection">
+                    <h5>Monasticism Information(Monooksummaa)</h5>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="monasticYear">Year of Monasticism(Bara)</label>
+                            <input type="number" id="monasticYear" name="monasticYear" 
+                                   min="1950" max="2030" placeholder="YYYY">
+                        </div>
+                        <div class="form-group">
+                            <label for="monasticMonastery">Monastery(Gadaama itti Fudhattan)</label>
+                            <input type="text" id="monasticMonastery" name="monasticMonastery" 
+                                   placeholder="Name of the monastery">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="monasticFather">Monastic Father</label>
+                            <input type="text" id="monasticFather" name="monasticFather" 
+                                   placeholder="Name of your monastic father">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clergy Documents Upload Section -->
+            <div class="form-section" id="section-3-upload" style="display: none;">
+                <div class="form-group full-width">
+                    <!-- Clergy Documents Upload Area with Drag & Drop -->
+                    <div id="clergyDocsUploadArea" style="position: relative; border: 3px dashed #d1d5db; border-radius: 12px; padding: 2rem; text-align: center; background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%); cursor: pointer; transition: all 0.3s;">
+                        <input type="file" id="clergyDocuments" name="clergyDocuments" 
+                               accept="image/*,.pdf"
+                               style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; cursor: pointer;">
+                        
+                        <div id="clergyUploadPrompt">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">⛪</div>
+                            <h4 style="color: #ca8a04; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">
+                                Clergy Documents Upload
+                            </h4>
+                            <p style="color: #6b7280; font-size: 0.875rem; margin-bottom: 1rem;">
+                                Click to Upload or Drag & Drop
+                            </p>
+                            <p style="color: #6b7280; font-size: 0.875rem; margin-bottom: 1rem;">
+                                Upload ordination certificate or verification documents
+                            </p>
+                            <div style="display: inline-block; padding: 0.5rem 1.5rem; background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); color: white; border-radius: 12px; font-weight: 600; font-size: 0.875rem;">
+                                Choose Document
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Document Requirements -->
+                    <div style="margin-top: 1rem; padding: 1rem; background: #fffbeb; border-radius: 12px; border: 1px solid #fde68a;">
+                        <div style="display: flex; align-items: start; gap: 0.75rem;">
+                            <span style="font-size: 1.25rem;">ℹ️</span>
+                            <div>
+                                <h5 style="color: #92400e; font-size: 0.875rem; font-weight: 600; margin: 0 0 0.5rem 0;">
+                                    Accepted Documents:
+                                </h5>
+                                <ul style="margin: 0; padding-left: 1.25rem; color: #78350f; font-size: 0.8rem; line-height: 1.6;">
+                                    <li>Ordination certificate (Diaconate/Priesthood/Monastic)</li>
+                                    <li>Church verification letter</li>
+                                    <li>Photo of ordination ceremony</li>
+                                    <li>Formats: JPG, PNG, PDF</li>
+                                    <li>Maximum size: 5MB</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field-error" id="clergyDocumentsError" style="display: none;"></div>
+                    
+                    <!-- Enhanced Document Preview -->
+                    <div id="clergyDocsPreview" style="display: none; margin-top: 1.5rem;">
+                        <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <h5 style="color: #ca8a04; font-weight: 600; margin: 0;">
+                                    Document Preview
+                                </h5>
+                                <button type="button" id="removeClergyDocsBtn" style="background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 12px; cursor: pointer; font-size: 0.875rem; font-weight: 600; transition: all 0.3s;">
+                                    🗑️ Remove
+                                </button>
+                            </div>
+                            
+                            <div style="text-align: center;">
+                                <div id="clergyDocsPreviewContent" style="display: inline-block; max-width: 300px;">
+                                    <!-- Image preview or PDF icon will be shown here -->
+                                </div>
+                            </div>
+                            
+                            <!-- Document Info -->
+                            <div id="clergyDocsInfo" style="margin-top: 1rem; padding: 1rem; background: #f9fafb; border-radius: 12px; font-size: 0.8rem; color: #6b7280;">
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem;">
+                                    <div>
+                                        <strong>File Name:</strong>
+                                        <div id="clergyDocsFileName">-</div>
+                                    </div>
+                                    <div>
+                                        <strong>File Size:</strong>
+                                        <div id="clergyDocsFileSize">-</div>
+                                    </div>
+                                    <div>
+                                        <strong>File Type:</strong>
+                                        <div id="clergyDocsFileType">-</div>
+                                    </div>
+                                    <div>
+                                        <strong>Status:</strong>
+                                        <div id="clergyDocsStatus" style="color: #059669; font-weight: 600;">✓ Ready</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Regional & Church Information -->
+            <div class="form-section" id="section-4" style="display: none;">
+                <h3 class="section-title">4. Regional & Church Information</h3>
+                <p class="section-note">Please provide your location and church affiliation details.</p>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="region">Region/State *</label>
+                        <select id="region" name="region" required>
+                            <option value="">Select Region</option>
+                            <option value="addis-ababa">Addis Ababa</option>
+                            <option value="afar">Afar</option>
+                            <option value="amhara">Amhara</option>
+                            <option value="benishangul-gumuz">Benishangul-Gumuz</option>
+                            <option value="dire-dawa">Dire Dawa</option>
+                            <option value="gambela">Gambela</option>
+                            <option value="harari">Harari</option>
+                            <option value="oromia">Oromia</option>
+                            <option value="sidama">Sidama</option>
+                            <option value="snnp">SNNP</option>
+                            <option value="somali">Somali</option>
+                            <option value="tigray">Tigray</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country *</label>
+                        <select id="country" name="country" required>
+                            <option value="ethiopia">Ethiopia</option>
+                            <option value="usa">United States</option>
+                            <option value="canada">Canada</option>
+                            <option value="uk">United Kingdom</option>
+                            <option value="germany">Germany</option>
+                            <option value="australia">Australia</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="subCity">City/Sub-City *</label>
+                        <input type="text" id="subCity" name="subCity" required 
+                               placeholder="Your city or sub-city">
+                    </div>
+                    <div class="form-group">
+                        <label for="currentChurch">Current Church *</label>
+                        <input type="text" id="currentChurch" name="currentChurch" required 
+                               placeholder="Name of your current church">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="churchWoreda">Church Woreda *</label>
+                        <input type="text" id="churchWoreda" name="churchWoreda" required 
+                               placeholder="Woreda of your church">
+                    </div>
+                    <div class="form-group">
+                        <label for="currentService">Current Service *</label>
+                        <input type="text" id="currentService" name="currentService" required 
+                               placeholder="Your current service in the church">
+                    </div>
+                </div>
+            </div>
+            <!-- Section 5: WDB Service Areas -->
+            <div class="form-section" id="section-5" style="display: none;">
+                <h3 class="section-title">5.Kutaalee Tajaajilaa WDB/ WDB Service Areas</h3>
+                <p class="section-note">Please select up to 3 service areas where you would like to contribute to WDB activities (in order of preference).</p>
+                
+                <div class="service-areas-container">
+                    <div class="service-area-item">
+                        <input type="checkbox" id="service-music" name="serviceAreas" value="music-literature">
+                        <label for="service-music" class="service-label">
+                            <strong>Kutaa Faaruu fi Ogbarruu/Spritual Song & Literature</strong>
+                            <span class="service-description">Contribute to WDB's musical and literary works, including hymns, books, and educational materials.</span>
+                        </label>
+                    </div>
+
+                    <div class="service-area-item">
+                        <input type="checkbox" id="service-committee" name="serviceAreas" value="committee-member">
+                        <label for="service-committee" class="service-label">
+                            <strong>Koree Miseensaa/Committee Member</strong>
+                            <span class="service-description">Participate in WDB committees for decision-making and organizational activities.</span>
+                        </label>
+                    </div>
+
+                    <div class="service-area-item">
+                        <input type="checkbox" id="service-followup" name="serviceAreas" value="member-followup">
+                        <label for="service-followup" class="service-label">
+                            <strong>Kutaa Hordoffii Miseensaa (Member Follow-up)</strong>
+                            <span class="service-description">Help with member engagement, communication, and community building activities.</span>
+                        </label>
+                    </div>
+
+                    <div class="service-area-item">
+                        <input type="checkbox" id="service-counseling" name="serviceAreas" value="counseling-mediation">
+                        <label for="service-counseling" class="service-label">
+                            <strong>Counseling/Mediation</strong>
+                            <span class="service-description">Provide counseling services and mediation for community conflicts and personal issues.</span>
+                        </label>
+                    </div>
+
+                    <div class="service-area-item">
+                        <input type="checkbox" id="service-education" name="serviceAreas" value="education">
+                        <label for="service-education" class="service-label">
+                            <strong>Education</strong>
+                            <span class="service-description">Contribute to educational programs, teaching, and knowledge sharing initiatives.</span>
+                        </label>
+                    </div>
+
+                    <div class="service-area-item">
+                        <input type="checkbox" id="service-media" name="serviceAreas" value="media-digital-it">
+                        <label for="service-media" class="service-label">
+                            <strong>Media/Digital/IT</strong>
+                            <span class="service-description">Support digital initiatives, website management, social media, and IT infrastructure.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="service-selection-note">
+                    <p class="text-sm text-gray-600 mt-4">
+                        <strong>Note:</strong> Please select 1-3 service areas in order of your preference. 
+                        You can change your selections later through your member profile.
+                    </p>
+                </div>
+            </div>
+            <!-- Section 6: Membership Status -->
+            <div class="form-section" id="section-6" style="display: none;">
+                <h3 class="section-title">6. Membership Status</h3>
+                <p class="section-note">Please select your preferred membership plan and provide any additional information.</p>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="membershipPlan">Membership Plan *</label>
+                        <select id="membershipPlan" name="membershipPlan" required>
+                            <option value="">Select Membership Plan</option>
+                            <option value="basic">Basic Membership - Free</option>
+                            <option value="premium">Premium Membership - Annual Fee</option>
+                            <option value="lifetime">Lifetime Membership - One-time Fee</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="wiirtuuStatus">Member Status</label>
+                        <select id="wiirtuuStatus" name="wiirtuuStatus">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="honorary">Honorary</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="preferredCenter">Preferred Center/Wiirtuu *</label>
+                        <select id="preferredCenter" name="preferredCenter" required>
+                            <option value="">Loading centers...</option>
+                        </select>
+                        <div class="field-note">Select the WDB center/Wiirtuu you would like to be associated with</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="centerRole">Role at Center</label>
+                        <select id="centerRole" name="centerRole">
+                            <option value="">Select Role (Optional)</option>
+                            <option value="member">Regular Member</option>
+                            <option value="volunteer">Volunteer</option>
+                            <option value="coordinator">Coordinator</option>
+                            <option value="leader">Leader</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <div class="field-note">Your intended role or contribution at the selected center</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="notes">Additional Notes</label>
+                        <textarea id="notes" name="notes" rows="4" 
+                                  placeholder="Any additional information you would like to share with WDB..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Terms and Conditions -->
+                <div class="terms-section">
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="#" class="text-blue-600 underline">Terms and Conditions</a> and 
+                            <a href="#" class="text-blue-600 underline">Privacy Policy</a> of WDB *
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="agreeContact" name="agreeContact">
+                            <span class="checkmark"></span>
+                            I agree to receive communications from WDB regarding membership activities and updates
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Member Photo Upload Section -->
+            <div class="form-section" id="section-7" style="display: none;">
+                <h3 class="section-title">7. Upload Your Photo *</h3>
+                <p class="section-note"><strong style="color: #ef4444;">* Required:</strong> Upload a clear, recent photo for your membership ID card. This is mandatory for all members.</p>
+                
+                <div class="form-group full-width">
+                    <!-- Photo Upload Area with Drag & Drop -->
+                    <div id="photoUploadArea" style="position: relative; border: 3px dashed #d1d5db; border-radius: 12px; padding: 2rem; text-align: center; background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%); cursor: pointer; transition: all 0.3s;">
+                        <input type="file" id="memberPhoto" name="memberPhoto" 
+                               accept="image/*" required
+                               style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; cursor: pointer;">
+                        
+                        <div id="uploadPrompt">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">📸</div>
+                            <h4 style="color: #6366f1; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">
+                                Member Photo Upload
+                            </h4>
+                            <p style="color: #6b7280; font-size: 0.875rem; margin-bottom: 1rem;">
+                                Click to Upload or Drag & Drop
+                            </p>
+                            <p style="color: #6b7280; font-size: 0.875rem; margin-bottom: 1rem;">
+                                Upload a clear photo of yourself
+                            </p>
+                            <div style="display: inline-block; padding: 0.5rem 1.5rem; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; border-radius: 12px; font-weight: 600; font-size: 0.875rem;">
+                                Choose Photo
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Photo Requirements -->
+                    <div style="margin-top: 1rem; padding: 1rem; background: #f0fdf4; border-radius: 12px; border: 1px solid #bbf7d0;">
+                        <div style="display: flex; align-items: start; gap: 0.75rem;">
+                            <span style="font-size: 1.25rem;">✓</span>
+                            <div>
+                                <h5 style="color: #059669; font-size: 0.875rem; font-weight: 600; margin: 0 0 0.5rem 0;">
+                                    Photo Requirements:
+                                </h5>
+                                <ul style="margin: 0; padding-left: 1.25rem; color: #047857; font-size: 0.8rem; line-height: 1.6;">
+                                    <li>Clear, recent photo (passport-style preferred)</li>
+                                    <li>Face clearly visible, looking at camera</li>
+                                    <li>Good lighting, plain background</li>
+                                    <li>Formats: JPG, PNG, GIF</li>
+                                    <li>Maximum size: 5MB</li>
+                                    <li>Minimum resolution: 300x300 pixels</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field-error" id="memberPhotoError" style="display: none;"></div>
+                    
+                    <!-- Enhanced Photo Preview with Controls -->
+                    <div id="photoPreview" style="display: none; margin-top: 1.5rem;">
+                        <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <h5 style="color: #6366f1; font-weight: 600; margin: 0;">
+                                    Photo Preview
+                                </h5>
+                                <button type="button" id="removePhotoBtn" style="background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 12px; cursor: pointer; font-size: 0.875rem; font-weight: 600; transition: all 0.3s;">
+                                    🗑️ Remove
+                                </button>
+                            </div>
+                            
+                            <div style="text-align: center;">
+                                <img id="photoPreviewImg" src="" alt="Photo preview" 
+                                     style="max-width: 300px; max-height: 300px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 4px solid white;">
+                            </div>
+                            
+                            <!-- Photo Info -->
+                            <div id="photoInfo" style="margin-top: 1rem; padding: 1rem; background: #f9fafb; border-radius: 12px; font-size: 0.8rem; color: #6b7280;">
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem;">
+                                    <div>
+                                        <strong>File Name:</strong>
+                                        <div id="photoFileName">-</div>
+                                    </div>
+                                    <div>
+                                        <strong>File Size:</strong>
+                                        <div id="photoFileSize">-</div>
+                                    </div>
+                                    <div>
+                                        <strong>Dimensions:</strong>
+                                        <div id="photoDimensions">-</div>
+                                    </div>
+                                    <div>
+                                        <strong>Status:</strong>
+                                        <div id="photoStatus" style="color: #059669; font-weight: 600;">✓ Ready</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" id="prevBtn" class="btn btn-secondary" style="display: none;">
+                    ← Previous
+                </button>
+                <button type="button" id="saveBtn" class="btn btn-outline">
+                    💾 Save as Draft
+                </button>
+                <button type="button" id="previewBtn" class="btn btn-outline">
+                    👁 Preview
+                </button>
+                <button type="button" id="nextBtn" class="btn btn-primary">
+                    Next →
+                </button>
+                <button type="submit" id="submitBtn" class="btn btn-primary" style="display: none;">
+                    ✓ Submit Registration
+                </button>
+                <button type="button" id="cancelBtn" class="btn btn-secondary">
+                    ✕ Cancel
+                </button>
+            </div>
+        </form>
+
+        <!-- Floating Save Button -->
+        <button type="button" id="floatingSave" class="floating-save" title="Save Draft">
+            💾
+        </button>
+    </div>
+    <style>
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #cbd5e0;
+        }
+        
+        .section-note {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+        }
+        
+        /* Unhanced ProED PROGRESS INDICATOR */
+        .form-progress {
+            margin: 2rem 0;
+            padding: 3rem;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--card-shadow-3d);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .form-progress::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-glow);
+            animation: progressPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes progressPulse {
+            0%, 100% { 
+                opacity: 0.7;
+                transform: scaleY(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: scaleY(1.5);
+            }
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #e5e7eb 0%, #d1d5db 100%);
+            z-index: 1;
+            border-radius: 2px;
+        }
+
+        .progress-steps::after {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 0;
+            height: 4px;
+            background: var(--primary-glow);
+            z-index: 2;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            width: calc((var(--current-step, 1) - 1) * 20%);
+            border-radius: 2px;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
+            animation: progressFlow 3s ease-in-out infinite;
+        }
+
+        @keyframes progressFlow {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(102, 126, 234, 0.8), 0 0 40px rgba(118, 75, 162, 0.4);
+            }
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 3;
+            transition: var(--transition-elastic);
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            transition: var(--transition-elastic);
+            border: 3px solid #e5e7eb;
+            background: white;
+            color: #9ca3af;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .step-number::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(37, 99, 235, 0.2);
+            opacity: 0;
+            transition: var(--transition-elastic);
+            z-index: -1;
+            border-radius: 50%;
+        }
+
+        .step-number::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            opacity: 0;
+            transition: var(--transition);
+            animation: stepRotate 3s linear infinite;
+        }
+
+        @keyframes stepRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .step.completed .step-number {
+            background: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+            transform: scale(1.2) rotateY(360deg);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.6);
+            animation: completedPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes completedPulse {
+            0%, 100% { 
+                box-shadow: 0 0 30px rgba(16, 185, 129, 0.6);
+                transform: scale(1.2) rotateY(0deg);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(16, 185, 129, 0.8);
+                transform: scale(1.25) rotateY(180deg);
+            }
+        }
+
+        .step.completed .step-number::after {
+            content: '✓';
+            font-size: 1.2rem;
+            font-weight: 900;
+            position: static;
+            width: auto;
+            height: auto;
+            background: none;
+            opacity: 1;
+            animation: none;
+        }
+        
+        .step.active .step-number {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: scale(1.3) rotateX(15deg);
+            box-shadow: 0 0 35px rgba(99, 102, 241, 0.7);
+            animation: activePulse 2s ease-in-out infinite;
+        }
+
+        .step.active .step-number::before {
+            opacity: 1;
+        }
+
+        .step.active .step-number::after {
+            opacity: 0.6;
+        }
+
+        @keyframes activePulse {
+            0%, 100% { 
+                box-shadow: 0 0 35px rgba(99, 102, 241, 0.7);
+                transform: scale(1.3) rotateX(15deg);
+            }
+            50% { 
+                box-shadow: 0 0 45px rgba(99, 102, 241, 0.9), 0 0 60px rgba(139, 92, 246, 0.5);
+                transform: scale(1.35) rotateX(20deg);
+            }
+        }
+        
+        .step-label {
+            font-size: 0.85rem;
+            text-align: center;
+            color: #6b7280;
+            font-weight: 700;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+        }
+
+        .step.active .step-label {
+            color: var(--primary-color);
+            transform: translateY(-5px);
+            text-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
+        }
+
+        .step.completed .step-label {
+            color: var(--success-color);
+            text-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .progress-text,
+        .progress-percentage {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .progress-percentage {
+            color: var(--primary-color);
+        }
+
+        /* Floating Action Button */
+        .floating-save {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+            transition: var(--transition);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .floating-save:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(37, 99, 235, 0.4);
+        }
+
+        .floating-save:active {
+            transform: scale(0.95);
+        }
+
+        /* Tooltip for floating button */
+        .floating-save::before {
+            content: 'Save Draft';
+            position: absolute;
+            right: 70px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .floating-save:hover::before {
+            opacity: 1;
+        }
+
+        /* Enhanced form section icons */
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 6px;
+            height: 40px;
+            background: var(--primary-gradient);
+            border-radius: 3px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: var(--primary-gradient);
+        }
+
+        /* Section specific icons */
+        #section-1 .section-title::before { content: '👤'; width: auto; height: auto; background: none; font-size: 1.5rem; }
+        #section-2 .section-title::before { content: '🎓'; width: auto; height: auto; background: none; font-size: 1.5rem; }
+        #section-3 .section-title::before { content: '⛪'; width: auto; height: auto; background: none; font-size: 1.5rem; }
+        #section-4 .section-title::before { content: '🌍'; width: auto; height: auto; background: none; font-size: 1.5rem; }
+        #section-5 .section-title::before { content: '🤝'; width: auto; height: auto; background: none; font-size: 1.5rem; }
+        #section-6 .section-title::before { content: '📋'; width: auto; height: auto; background: none; font-size: 1.5rem; }
+
+        /* Enhanced Section Titles with Professional Icons */
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideInFromLeft 0.6s ease-out;
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .section-title::before {
+            content: '';
+            width: 6px;
+            height: 40px;
+            background: var(--primary-gradient);
+            border-radius: 3px;
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: var(--primary-gradient);
+            animation: expandWidth 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 100px; }
+        }
+        
+        .section-note {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+            font-style: italic;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: var(--border-radius-sm);
+            border-left: 4px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-note::before {
+            content: '💡';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        /* Enhanced Form Elements with Professional Styling */
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 1rem 1.25rem;
+            border: 2px solid #e5e7eb;
+            border-radius: var(--border-radius-sm);
+            font-size: 0.9rem;
+            transition: var(--transition);
+            background: white;
+            font-family: inherit;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #9ca3af;
+            font-style: italic;
+            font-weight: 400;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
+            transform: translateY(-1px);
+            background: linear-gradient(135deg, #ffffff 0%, #fafbff 100%);
+        }
+
+        .form-group input:invalid:not(:focus):not(:placeholder-shown),
+        .form-group select:invalid:not(:focus),
+        .form-group textarea:invalid:not(:focus):not(:placeholder-shown) {
+            border-color: var(--error-color);
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .form-group input:valid:not(:focus):not(:placeholder-shown),
+        .form-group select:valid:not(:focus),
+        .form-group textarea:valid:not(:focus):not(:placeholder-shown) {
+            border-color: var(--success-color);
+            box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.1);
+        }
+
+        /* Enhanced Input Labels with Professional Styling */
+        .form-group label {
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.025em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+
+        .form-group label::after {
+            content: ' *';
+            color: var(--error-color);
+            font-weight: 400;
+            font-size: 0.8rem;
+        }
+
+        .form-group label:not([for*="required"])::after {
+            display: none;
+        }
+
+        /* Professional Input Focus Ring */
+        .form-group input:focus-visible,
+        .form-group select:focus-visible,
+        .form-group textarea:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Enhanced Clergy Subsections */
+        .clergy-subsection {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 2rem;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .clergy-subsection::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary-gradient);
+        }
+        
+        .clergy-subsection h5 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .clergy-subsection h5::before {
+            content: '⛪';
+            font-size: 1.1rem;
+        }
+        
+        /* Enhanced Service Areas with Professional Micro-interactions */
+        .service-areas-container {
+            display: grid;
+            gap: 1.25rem;
+        }
+        
+        .service-area-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 1.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--border-radius-sm);
+            transition: var(--transition);
+            background: white;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transform: translateY(0);
+        }
+
+        .service-area-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(29, 78, 216, 0.05) 100%);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .service-area-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-gradient);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            z-index: 1;
+        }
+        
+        .service-area-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.15);
+        }
+
+        .service-area-item:hover::before {
+            opacity: 1;
+        }
+
+        .service-area-item:hover::after {
+            transform: scaleY(1);
+        }
+        
+        .service-area-item input[type="checkbox"] {
+            margin-right: 1rem;
+            margin-top: 0.25rem;
+            width: 22px;
+            height: 22px;
+            accent-color: var(--primary-color);
+            position: relative;
+            z-index: 10;
+            cursor: pointer;
+            flex-shrink: 0;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .service-area-item input[type="checkbox"]:checked {
+            transform: scale(1.1);
+        }
+
+        .service-area-item input[type="checkbox"]:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .service-area-item.selected {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(29, 78, 216, 0.08) 100%);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .service-area-item.selected::after {
+            transform: scaleY(1);
+        }
+
+        .service-area-item.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #f8f9fa;
+            transform: none;
+        }
+
+        .service-area-item.disabled:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: #e2e8f0;
+        }
+
+        .service-area-item.disabled::before {
+            opacity: 0;
+        }
+        
+        .service-label {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            flex: 1;
+            position: relative;
+            z-index: 5;
+        }
+
+        .service-label strong {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .service-area-item:hover .service-label strong {
+            color: var(--primary-color);
+        }
+
+        .service-description {
+            font-size: 0.875rem;
+            color: #6b7280;
+            line-height: 1.5;
+            transition: color 0.3s ease;
+        }
+
+        .service-area-item:hover .service-description {
+            color: #4b5563;
+        }
+
+        .service-selection-note {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: var(--border-radius-sm);
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .service-selection-note p {
+            margin: 0;
+            color: #92400e;
+            font-weight: 500;
+        }
+
+        /* Enhanced Terms Section */
+        .terms-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 2rem;
+            border-radius: var(--border-radius-sm);
+            margin-top: 2rem;
+            border: 1px solid #dee2e6;
+            position: relative;
+        }
+
+        .terms-section::before {
+            content: '📋';
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            opacity: 0.7;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            cursor: pointer;
+            margin-bottom: 1.25rem;
+            padding: 0.75rem;
+            border-radius: var(--border-radius-sm);
+            transition: var(--transition);
+        }
+
+        .checkbox-label:hover {
+            background: rgba(37, 99, 235, 0.05);
+        }
+        
+        .checkbox-label input[type="checkbox"] {
+            margin-right: 1rem;
+            margin-top: 0.25rem;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-color);
+        }
+
+        .checkbox-label a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .checkbox-label a:hover {
+            text-decoration: underline;
+            color: var(--primary-dark);
+        }
+        
+        /* Enhanced Messages */
+        .error-message {
+            background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+            color: #c53030;
+            padding: 1.25rem;
+            border-radius: var(--border-radius-sm);
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--error-color);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+        }
+
+        .error-message::before {
+            content: '⚠️';
+            font-size: 1.2rem;
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
+            color: #22543d;
+            padding: 1.25rem;
+            border-radius: var(--border-radius-sm);
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--success-color);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
+        }
+
+        .success-message::before {
+            content: '✅';
+            font-size: 1.2rem;
+        }
+
+        .message.warning {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #92400e;
+            border-left: 4px solid var(--warning-color);
+            padding: 1rem 1.25rem;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .message.warning::before {
+            content: '⚠️';
+            font-size: 1.2rem;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .form-container {
+                padding: 2rem;
+            }
+            
+            .form-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .header-section {
+                flex-direction: column;
+                text-align: center;
+                padding: 2rem 1.5rem;
+            }
+            
+            .header-logo-left, .header-logo-right {
+                width: 80px;
+                height: 80px;
+                margin: 0.75rem 0;
+            }
+
+            .form-header-center {
+                margin: 1rem 0;
+            }
+            
+            .form-title {
+                font-size: 1.75rem;
+            }
+
+            .form-subtitle {
+                font-size: 1.125rem;
+            }
+            
+            .form-container {
+                padding: 1.5rem;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .progress-steps {
+                flex-wrap: wrap;
+                gap: 1rem;
+                justify-content: center;
+            }
+
+            .step {
+                flex: 0 0 auto;
+                min-width: 80px;
+            }
+
+            .step-number {
+                width: 45px;
+                height: 45px;
+            }
+
+            .step-label {
+                font-size: 0.7rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .section-title::before {
+                width: 40px;
+                height: 4px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.75rem;
+            }
+
+            .header-section {
+                padding: 1.5rem 1rem;
+            }
+
+            .form-container {
+                padding: 1.25rem;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+            }
+
+            .form-subtitle {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+            }
+
+            .clergy-subsection,
+            .service-area-item,
+            .terms-section {
+                padding: 1.25rem;
+            }
+
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 0.875rem;
+            }
+
+            .step-label {
+                font-size: 0.65rem;
+            }
+        }
+
+        /* Professional Message System */
+        .error-message, .success-message {
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideInFromTop 0.4s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+            border: 1px solid #f87171;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+        }
+
+        .error-message::before {
+            content: '⚠️';
+            font-size: 1.2rem;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+            border: 1px solid #34d399;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+        }
+
+        .success-message::before {
+            content: '✅';
+            font-size: 1.2rem;
+        }
+
+        .message {
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius-sm);
+            margin: 1rem 0;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideInFromTop 0.4s ease-out;
+        }
+
+        .message.warning {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #92400e;
+            border: 1px solid #f59e0b;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+        }
+
+        .message.warning::before {
+            content: '⚠️';
+            font-size: 1.2rem;
+        }
+
+        /* Enhanced Tooltips */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: 115%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #1f2937;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .tooltip:hover::before,
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+
+        /* Professional Loading States */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            backdrop-filter: blur(2px);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e5e7eb;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Enhanced Visual Feedback */
+        .form-group.has-error input,
+        .form-group.has-error select,
+        .form-group.has-error textarea {
+            border-color: var(--error-color);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .form-group.has-success input,
+        .form-group.has-success select,
+        .form-group.has-success textarea {
+            border-color: var(--success-color);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        .form-group.has-error label {
+            color: var(--error-color);
+        }
+
+        .form-group.has-success label {
+            color: var(--success-color);
+        }
+
+        /* Professional Field Validation Icons */
+        .form-group.has-error::after {
+            content: '❌';
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+            z-index: 10;
+        }
+
+        .form-group.has-success::after {
+            content: '✅';
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+            z-index: 10;
+        }
+
+        /* Professional Animation Library */
+        @keyframes bounceIn {
+            0% { 
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% { 
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+            70% { 
+                transform: scale(0.9);
+                opacity: 0.9;
+            }
+            100% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { 
+                transform: translateY(0px);
+            }
+            50% { 
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Enhanced Form Section Animations */
+        .form-section {
+            animation: fadeInScale 0.6s ease-out;
+        }
+
+        .form-row {
+            animation: slideInFromLeft 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .form-row:nth-child(1) { animation-delay: 0.1s; }
+        .form-row:nth-child(2) { animation-delay: 0.2s; }
+        .form-row:nth-child(3) { animation-delay: 0.3s; }
+        .form-row:nth-child(4) { animation-delay: 0.4s; }
+        .form-row:nth-child(5) { animation-delay: 0.5s; }
+
+        /* Professional Hover Effects */
+        .header-logo-left, .header-logo-right {
+            animation: gentleFloat 3s ease-in-out infinite;
+        }
+
+        .header-logo-right {
+            animation-delay: 1.5s;
+        }
+
+        /* Enhanced Button Interactions */
+        .btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Professional Focus States */
+        .btn:focus-visible,
+        .form-group input:focus-visible,
+        .form-group select:focus-visible,
+        .form-group textarea:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Enhanced Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* High Contrast Mode Support */
+        @media (prefers-contrast: high) {
+            :root {
+                --primary-color: #0000ff;
+                --primary-dark: #000080;
+                --success-color: #008000;
+                --error-color: #ff0000;
+                --secondary-color: #000000;
+            }
+
+            .form-container,
+            .header-section,
+            .form-progress {
+                border: 2px solid #000000;
+            }
+
+            .btn {
+                border: 2px solid currentColor;
+            }
+        }
+
+        /* Print Optimization */
+        @media print {
+            body {
+                background: white !important;
+            }
+
+            .form-progress,
+            .form-actions,
+            .btn,
+            .floating-save {
+                display: none !important;
+            }
+
+            .form-container,
+            .header-section {
+                box-shadow: none !important;
+                border: 1px solid #000 !important;
+                background: white !important;
+            }
+
+            .form-section {
+                page-break-inside: avoid;
+            }
+
+            .section-title {
+                page-break-after: avoid;
+            }
+        }
+    </style>
+
+    <script src="js/auth.js"></script>
+    <script>
+        // Form state management
+        let currentStep = 1;
+        const totalSteps = 7; // Updated to include photo upload section
+        let formData = {};
+        
+        // Initialize form
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthentication();
+            initializeForm();
+            setupEventListeners();
+            loadDraftData();
+            loadCenters(); // Load centers for the dropdown
+        });
+        
+        // Check if user is authenticated and has a member ID
+        function checkAuthentication() {
+            const userData = localStorage.getItem('wdb_user_data');
+            const memberId = localStorage.getItem('wdb_member_id');
+            
+            if (!userData || !memberId) {
+                // Allow direct registration without prior authentication
+                // The backend will create both user account and member record
+                console.log('No existing member ID found - will create new registration');
+                hideAuthRequiredNotice();
+                enableForm();
+                return true; // Changed from false to true to allow registration
+            }
+            
+            try {
+                const user = JSON.parse(userData);
+                if (user.member_id || memberId) {
+                    // User is authenticated and has a member ID
+                    showMemberIdDisplay(user.member_id || memberId);
+                    enableForm();
+                    return true;
+                }
+            } catch (e) {
+                console.error('Error parsing user data:', e);
+            }
+            
+            // Allow registration even if parsing fails
+            hideAuthRequiredNotice();
+            enableForm();
+            return true; // Changed from false to true
+        }
+        
+        function hideAuthRequiredNotice() {
+            document.getElementById('authRequiredNotice').style.display = 'none';
+            document.getElementById('memberIdDisplay').style.display = 'none';
+        }
+        
+        function showAuthRequiredNotice() {
+            document.getElementById('authRequiredNotice').style.display = 'block';
+            document.getElementById('memberIdDisplay').style.display = 'none';
+        }
+        
+        function showMemberIdDisplay(memberId) {
+            document.getElementById('memberIdValue').textContent = memberId;
+            document.getElementById('memberIdDisplay').style.display = 'block';
+            document.getElementById('authRequiredNotice').style.display = 'none';
+            
+            // Also populate the form field
+            const memberIdInput = document.getElementById('userMemberId');
+            if (memberIdInput) {
+                memberIdInput.value = memberId;
+            }
+        }
+        
+        function disableForm() {
+            const form = document.getElementById('wdbMembershipForm');
+            const inputs = form.querySelectorAll('input, select, textarea, button');
+            inputs.forEach(input => {
+                if (input.type !== 'button' || input.id === 'cancelBtn') {
+                    input.disabled = true;
+                }
+            });
+            
+            // Hide navigation buttons
+            document.querySelector('.form-actions').style.opacity = '0.5';
+            document.querySelector('.form-actions').style.pointerEvents = 'none';
+        }
+        
+        function enableForm() {
+            const form = document.getElementById('wdbMembershipForm');
+            const inputs = form.querySelectorAll('input, select, textarea, button');
+            inputs.forEach(input => {
+                input.disabled = false;
+            });
+            
+            // Show navigation buttons
+            document.querySelector('.form-actions').style.opacity = '1';
+            document.querySelector('.form-actions').style.pointerEvents = 'auto';
+        }
+        function initializeForm() {
+            showStep(1);
+            updateProgressIndicator();
+        }
+        
+        function setupEventListeners() {
+            // Navigation buttons
+            document.getElementById('nextBtn').addEventListener('click', nextStep);
+            document.getElementById('prevBtn').addEventListener('click', prevStep);
+            document.getElementById('saveBtn').addEventListener('click', saveDraft);
+            document.getElementById('floatingSave').addEventListener('click', saveDraft);
+            document.getElementById('previewBtn').addEventListener('click', previewForm);
+            document.getElementById('submitBtn').addEventListener('click', submitForm);
+            document.getElementById('cancelBtn').addEventListener('click', cancelForm);
+            
+            // Marital status change
+            document.getElementById('maritalStatus').addEventListener('change', toggleSpouseInfo);
+            
+            // Enhanced form validation with real-time feedback
+            setupRealTimeValidation();
+            
+            // Service area selection limit
+            const serviceCheckboxes = document.querySelectorAll('input[name="serviceAreas"]');
+            console.log('Found service checkboxes:', serviceCheckboxes.length);
+            serviceCheckboxes.forEach((checkbox, index) => {
+                console.log(`Setting up checkbox ${index}:`, checkbox.id);
+                checkbox.addEventListener('change', function(e) {
+                    console.log('Checkbox changed:', e.target.id, 'checked:', e.target.checked);
+                    limitServiceSelection();
+                });
+            });
+            
+            // Add click handlers to service area items for better UX
+            const serviceAreaItems = document.querySelectorAll('.service-area-item');
+            console.log('Found service area items:', serviceAreaItems.length);
+            serviceAreaItems.forEach((item, index) => {
+                console.log(`Setting up service area item ${index}`);
+                item.addEventListener('click', function(e) {
+                    console.log('Service area item clicked:', e.target.tagName, e.target.type);
+                    
+                    // Don't trigger if clicking directly on checkbox or label
+                    if (e.target.type === 'checkbox' || e.target.tagName === 'LABEL' || e.target.tagName === 'STRONG' || e.target.tagName === 'SPAN') {
+                        console.log('Clicked on interactive element, letting default behavior handle it');
+                        return;
+                    }
+                    
+                    const checkbox = item.querySelector('input[type="checkbox"]');
+                    if (checkbox && !checkbox.disabled) {
+                        console.log('Toggling checkbox:', checkbox.id);
+                        checkbox.checked = !checkbox.checked;
+                        // Trigger the change event to update the selection limit
+                        checkbox.dispatchEvent(new Event('change'));
+                    }
+                });
+                
+                // Also add click handler to the label for better accessibility
+                const label = item.querySelector('.service-label');
+                if (label) {
+                    label.addEventListener('click', function(e) {
+                        console.log('Label clicked for:', item.querySelector('input').id);
+                        // Let the default label behavior handle this
+                    });
+                }
+            });
+            
+            // Form validation
+            const form = document.getElementById('wdbMembershipForm');
+            form.addEventListener('submit', handleFormSubmit);
+
+            // Add professional keyboard shortcuts
+            setupKeyboardShortcuts();
+            
+            // Setup file upload handlers
+            setupFileUploads();
+        }
+
+        // File Upload Handlers
+        function setupFileUploads() {
+            // Clergy Documents Upload
+            const clergyDocsInput = document.getElementById('clergyDocuments');
+            const clergyDocsArea = document.getElementById('clergyDocsUploadArea');
+            const removeClergyDocsBtn = document.getElementById('removeClergyDocsBtn');
+            
+            if (clergyDocsInput && clergyDocsArea) {
+                clergyDocsInput.addEventListener('change', handleClergyDocsUpload);
+                
+                // Drag and drop
+                clergyDocsArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    clergyDocsArea.style.borderColor = '#eab308';
+                    clergyDocsArea.style.background = 'linear-gradient(135deg, #fef9c3 0%, #fef3c7 100%)';
+                });
+                
+                clergyDocsArea.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    clergyDocsArea.style.borderColor = '#d1d5db';
+                    clergyDocsArea.style.background = 'linear-gradient(135deg, #fefce8 0%, #fef9c3 100%)';
+                });
+                
+                clergyDocsArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    clergyDocsArea.style.borderColor = '#d1d5db';
+                    clergyDocsArea.style.background = 'linear-gradient(135deg, #fefce8 0%, #fef9c3 100%)';
+                    
+                    if (e.dataTransfer.files.length > 0) {
+                        clergyDocsInput.files = e.dataTransfer.files;
+                        handleClergyDocsUpload();
+                    }
+                });
+            }
+            
+            if (removeClergyDocsBtn) {
+                removeClergyDocsBtn.addEventListener('click', () => {
+                    clergyDocsInput.value = '';
+                    document.getElementById('clergyDocsPreview').style.display = 'none';
+                    document.getElementById('clergyUploadPrompt').style.display = 'block';
+                });
+            }
+            
+            // Member Photo Upload
+            const photoInput = document.getElementById('memberPhoto');
+            const photoArea = document.getElementById('photoUploadArea');
+            const removePhotoBtn = document.getElementById('removePhotoBtn');
+            
+            if (photoInput && photoArea) {
+                photoInput.addEventListener('change', handlePhotoUpload);
+                
+                // Drag and drop
+                photoArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    photoArea.style.borderColor = '#6366f1';
+                    photoArea.style.background = 'linear-gradient(135deg, #f5f5f5 0%, #e5e5e5 100%)';
+                });
+                
+                photoArea.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    photoArea.style.borderColor = '#d1d5db';
+                    photoArea.style.background = 'linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%)';
+                });
+                
+                photoArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    photoArea.style.borderColor = '#d1d5db';
+                    photoArea.style.background = 'linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%)';
+                    
+                    if (e.dataTransfer.files.length > 0) {
+                        photoInput.files = e.dataTransfer.files;
+                        handlePhotoUpload();
+                    }
+                });
+            }
+            
+            if (removePhotoBtn) {
+                removePhotoBtn.addEventListener('click', () => {
+                    photoInput.value = '';
+                    document.getElementById('photoPreview').style.display = 'none';
+                    document.getElementById('uploadPrompt').style.display = 'block';
+                });
+            }
+        }
+        
+        function handleClergyDocsUpload() {
+            const input = document.getElementById('clergyDocuments');
+            const file = input.files[0];
+            
+            if (!file) return;
+            
+            // Validate file size (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size must not exceed 5MB');
+                input.value = '';
+                return;
+            }
+            
+            // Validate file type
+            const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+            if (!validTypes.includes(file.type)) {
+                alert('Please upload an image (JPG, PNG) or PDF file');
+                input.value = '';
+                return;
+            }
+            
+            // Show preview
+            document.getElementById('clergyUploadPrompt').style.display = 'none';
+            document.getElementById('clergyDocsPreview').style.display = 'block';
+            
+            // Update file info
+            document.getElementById('clergyDocsFileName').textContent = file.name;
+            document.getElementById('clergyDocsFileSize').textContent = formatFileSize(file.size);
+            document.getElementById('clergyDocsFileType').textContent = file.type.split('/')[1].toUpperCase();
+            
+            // Show preview content
+            const previewContent = document.getElementById('clergyDocsPreviewContent');
+            if (file.type === 'application/pdf') {
+                previewContent.innerHTML = '<div style="font-size: 4rem; color: #ca8a04;">📄</div><p style="color: #6b7280; margin-top: 0.5rem;">PDF Document</p>';
+            } else {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewContent.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function handlePhotoUpload() {
+            const input = document.getElementById('memberPhoto');
+            const file = input.files[0];
+            
+            if (!file) return;
+            
+            // Validate file size (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size must not exceed 5MB');
+                input.value = '';
+                return;
+            }
+            
+            // Validate file type
+            const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!validTypes.includes(file.type)) {
+                alert('Please upload an image file (JPG, PNG, GIF)');
+                input.value = '';
+                return;
+            }
+            
+            // Show preview
+            document.getElementById('uploadPrompt').style.display = 'none';
+            document.getElementById('photoPreview').style.display = 'block';
+            
+            // Update file info
+            document.getElementById('photoFileName').textContent = file.name;
+            document.getElementById('photoFileSize').textContent = formatFileSize(file.size);
+            
+            // Show image preview and get dimensions
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = document.getElementById('photoPreviewImg');
+                img.src = e.target.result;
+                
+                // Get image dimensions
+                const tempImg = new Image();
+                tempImg.onload = () => {
+                    const dimensions = `${tempImg.width} x ${tempImg.height}`;
+                    document.getElementById('photoDimensions').textContent = dimensions;
+                    
+                    // Check resolution
+                    if (tempImg.width < 300 || tempImg.height < 300) {
+                        document.getElementById('photoStatus').innerHTML = '⚠️ Low Resolution';
+                        document.getElementById('photoStatus').style.color = '#f59e0b';
+                    } else {
+                        document.getElementById('photoStatus').innerHTML = '✓ Ready';
+                        document.getElementById('photoStatus').style.color = '#059669';
+                    }
+                };
+                tempImg.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        // Enhanced Real-time Validation
+        function setupRealTimeValidation() {
+            const inputs = document.querySelectorAll('input, select, textarea');
+            
+            inputs.forEach(input => {
+                // Add blur event for validation
+                input.addEventListener('blur', function() {
+                    validateField(this);
+                });
+
+                // Add input event for immediate feedback on required fields
+                input.addEventListener('input', function() {
+                    if (this.hasAttribute('required')) {
+                        validateField(this);
+                    }
+                });
+
+                // Add focus event to clear error states
+                input.addEventListener('focus', function() {
+                    clearFieldValidation(this);
+                });
+            });
+        }
+
+        function validateField(field) {
+            const formGroup = field.closest('.form-group');
+            if (!formGroup) return;
+
+            // Clear previous validation states
+            formGroup.classList.remove('has-error', 'has-success');
+
+            // Check if field is required and empty
+            if (field.hasAttribute('required') && !field.value.trim()) {
+                formGroup.classList.add('has-error');
+                return false;
+            }
+
+            // Email validation
+            if (field.type === 'email' && field.value) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(field.value)) {
+                    formGroup.classList.add('has-error');
+                    return false;
+                }
+            }
+
+            // Phone validation
+            if (field.type === 'tel' && field.value) {
+                const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+                if (!phoneRegex.test(field.value.replace(/[\s\-\(\)]/g, ''))) {
+                    formGroup.classList.add('has-error');
+                    return false;
+                }
+            }
+
+            // If we get here, field is valid
+            if (field.value.trim()) {
+                formGroup.classList.add('has-success');
+            }
+            return true;
+        }
+
+        function clearFieldValidation(field) {
+            const formGroup = field.closest('.form-group');
+            if (formGroup) {
+                formGroup.classList.remove('has-error', 'has-success');
+            }
+        }
+
+        // Professional Keyboard Shortcuts
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', function(e) {
+                // Ctrl/Cmd + S to save draft
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    saveDraft();
+                }
+
+                // Ctrl/Cmd + Enter to go to next step or submit
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    e.preventDefault();
+                    if (currentStep < totalSteps) {
+                        nextStep();
+                    } else {
+                        submitForm();
+                    }
+                }
+
+                // Escape to cancel
+                if (e.key === 'Escape') {
+                    const confirmCancel = confirm('Are you sure you want to cancel? Any unsaved changes will be lost.');
+                    if (confirmCancel) {
+                        cancelForm();
+                    }
+                }
+            });
+        }
+        
+        function showStep(step) {
+            // Hide all sections with fade out
+            for (let i = 1; i <= totalSteps; i++) {
+                const section = document.getElementById(`section-${i}`);
+                if (section) {
+                    section.style.opacity = '0';
+                    section.style.transform = 'translateX(-20px)';
+                    setTimeout(() => {
+                        section.style.display = 'none';
+                    }, 200);
+                }
+            }
+            
+            // Also hide clergy upload section
+            const clergyUploadSection = document.getElementById('section-3-upload');
+            if (clergyUploadSection) {
+                clergyUploadSection.style.opacity = '0';
+                clergyUploadSection.style.transform = 'translateX(-20px)';
+                setTimeout(() => {
+                    clergyUploadSection.style.display = 'none';
+                }, 200);
+            }
+            
+            // Show current section with fade in
+            setTimeout(() => {
+                const currentSection = document.getElementById(`section-${step}`);
+                if (currentSection) {
+                    currentSection.style.display = 'block';
+                    setTimeout(() => {
+                        currentSection.style.opacity = '1';
+                        currentSection.style.transform = 'translateX(0)';
+                    }, 50);
+                }
+                
+                // Show clergy upload section when on section 3
+                if (step === 3 && clergyUploadSection) {
+                    clergyUploadSection.style.display = 'block';
+                    setTimeout(() => {
+                        clergyUploadSection.style.opacity = '1';
+                        clergyUploadSection.style.transform = 'translateX(0)';
+                    }, 50);
+                }
+            }, 250);
+            
+            // Update navigation buttons
+            updateNavigationButtons(step);
+            
+            // Update progress indicator
+            updateProgressIndicator();
+            
+            // Scroll to top of form
+            document.querySelector('.form-container').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }
+        
+        function updateNavigationButtons(step) {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Show/hide previous button
+            prevBtn.style.display = step > 1 ? 'block' : 'none';
+            
+            // Show/hide next/submit buttons
+            if (step === totalSteps) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+        }
+        
+        function updateProgressIndicator() {
+            const steps = document.querySelectorAll('.step');
+            steps.forEach((step, index) => {
+                const stepNumber = index + 1;
+                step.classList.remove('active', 'completed');
+                
+                if (stepNumber < currentStep) {
+                    step.classList.add('completed');
+                } else if (stepNumber === currentStep) {
+                    step.classList.add('active');
+                }
+            });
+
+            // Update progress text and percentage
+            document.getElementById('currentStepText').textContent = currentStep;
+            const percentage = Math.round((currentStep / totalSteps) * 100);
+            document.getElementById('progressPercentage').textContent = percentage;
+
+            // Update CSS custom property for progress bar
+            document.documentElement.style.setProperty('--current-step', currentStep);
+        }
+        function nextStep() {
+            if (validateCurrentStep()) {
+                saveCurrentStepData();
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            }
+        }
+        
+        function prevStep() {
+            saveCurrentStepData();
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+        
+        function validateCurrentStep() {
+            const currentSection = document.getElementById(`section-${currentStep}`);
+            const requiredFields = currentSection.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = '#e53e3e';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#e2e8f0';
+                }
+            });
+            
+            // Special validation for service areas (step 5)
+            if (currentStep === 5) {
+                const selectedServices = document.querySelectorAll('input[name="serviceAreas"]:checked');
+                if (selectedServices.length === 0) {
+                    showMessage('Please select at least one service area.', 'error');
+                    isValid = false;
+                } else if (selectedServices.length > 3) {
+                    showMessage('Please select no more than 3 service areas.', 'error');
+                    isValid = false;
+                }
+            }
+            
+            // Special validation for photo upload (step 7) - MANDATORY
+            if (currentStep === 7) {
+                const photoInput = document.getElementById('memberPhoto');
+                const photoPreview = document.getElementById('photoPreview');
+                
+                if (!photoInput.files || photoInput.files.length === 0) {
+                    showMessage('❌ Photo upload is mandatory! Please upload your photo to continue.', 'error');
+                    
+                    // Highlight the upload area
+                    const uploadArea = document.getElementById('photoUploadArea');
+                    uploadArea.style.borderColor = '#ef4444';
+                    uploadArea.style.backgroundColor = '#fee2e2';
+                    
+                    // Show error message
+                    const errorDiv = document.getElementById('memberPhotoError');
+                    errorDiv.textContent = 'Photo upload is required for membership registration';
+                    errorDiv.style.display = 'block';
+                    errorDiv.style.color = '#ef4444';
+                    errorDiv.style.marginTop = '10px';
+                    errorDiv.style.fontWeight = '600';
+                    
+                    isValid = false;
+                } else {
+                    // Reset error styling if photo is uploaded
+                    const uploadArea = document.getElementById('photoUploadArea');
+                    uploadArea.style.borderColor = '#d1d5db';
+                    uploadArea.style.backgroundColor = '';
+                    
+                    const errorDiv = document.getElementById('memberPhotoError');
+                    errorDiv.style.display = 'none';
+                }
+            }
+            
+            if (!isValid) {
+                showMessage('Please fill in all required fields.', 'error');
+            }
+            
+            return isValid;
+        }
+        
+        function saveCurrentStepData() {
+            const currentSection = document.getElementById(`section-${currentStep}`);
+            const inputs = currentSection.querySelectorAll('input, select, textarea');
+            
+            inputs.forEach(input => {
+                if (input.type === 'checkbox') {
+                    if (input.name === 'serviceAreas') {
+                        if (!formData.serviceAreas) formData.serviceAreas = [];
+                        if (input.checked && !formData.serviceAreas.includes(input.value)) {
+                            formData.serviceAreas.push(input.value);
+                        } else if (!input.checked) {
+                            formData.serviceAreas = formData.serviceAreas.filter(val => val !== input.value);
+                        }
+                    } else {
+                        formData[input.name] = input.checked;
+                    }
+                } else {
+                    formData[input.name] = input.value;
+                }
+            });
+        }
+        
+        function toggleSpouseInfo() {
+            const maritalStatus = document.getElementById('maritalStatus').value;
+            const spouseInfo = document.getElementById('spouseInfo');
+            
+            if (maritalStatus === 'married') {
+                spouseInfo.style.display = 'block';
+                document.getElementById('spouseName').required = true;
+            } else {
+                spouseInfo.style.display = 'none';
+                document.getElementById('spouseName').required = false;
+                document.getElementById('spousePhone').required = false;
+            }
+        }
+        function limitServiceSelection() {
+            const selectedServices = document.querySelectorAll('input[name="serviceAreas"]:checked');
+            const allServices = document.querySelectorAll('input[name="serviceAreas"]');
+            const serviceItems = document.querySelectorAll('.service-area-item');
+            
+            // Update visual states
+            serviceItems.forEach(item => {
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                
+                // Remove all state classes
+                item.classList.remove('selected', 'disabled');
+                
+                if (checkbox.checked) {
+                    item.classList.add('selected');
+                }
+            });
+            
+            if (selectedServices.length >= 3) {
+                allServices.forEach((service, index) => {
+                    if (!service.checked) {
+                        service.disabled = true;
+                        serviceItems[index].classList.add('disabled');
+                    }
+                });
+                
+                // Show message about limit reached
+                showServiceLimitMessage();
+            } else {
+                allServices.forEach((service, index) => {
+                    service.disabled = false;
+                    serviceItems[index].classList.remove('disabled');
+                });
+                
+                // Hide limit message
+                hideServiceLimitMessage();
+            }
+        }
+
+        function showServiceLimitMessage() {
+            const existingMessage = document.getElementById('serviceLimitMessage');
+            if (!existingMessage) {
+                const message = document.createElement('div');
+                message.id = 'serviceLimitMessage';
+                message.className = 'message warning';
+                message.innerHTML = '<span>Maximum of 3 service areas selected. Uncheck an option to select a different one.</span>';
+                
+                const serviceContainer = document.querySelector('.service-areas-container');
+                serviceContainer.parentNode.insertBefore(message, serviceContainer.nextSibling);
+            }
+        }
+
+        function hideServiceLimitMessage() {
+            const existingMessage = document.getElementById('serviceLimitMessage');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+        }
+        
+        function saveDraft() {
+            saveCurrentStepData();
+            
+            // Add loading state to save buttons
+            const saveBtn = document.getElementById('saveBtn');
+            const floatingSave = document.getElementById('floatingSave');
+            
+            saveBtn.classList.add('loading');
+            floatingSave.classList.add('loading');
+            
+            setTimeout(() => {
+                localStorage.setItem('wdb_membership_draft', JSON.stringify({
+                    formData: formData,
+                    currentStep: currentStep,
+                    savedAt: new Date().toISOString()
+                }));
+                
+                saveBtn.classList.remove('loading');
+                floatingSave.classList.remove('loading');
+                
+                showMessage('Draft saved successfully! ✨', 'success');
+                
+                // Animate the floating save button
+                floatingSave.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    floatingSave.style.transform = '';
+                }, 200);
+            }, 500);
+        }
+        
+        function loadDraftData() {
+            const draft = localStorage.getItem('wdb_membership_draft');
+            if (draft) {
+                try {
+                    const draftData = JSON.parse(draft);
+                    formData = draftData.formData || {};
+                    currentStep = draftData.currentStep || 1;
+                    
+                    // Populate form fields
+                    populateFormFields();
+                    showStep(currentStep);
+                    
+                    showMessage('Draft data loaded. You can continue from where you left off.', 'success');
+                } catch (e) {
+                    console.error('Error loading draft data:', e);
+                }
+            }
+        }
+        
+        function populateFormFields() {
+            // First populate from draft data
+            Object.keys(formData).forEach(key => {
+                const field = document.querySelector(`[name="${key}"]`);
+                if (field) {
+                    if (field.type === 'checkbox') {
+                        if (key === 'serviceAreas' && Array.isArray(formData[key])) {
+                            formData[key].forEach(value => {
+                                const checkbox = document.querySelector(`[name="${key}"][value="${value}"]`);
+                                if (checkbox) checkbox.checked = true;
+                            });
+                        } else {
+                            field.checked = formData[key];
+                        }
+                    } else {
+                        field.value = formData[key];
+                    }
+                }
+            });
+            
+            // Then populate from user account data if available
+            const userData = localStorage.getItem('wdb_user_data');
+            const memberId = localStorage.getItem('wdb_member_id');
+            
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    
+                    // Pre-populate member ID
+                    const memberIdInput = document.getElementById('userMemberId');
+                    if (memberIdInput) {
+                        const userMemberId = user.member_id || memberId;
+                        if (userMemberId) {
+                            memberIdInput.value = userMemberId;
+                            formData.userMemberId = userMemberId;
+                        }
+                    }
+                    
+                    // Pre-populate email if not already filled
+                    const emailField = document.querySelector('[name="email"]');
+                    if (emailField && !emailField.value && user.email) {
+                        emailField.value = user.email;
+                        formData.email = user.email;
+                    }
+                    
+                    // Pre-populate full name if not already filled
+                    const fullNameField = document.querySelector('[name="fullName"]');
+                    if (fullNameField && !fullNameField.value && user.full_name) {
+                        fullNameField.value = user.full_name;
+                        formData.fullName = user.full_name;
+                    }
+                } catch (e) {
+                    console.error('Error parsing user data:', e);
+                }
+            }
+            
+            // Trigger spouse info display if married
+            toggleSpouseInfo();
+        }
+        
+        function previewForm() {
+            saveCurrentStepData();
+            // Create preview modal or new window
+            const previewWindow = window.open('', '_blank', 'width=800,height=600');
+            previewWindow.document.write(generatePreviewHTML());
+        }
+        function generatePreviewHTML() {
+            return `
+                <html>
+                <head>
+                    <title>WDB Membership Application Preview</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        .preview-section { margin-bottom: 30px; }
+                        .preview-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+                        .preview-item { margin-bottom: 8px; }
+                        .preview-label { font-weight: bold; }
+                    </style>
+                </head>
+                <body>
+                    <h1>WDB Membership Application Preview</h1>
+                    ${generatePreviewContent()}
+                    <button onclick="window.close()">Close Preview</button>
+                </body>
+                </html>
+            `;
+        }
+        
+        function generatePreviewContent() {
+            let content = '';
+            
+            // Personal Information
+            content += `
+                <div class="preview-section">
+                    <div class="preview-title">Personal Information</div>
+                    <div class="preview-item"><span class="preview-label">Full Name:</span> ${formData.fullName || 'N/A'}</div>
+                    <div class="preview-item"><span class="preview-label">Email:</span> ${formData.email || 'N/A'}</div>
+                    <div class="preview-item"><span class="preview-label">Phone:</span> ${formData.mobilePhone || 'N/A'}</div>
+                    <div class="preview-item"><span class="preview-label">Gender:</span> ${formData.gender || 'N/A'}</div>
+                    <div class="preview-item"><span class="preview-label">Date of Birth:</span> ${formData.dateOfBirth || 'N/A'}</div>
+                </div>
+            `;
+            
+            // Add other sections as needed
+            return content;
+        }
+        
+        async function submitForm(event) {
+            if (event) event.preventDefault();
+            
+            // Validate current step before submission
+            if (!validateCurrentStep()) {
+                return;
+            }
+            
+            // MANDATORY: Check if photo is uploaded before final submission
+            const photoInput = document.getElementById('memberPhoto');
+            if (!photoInput.files || photoInput.files.length === 0) {
+                showMessage('❌ PHOTO UPLOAD IS MANDATORY! Please go back to Step 7 and upload your photo.', 'error');
+                
+                // Navigate back to photo upload step
+                currentStep = 7;
+                showStep(currentStep);
+                
+                // Highlight the upload area
+                const uploadArea = document.getElementById('photoUploadArea');
+                uploadArea.style.borderColor = '#ef4444';
+                uploadArea.style.backgroundColor = '#fee2e2';
+                
+                return;
+            }
+            
+            saveCurrentStepData();
+            
+            try {
+                // Get user data from localStorage (may be empty for new registrations)
+                const userData = JSON.parse(localStorage.getItem('wdb_user_data') || '{}');
+                const memberId = localStorage.getItem('wdb_member_id');
+                
+                // Prepare comprehensive form data
+                const comprehensiveData = {
+                    // Include existing user information if available
+                    email: formData.email || userData.email,
+                    member_id: userData.member_id || memberId || null,
+                    
+                    // Personal Information
+                    fullName: formData.fullName,
+                    baptismName: formData.baptismName,
+                    facebookName: formData.facebookName,
+                    dateOfBirth: formData.dateOfBirth,
+                    gender: formData.gender,
+                    maritalStatus: formData.maritalStatus,
+                    spouseName: formData.spouseName,
+                    spousePhone: formData.spousePhone,
+                    confessionFather: formData.confessionFather,
+                    mobilePhone: formData.mobilePhone,
+                    currentAddress: formData.currentAddress,
+                    
+                    // Education & Occupation
+                    educationLevel: formData.educationLevel,
+                    fieldOfStudy: formData.fieldOfStudy,
+                    university: formData.university,
+                    graduationYear: formData.graduationYear,
+                    occupation: formData.occupation,
+                    organization: formData.organization,
+                    
+                    // Clergy Status
+                    diaconateYear: formData.diaconateYear,
+                    diaconateChurch: formData.diaconateChurch,
+                    diaconateFather: formData.diaconateFather,
+                    priesthoodYear: formData.priesthoodYear,
+                    priesthoodChurch: formData.priesthoodChurch,
+                    priesthoodFather: formData.priesthoodFather,
+                    monasticYear: formData.monasticYear,
+                    monasticMonastery: formData.monasticMonastery,
+                    monasticFather: formData.monasticFather,
+                    
+                    // Regional & Church Information
+                    region: formData.region,
+                    country: formData.country,
+                    subCity: formData.subCity,
+                    currentChurch: formData.currentChurch,
+                    churchWoreda: formData.churchWoreda,
+                    currentService: formData.currentService,
+                    
+                    // Service Areas (array of selected values)
+                    serviceAreas: formData.serviceAreas || [],
+                    
+                    // Membership Status
+                    membershipPlan: formData.membershipPlan,
+                    wiirtuuStatus: formData.wiirtuuStatus,
+                    preferredCenter: formData.preferredCenter,
+                    centerRole: formData.centerRole,
+                    notes: formData.notes,
+                    
+                    // Agreement and Consent
+                    agreeTerms: formData.agreeTerms,
+                    agreeContact: formData.agreeContact,
+                    
+                    // System fields
+                    language: 'en', // Default language
+                    quickRegistration: false // This is comprehensive registration
+                };
+                
+                console.log('Submitting membership form data:', comprehensiveData);
+                
+                // Show loading state
+                const submitBtn = document.getElementById('submitBtn');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Submitting...';
+                submitBtn.disabled = true;
+                
+                const response = await fetch('api/register.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(comprehensiveData)
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                // Get response text first to check if it's valid JSON
+                const responseText = await response.text();
+                console.log('Response text:', responseText);
+                
+                // Try to parse as JSON
+                let result;
+                try {
+                    result = JSON.parse(responseText);
+                } catch (jsonError) {
+                    console.error('JSON parse error:', jsonError);
+                    console.error('Response was not valid JSON:', responseText);
+                    showMessage('Server error: Invalid response format. Please contact support.\n\nResponse: ' + responseText.substring(0, 200), 'error');
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                    return;
+                }
+                
+                console.log('Parsed result:', result);
+                
+                if (result.success) {
+                    showMessage('✅ Registration completed successfully! Your membership profile has been updated.', 'success');
+                    localStorage.removeItem('wdb_membership_draft');
+                    
+                    // Update user data with member ID if provided
+                    if (result.data.member_id) {
+                        const updatedUserData = {
+                            ...userData,
+                            member_id: result.data.member_id,
+                            member_record_id: result.data.member_record_id
+                        };
+                        localStorage.setItem('wdb_user_data', JSON.stringify(updatedUserData));
+                        localStorage.setItem('wdb_member_id', result.data.member_id);
+                    }
+                    
+                    // Redirect to success page with options
+                    setTimeout(() => {
+                        const memberId = result.data.member_id || localStorage.getItem('wdb_member_id');
+                        const userId = result.data.user_id || userData.user_id;
+                        const username = result.data.username || userData.username;
+                        window.location.href = `registration-success.html?member_id=${memberId}&user_id=${userId}&username=${username}`;
+                    }, 2000);
+                } else {
+                    const errorMessage = Array.isArray(result.errors) ? result.errors.join(', ') : (result.error || 'Unknown error');
+                    showMessage('❌ Registration failed: ' + errorMessage, 'error');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                console.error('Error details:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
+                showMessage('❌ Network error occurred: ' + error.message + '\n\nPlease check:\n1. Your internet connection\n2. The server is running\n3. Browser console for details (F12)', 'error');
+            } finally {
+                // Reset button state
+                const submitBtn = document.getElementById('submitBtn');
+                if (submitBtn) {
+                    submitBtn.textContent = 'Submit Registration';
+                    submitBtn.disabled = false;
+                }
+            }
+        }
+        
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            submitForm();
+        }
+        
+        function cancelForm() {
+            if (confirm('Are you sure you want to cancel? All unsaved data will be lost.')) {
+                localStorage.removeItem('wdb_membership_draft');
+                window.location.href = 'index.html';
+            }
+        }
+        
+        function showMessage(message, type) {
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            
+            // Hide both messages first
+            errorDiv.classList.add('hidden');
+            successDiv.classList.add('hidden');
+            
+            // Show appropriate message with enhanced styling
+            if (type === 'error') {
+                errorDiv.innerHTML = `<span>${message}</span>`;
+                errorDiv.classList.remove('hidden');
+                
+                // Add shake animation for errors
+                errorDiv.style.animation = 'shake 0.5s ease-in-out';
+                setTimeout(() => {
+                    errorDiv.style.animation = '';
+                }, 500);
+            } else {
+                successDiv.innerHTML = `<span>${message}</span>`;
+                successDiv.classList.remove('hidden');
+                
+                // Add bounce animation for success
+                successDiv.style.animation = 'bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                setTimeout(() => {
+                    successDiv.style.animation = '';
+                }, 600);
+            }
+            
+            // Auto-hide after 5 seconds with fade out
+            setTimeout(() => {
+                if (type === 'error') {
+                    errorDiv.style.transition = 'opacity 0.5s ease-out';
+                    errorDiv.style.opacity = '0';
+                    setTimeout(() => {
+                        errorDiv.classList.add('hidden');
+                        errorDiv.style.opacity = '';
+                        errorDiv.style.transition = '';
+                    }, 500);
+                } else {
+                    successDiv.style.transition = 'opacity 0.5s ease-out';
+                    successDiv.style.opacity = '0';
+                    setTimeout(() => {
+                        successDiv.classList.add('hidden');
+                        successDiv.style.opacity = '';
+                        successDiv.style.transition = '';
+                    }, 500);
+                }
+            }, 5000);
+
+            // Scroll to message if it's not visible
+            const messageElement = type === 'error' ? errorDiv : successDiv;
+            const rect = messageElement.getBoundingClientRect();
+            if (rect.top < 0 || rect.bottom > window.innerHeight) {
+                messageElement.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+            }
+        }
+
+        // Load centers from API for the dropdown
+        async function loadCenters() {
+            const centerSelect = document.getElementById('preferredCenter');
+            
+            try {
+                // Show loading state
+                centerSelect.innerHTML = '<option value="">Loading centers...</option>';
+                
+                // Try multiple endpoints
+                let response;
+                try {
+                    response = await fetch('api/public/centers-list.php', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                } catch (e) {
+                    // Fallback to test-centers
+                    response = await fetch('api/test-centers.php', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                }
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success && result.data && Array.isArray(result.data)) {
+                    // Clear loading option
+                    centerSelect.innerHTML = '<option value="">Select a Center/Wiirtuu</option>';
+                    
+                    // Add centers to dropdown
+                    result.data.forEach(center => {
+                        const option = document.createElement('option');
+                        option.value = center.id;
+                        option.textContent = `${center.name} - ${center.location || center.city || 'Location not specified'}`;
+                        centerSelect.appendChild(option);
+                    });
+                    
+                    console.log(`Loaded ${result.data.length} centers successfully`);
+                } else {
+                    // Handle case where API returns success but no data
+                    centerSelect.innerHTML = '<option value="">No centers available</option>';
+                    console.warn('Centers API returned success but no data:', result);
+                }
+                
+            } catch (error) {
+                console.error('Error loading centers:', error);
+                
+                // Fallback: Add some default centers
+                centerSelect.innerHTML = `
+                    <option value="">Select a Center/Wiirtuu</option>
+                    <option value="addis_ababa">Wiirtuu Muummee</option>
+                    <option value="oromia">Wiirtuu Laga Xaafoo</option>
+                    <option value="amhara">Wiirtuu Sabbataa</option>
+                    <option value="other">Other Center</option>
+                `;
+                
+                // Show error message to user
+                showMessage('Could not load centers list. Using default options.', 'error');
+            }
+        }
+
+        // Copy Member ID from form field
+        function copyMemberIdFromForm() {
+            const memberIdInput = document.getElementById('userMemberId');
+            const memberId = memberIdInput.value;
+            
+            if (memberId && memberId.trim() !== '') {
+                navigator.clipboard.writeText(memberId).then(function() {
+                    // Show success feedback
+                    const button = event.target.closest('.copy-member-id-btn');
+                    const originalHTML = button.innerHTML;
+                    button.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/></svg>';
+                    button.style.background = '#059669';
+                    
+                    showMessage('Member ID copied to clipboard! ✨', 'success');
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.style.background = '';
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Could not copy text: ', err);
+                    showMessage('Failed to copy Member ID. Please copy it manually.', 'error');
+                });
+            } else {
+                showMessage('No Member ID available to copy.', 'error');
+            }
+        }
+    </script>
+
+    <!-- Photo Upload Integration -->
+    <script src="js/member-photo-handler.js"></script>
+    <script src="fix-photo-upload-complete-system.js"></script>
+    <script>
+    // Add photo upload to form submission
+    const originalHandleFormSubmit = window.handleFormSubmit;
+    window.handleFormSubmit = async function(e) {
+        if (originalHandleFormSubmit) {
+            const result = await originalHandleFormSubmit(e);
+            
+            if (result && result.success && result.data.member_record_id) {
+                console.log('[Registration] Form submitted successfully, member_record_id:', result.data.member_record_id);
+                
+                // Upload photo if selected
+                const photoInput = document.getElementById('memberPhoto');
+                if (photoInput && photoInput.files.length > 0) {
+                    console.log('[Registration] Photo selected, uploading...');
+                    try {
+                        const photoResult = await photoHandler.uploadPhoto(
+                            photoInput.files[0],
+                            null, // memberId
+                            null, // userId
+                            result.data.member_record_id, // memberRecordId
+                            true  // isRegistration
+                        );
+                        console.log('[Registration] Photo uploaded successfully:', photoResult);
+                        
+                        // Show success message
+                        if (window.showMessage) {
+                            showMessage('✅ Registration and photo upload completed successfully!', 'success');
+                        }
+                    } catch (photoError) {
+                        console.error('[Registration] Photo upload failed:', photoError);
+                        if (window.showMessage) {
+                            showMessage('⚠️ Registration completed but photo upload failed: ' + photoError.message, 'warning');
+                        }
+                    }
+                } else {
+                    console.log('[Registration] No photo selected');
+                }
+            }
+            
+            return result;
+        }
+    };
+    </script>
+</body>
+</html>
