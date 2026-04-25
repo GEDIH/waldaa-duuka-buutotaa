@@ -1330,6 +1330,14 @@
                 window.location.href = 'member-login.html';
                 return;
             }
+            // Membership form guard — redirect if form not yet completed
+            const membershipComplete = localStorage.getItem('wdb_membership_form_complete');
+            const pendingMemberId = localStorage.getItem('wdb_pending_member_id');
+            if (membershipComplete === 'false' || (membershipComplete === null && pendingMemberId)) {
+                const mid = pendingMemberId || '';
+                window.location.href = 'wdb-membership-form.html?member_id=' + encodeURIComponent(mid) + '&new_registration=true';
+                return;
+            }
             loadMemberData();
             loadRecentAnnouncements();
             renderContributions();
