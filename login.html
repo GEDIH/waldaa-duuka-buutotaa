@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -566,7 +566,7 @@
                 <p class="text-sm text-gray-600 mb-3">
                     Don't have an account yet?
                 </p>
-                <a href="register.html" class="register-highlight">
+                <a href="member-registration.html" class="register-highlight">
                     🚀 Register New Member
                 </a>
                 <p class="text-xs text-gray-500 mt-4">
@@ -583,14 +583,13 @@
             try {
                 const user = JSON.parse(userData);
                 if (user.role === 'superadmin') {
-                    window.location.href = 'superadmin-dashboard.html';
+                    window.location.href = 'system-administrator-dashboard.html';
                 } else if (user.role === 'admin') {
                     window.location.href = 'admin-dashboard.html';
                 } else if (user.role === 'user') {
                     window.location.href = 'member-dashboard.html';
                 }
             } catch (e) {
-                // Invalid stored data, clear it
                 localStorage.removeItem('wdb_user');
                 localStorage.removeItem('wdb_csrf_token');
                 localStorage.removeItem('wdb_permissions');
@@ -626,5 +625,11 @@
         });
     </script>
     <script src="js/wdb-ai-assistant.js"></script>
+
+    <!-- Back to website navigation -->
+    <div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:1000;display:flex;gap:12px;">
+        <a href="index.html" style="background:rgba(255,255,255,0.9);color:#1a3b5c;padding:8px 18px;border-radius:20px;font-size:0.82rem;font-weight:600;text-decoration:none;box-shadow:0 4px 15px rgba(0,0,0,0.15);"> WDB Website</a>
+        <a href="portal.html" style="background:rgba(212,175,55,0.9);color:#1a3b5c;padding:8px 18px;border-radius:20px;font-size:0.82rem;font-weight:600;text-decoration:none;box-shadow:0 4px 15px rgba(0,0,0,0.15);"> Portal</a>
+    </div>
 </body>
 </html>
