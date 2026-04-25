@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - WDB Management System</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Instant Auth Fix Script -->
+    <script src="instant-fix-admin-auth.js"></script>
+    
+        <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --darker: #0f172a;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .stat-card:hover::before {
+            left: 100%;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .stat-card:active {
+            transform: translateY(-4px) scale(1.01);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .activity-item {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .activity-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: #6366f1;
+            padding-left: 1rem;
+        }
+        
+        .quick-action-btn {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .quick-action-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .quick-action-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        
+        .loading-spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-success { background: #10b981; color: white; }
+        .badge-warning { background: #f59e0b; color: white; }
+        .badge-danger { background: #ef4444; color: white; }
+        .badge-info { background: #3b82f6; color: white; }
+        
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .stat-card {
+                margin-bottom: 1rem;
+            }
+            
+            .chart-container {
+                height: 250px;
+            }
+            
+            /* Enhanced Modal responsive adjustments */
+            #addContributionModal .bg-white {
+                max-width: 95vw;
+                max-height: 95vh;
+                margin: 0.5rem;
+            }
+            
+            #addContributionModal .p-6 {
+                padding: 1rem;
+            }
+            
+            #addContributionModal .px-6 {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            /* Ensure buttons are always visible on mobile */
+            #addContributionModal .flex-col .bg-gray-50 {
+                position: sticky;
+                bottom: 0;
+                z-index: 10;
+            }
+        }
+        
+        @media (max-height: 600px) {
+            /* For very short screens */
+            #addContributionModal .bg-white {
+                max-height: 95vh;
+            }
+            
+            /* Reduce padding on short screens */
+            #addContributionModal .p-4 {
+                padding: 0.75rem;
+            }
+            
+            #addContributionModal .space-y-4 > * + * {
+                margin-top: 0.75rem;
+            }
+        }
+        
+        @media (max-height: 480px) {
+            /* For extremely short screens (landscape phones) */
+            #addContributionModal .bg-white {
+                max-height: 98vh;
+                margin: 0.25rem;
+            }
+            
+            #addContributionModal .p-4 {
+                padding: 0.5rem;
+            }
+            
+            #addContributionModal .py-3 {
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+            
+            #addContributionModal .space-y-4 > * + * {
+                margin-top: 0.5rem;
+            }
+        }
+        
+        /* Modal specific improvements */
+        #addContributionModal {
+            /* Ensure modal is always centered */
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #addContributionModal .bg-white {
+            /* Prevent modal from being too tall */
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #addContributionModal .overflow-y-auto {
+            /* Ensure scrollable area works properly */
+            flex: 1 1 0%;
+            min-height: 0;
+        }
+        
+        /* Button visibility improvements */
+        #addContributionModal .bg-gray-50 {
+            /* Ensure footer is always visible */
+            flex-shrink: 0;
+            background-color: rgba(249, 250, 251, 0.95);
+            backdrop-filter: blur(4px);
+        }
+        
+        /* Notification toast */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+            animation: slideInRight 0.3s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/announcement-widget.css">
+</head>
+<body class="font-sans">
+    <!-- Top Navigation -->
+    <nav class="glass-card text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <i class="fas fa-church text-2xl"></i>
+                <div>
+                    <h1 class="text-xl font-bold">WDB Admin Dashboard</h1>
+                    <p class="text-sm opacity-75">Administrator Panel</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-right">
+                    <p class="font-semibold" id="adminName">Admin User</p>
+                    <p class="text-xs opacity-75" id="adminRole">ADMINISTRATOR</p>
+                </div>
+                <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto p-6">
+        <!-- Analytics Integration Section -->
+        <div id="analytics-widgets-container" class="mb-6">
+            <!-- Analytics widgets will be dynamically loaded here -->
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            <!-- Centers Card -->
+            <div onclick="window.location.href='admin-center-management.html'" class="stat-card glass-card rounded-xl p-6 text-white">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="bg-blue-500 p-3 rounded-lg">
+                        <i class="fas fa-building text-2xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="centersCount">0</span>
+                </div>
+                <h3 class="text-lg font-semibold">Centers</h3>
+                <p class="text-sm opacity-75">Active centers</p>
+            </div>
+
+            <!-- Members Card -->
+            <div onclick="window.location.href='admin-members-management.html'" class="stat-card glass-card rounded-xl p-6 text-white">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="bg-green-500 p-3 rounded-lg">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="membersCount">0</span>
+                </div>
+                <h3 class="text-lg font-semibold">Members</h3>
+                <p class="text-sm opacity-75">Total members</p>
+            </div>
+
+            <!-- Contributions Card -->
+            <div onclick="window.location.href='admin-contributions-management.html'" class="stat-card glass-card rounded-xl p-6 text-white">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="bg-purple-500 p-3 rounded-lg">
+                        <i class="fas fa-hand-holding-usd text-2xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="contributionsCount">0</span>
+                </div>
+                <h3 class="text-lg font-semibold">Contributions</h3>
+                <p class="text-sm opacity-75">This month</p>
+            </div>
+
+            <!-- Announcements Card -->
+            <div onclick="alert('Announcements management coming soon!')" class="stat-card glass-card rounded-xl p-6 text-white">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="bg-yellow-500 p-3 rounded-lg">
+                        <i class="fas fa-bullhorn text-2xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="announcementsCount">0</span>
+                </div>
+                <h3 class="text-lg font-semibold">Announcements</h3>
+                <p class="text-sm opacity-75">Active</p>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="glass-card rounded-xl p-6 text-white mb-6">
+            <h2 class="text-2xl font-bold mb-4">
+                <i class="fas fa-bolt mr-2"></i>Quick Actions
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <button onclick="showSection('centers')" class="bg-blue-500 hover:bg-blue-600 p-4 rounded-lg transition">
+                    <i class="fas fa-building text-3xl mb-2"></i>
+                    <p class="font-semibold">Manage Centers</p>
+                </button>
+                <button onclick="showSection('members')" class="bg-green-500 hover:bg-green-600 p-4 rounded-lg transition">
+                    <i class="fas fa-users text-3xl mb-2"></i>
+                    <p class="font-semibold">Manage Members</p>
+                </button>
+                <button onclick="showSection('contributions')" class="bg-purple-500 hover:bg-purple-600 p-4 rounded-lg transition">
+                    <i class="fas fa-hand-holding-usd text-3xl mb-2"></i>
+                    <p class="font-semibold">View Contributions</p>
+                </button>
+                <button onclick="showSection('announcements')" class="bg-yellow-500 hover:bg-yellow-600 p-4 rounded-lg transition">
+                    <i class="fas fa-bullhorn text-3xl mb-2"></i>
+                    <p class="font-semibold">Announcements</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Sections -->
+        <div id="contentArea" class="glass-card rounded-xl p-6 text-white">
+                        <div id="welcomeSection">
+                <h2 class="text-3xl font-bold mb-2">Welcome back, <span id="adminNameDisplay">Administrator</span>! 👋</h2>
+                <p class="text-lg opacity-90 mb-6">Here's what's happening with your centers today.</p>
+                
+                <!-- Quick Stats Row -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="bg-white bg-opacity-10 rounded-lg p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm opacity-75">Today's Contributions</p>
+                                <p class="text-2xl font-bold" id="todayContributions">ETB 0</p>
+                            </div>
+                            <i class="fas fa-money-bill-wave text-3xl opacity-50"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white bg-opacity-10 rounded-lg p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm opacity-75">Active Members</p>
+                                <p class="text-2xl font-bold" id="activeMembers">0</p>
+                            </div>
+                            <i class="fas fa-user-check text-3xl opacity-50"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white bg-opacity-10 rounded-lg p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm opacity-75">Pending Actions</p>
+                                <p class="text-2xl font-bold" id="pendingActions">0</p>
+                            </div>
+                            <i class="fas fa-clock text-3xl opacity-50"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white bg-opacity-10 rounded-lg p-6">
+                        <h3 class="text-xl font-semibold mb-4">
+                            <i class="fas fa-chart-line mr-2"></i>Contributions Trend
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="contributionsChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white bg-opacity-10 rounded-lg p-6">
+                        <h3 class="text-xl font-semibold mb-4">
+                            <i class="fas fa-chart-pie mr-2"></i>Members by Status
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="membersChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment Methods Section -->
+                <div class="bg-white bg-opacity-10 rounded-lg p-6 mb-8">
+                    <div id="adminPaymentMethodsContainer" data-payment-methods-widget="true" data-show-title="true" data-show-description="true" data-show-fees="true" data-show-limits="true" data-compact="true"></div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="mt-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-semibold">
+                            <i class="fas fa-history mr-2"></i>Recent Activity
+                        </h3>
+                        <button onclick="refreshActivity()" class="text-sm bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1 rounded transition">
+                            <i class="fas fa-sync-alt mr-1"></i>Refresh
+                        </button>
+                    </div>
+                    <div class="space-y-3" id="recentActivity">
+                        <div class="flex items-center justify-center py-8">
+                            <div class="loading-spinner"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+
+            <!-- Centers Section -->
+            <div id="centersSection" class="hidden">
+                <h2 class="text-2xl font-bold mb-4">
+                    <i class="fas fa-building mr-2"></i>Centers Management
+                </h2>
+                <p class="mb-4">Manage church centers and their information.</p>
+                <button onclick="window.location.href='admin-center-management.html'" class="bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-lg transition">
+                    <i class="fas fa-external-link-alt mr-2"></i>Open Centers Management
+                </button>
+            </div>
+
+            <!-- Members Section -->
+            <div id="membersSection" class="hidden">
+                <h2 class="text-2xl font-bold mb-4">
+                    <i class="fas fa-users mr-2"></i>Members Management
+                </h2>
+                <p class="mb-4">View and manage church members.</p>
+                <button onclick="window.location.href='admin-members-management.html'" class="bg-green-500 hover:bg-green-600 px-6 py-3 rounded-lg transition">
+                    <i class="fas fa-users mr-2"></i>Manage Members
+                </button>
+            </div>
+
+            <!-- Contributions Section -->
+            <div id="contributionsSection" class="hidden">
+                <h2 class="text-2xl font-bold mb-4">
+                    <i class="fas fa-hand-holding-usd mr-2"></i>Contributions Management
+                </h2>
+                
+                <!-- Quick Actions -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <button onclick="openAddContributionModal()" class="bg-green-500 hover:bg-green-600 p-4 rounded-lg transition text-white">
+                        <i class="fas fa-plus text-2xl mb-2"></i>
+                        <p class="font-semibold">Add Contribution</p>
+                    </button>
+                    <button onclick="window.location.href='admin-contributions-management.html'" class="bg-purple-500 hover:bg-purple-600 p-4 rounded-lg transition text-white">
+                        <i class="fas fa-list text-2xl mb-2"></i>
+                        <p class="font-semibold">View All</p>
+                    </button>
+                    <button onclick="window.location.href='admin-contributions-management-enhanced.html'" class="bg-blue-500 hover:bg-blue-600 p-4 rounded-lg transition text-white">
+                        <i class="fas fa-chart-bar text-2xl mb-2"></i>
+                        <p class="font-semibold">Advanced Analytics</p>
+                    </button>
+                    <button onclick="exportContributions()" class="bg-orange-500 hover:bg-orange-600 p-4 rounded-lg transition text-white">
+                        <i class="fas fa-download text-2xl mb-2"></i>
+                        <p class="font-semibold">Export Data</p>
+                    </button>
+                </div>
+
+                <!-- Recent Contributions Table -->
+                <div class="bg-white bg-opacity-10 rounded-lg p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold">Recent Contributions</h3>
+                        <div class="flex space-x-2">
+                            <select id="contributionCenterFilter" class="bg-white bg-opacity-20 text-white rounded px-3 py-1">
+                                <option value="">All Centers</option>
+                            </select>
+                            <button onclick="refreshContributions()" class="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1 rounded transition">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="border-b border-white border-opacity-20">
+                                    <th class="pb-2">Member</th>
+                                    <th class="pb-2">Amount</th>
+                                    <th class="pb-2">Date</th>
+                                    <th class="pb-2">Status</th>
+                                    <th class="pb-2">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="contributionsTableBody">
+                                <tr>
+                                    <td colspan="5" class="text-center py-4">
+                                        <div class="loading-spinner mx-auto"></div>
+                                        <p class="mt-2">Loading contributions...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-4 flex justify-between items-center">
+                        <p class="text-sm opacity-75">Showing recent contributions</p>
+                        <button onclick="window.location.href='admin-contributions-management.html'" class="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded transition">
+                            View All Contributions
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Contribution Modal -->
+            <div id="addContributionModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-2 sm:p-4">
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md sm:max-w-lg max-h-[95vh] sm:max-h-[90vh] flex flex-col mx-2 sm:mx-0">
+                    <!-- Modal Header -->
+                    <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 sm:p-6 rounded-t-2xl flex-shrink-0">
+                        <h3 class="text-lg sm:text-xl font-bold">Add New Contribution</h3>
+                    </div>
+                    
+                    <!-- Modal Body - Scrollable -->
+                    <div class="p-4 sm:p-6 overflow-y-auto flex-1 min-h-0">
+                        <form id="addContributionForm" class="space-y-4">
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Member *</label>
+                                <select id="contributionMember" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-green-500 text-sm" required>
+                                    <option value="">Select Member</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Title *</label>
+                                <input type="text" id="contributionTitle" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-green-500 text-sm" placeholder="e.g., Monthly Tithe, Special Offering" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Type *</label>
+                                <select id="contributionType" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-green-500 text-sm" required>
+                                    <option value="">Select Type</option>
+                                    <option value="financial">Financial</option>
+                                    <option value="material">Material</option>
+                                    <option value="service">Service</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Amount (ETB) *</label>
+                                <input type="number" id="contributionAmount" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-green-500 text-sm" step="0.01" min="0.01" max="999999.99" placeholder="0.00" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Date *</label>
+                                <input type="date" id="contributionDate" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-green-500 text-sm" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Payment Method *</label>
+                                <select id="contributionPaymentMethod" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-green-500 text-sm" required>
+                                    <option value="">Select Payment Method</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="bank_transfer">Bank Transfer</option>
+                                    <option value="mobile_money">Mobile Money</option>
+                                    <option value="check">Check</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Payment Status *</label>
+                                <select id="contributionStatus" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-green-500 text-sm" required>
+                                    <option value="pending">Pending</option>
+                                    <option value="confirmed">Confirmed</option>
+                                    <option value="partial">Partial</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Description</label>
+                                <textarea id="contributionDescription" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-green-500 text-sm" rows="2" placeholder="Optional description"></textarea>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Notes</label>
+                                <textarea id="contributionNotes" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-green-500 text-sm" rows="2" placeholder="Optional notes"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Modal Footer - Always Visible -->
+                    <div class="bg-gray-50 px-4 sm:px-6 py-3 sm:py-4 rounded-b-2xl flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 flex-shrink-0 border-t">
+                        <button onclick="closeAddContributionModal()" class="w-full sm:w-auto px-4 sm:px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition font-medium text-sm order-2 sm:order-1">
+                            Cancel
+                        </button>
+                        <button onclick="saveContribution()" class="w-full sm:w-auto px-4 sm:px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-medium text-sm order-1 sm:order-2">
+                            <i class="fas fa-save mr-2"></i>Save Contribution
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Announcements Section -->
+            <div id="announcementsSection" class="hidden">
+                <h2 class="text-2xl font-bold mb-4">
+                    <i class="fas fa-bullhorn mr-2"></i>Announcements
+                </h2>
+                <p class="mb-4">Create and manage church announcements.</p>
+                <button onclick="alert('Announcements management coming soon!')" class="bg-yellow-500 hover:bg-yellow-600 px-6 py-3 rounded-lg transition">
+                    <i class="fas fa-plus mr-2"></i>Create Announcement
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        const userData = localStorage.getItem('wdb_user');
+        if (!userData) {
+            window.location.href = 'admin-login.html';
+        }
+
+        let currentUser;
+        try {
+            currentUser = JSON.parse(userData);
+            document.getElementById('adminName').textContent = currentUser.full_name || currentUser.username;
+            document.getElementById('adminRole').textContent = currentUser.role.toUpperCase();
+        } catch (e) {
+            window.location.href = 'admin-login.html';
+        }
+
+        // Load dashboard stats
+        async function loadStats() {
+            try {
+                // Load centers count (admin sees only their assigned centers)
+                const centersResponse = await fetch('api/admin/centers.php');
+                if (centersResponse.ok) {
+                    const centersData = await centersResponse.json();
+                    document.getElementById('centersCount').textContent = centersData.count || 0;
+                }
+
+                // Load members count (filtered by admin's assigned centers)
+                const membersResponse = await fetch('api/admin/center-members.php?action=stats');
+                if (membersResponse.ok) {
+                    const membersData = await membersResponse.json();
+                    if (membersData.success && membersData.data) {
+                        document.getElementById('membersCount').textContent = membersData.data.total_members || 0;
+                    }
+                }
+
+                // Load contributions count (filtered by admin's assigned centers)
+                const contributionsResponse = await fetch('api/admin/center-contributions.php?action=stats');
+                if (contributionsResponse.ok) {
+                    const contributionsData = await contributionsResponse.json();
+                    if (contributionsData.success && contributionsData.data) {
+                        document.getElementById('contributionsCount').textContent = contributionsData.data.total_count || 0;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Show section
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('#contentArea > div').forEach(div => {
+                div.classList.add('hidden');
+            });
+
+            // Show selected section
+            document.getElementById(section + 'Section').classList.remove('hidden');
+        }
+
+        // Logout handled by modal system below
+
+        // Load stats on page load
+        loadStats();
+    </script>
+    <script>
+        // Enhanced Dashboard JavaScript
+        let contributionsChart = null;
+        let membersChart = null;
+        let refreshInterval = null;
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAdminInfo();
+            loadDashboardStats();
+            loadRecentActivity();
+            initializeCharts();
+            startAutoRefresh();
+        });
+        
+        // Load admin information
+        async function loadAdminInfo() {
+            try {
+                const response = await fetch('api/auth/session.php');
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    document.getElementById('adminName').textContent = result.data.full_name || 'Admin User';
+                    document.getElementById('adminNameDisplay').textContent = result.data.full_name || 'Administrator';
+                    document.getElementById('adminRole').textContent = (result.data.role || 'ADMINISTRATOR').toUpperCase();
+                }
+            } catch (error) {
+                console.error('Error loading admin info:', error);
+            }
+        }
+        
+        // Load dashboard statistics
+        async function loadDashboardStats() {
+            try {
+                // Load centers count
+                const centersResponse = await fetch('api/admin/centers-simple-working.php?action=list');
+                const centersResult = await centersResponse.json();
+                if (centersResult.success) {
+                    document.getElementById('centersCount').textContent = centersResult.data?.length || 0;
+                }
+                
+                // Load members count
+                const membersResponse = await fetch('api/admin/center-members.php?action=list');
+                const membersResult = await membersResponse.json();
+                if (membersResult.success) {
+                    const members = membersResult.data || [];
+                    document.getElementById('membersCount').textContent = members.length;
+                    
+                    // Count active members
+                    const activeCount = members.filter(m => m.status === 'active').length;
+                    document.getElementById('activeMembers').textContent = activeCount;
+                }
+                
+                // Load contributions
+                const contribResponse = await fetch('api/admin/center-contributions.php?action=list');
+                const contribResult = await contribResponse.json();
+                if (contribResult.success) {
+                    const contributions = contribResult.data || [];
+                    document.getElementById('contributionsCount').textContent = contributions.length;
+                    
+                    // Calculate today's contributions
+                    const today = new Date().toISOString().split('T')[0];
+                    const todayContribs = contributions.filter(c => 
+                        (c.contribution_date || c.created_at || '').startsWith(today)
+                    );
+                    const todayTotal = todayContribs.reduce((sum, c) => sum + parseFloat(c.amount || 0), 0);
+                    document.getElementById('todayContributions').textContent = 
+                        `ETB ${todayTotal.toLocaleString(undefined, {maximumFractionDigits: 2})}`;
+                    
+                    // Update charts with real data
+                    updateContributionsChart(contributions);
+                }
+                
+                // Calculate pending actions (example: pending members)
+                const pendingCount = 0; // You can calculate based on your logic
+                document.getElementById('pendingActions').textContent = pendingCount;
+                
+            } catch (error) {
+                console.error('Error loading dashboard stats:', error);
+            }
+        }
+        
+        // Initialize charts
+        function initializeCharts() {
+            // Contributions Trend Chart
+            const contribCtx = document.getElementById('contributionsChart');
+            if (contribCtx) {
+                contributionsChart = new Chart(contribCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Contributions (ETB)',
+                            data: [0, 0, 0, 0, 0, 0, 0],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: { 
+                                beginAtZero: true,
+                                ticks: { color: 'white' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            },
+                            x: { 
+                                ticks: { color: 'white' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Members Status Chart
+            const membersCtx = document.getElementById('membersChart');
+            if (membersCtx) {
+                membersChart = new Chart(membersCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Active', 'Pending', 'Inactive'],
+                        datasets: [{
+                            data: [0, 0, 0],
+                            backgroundColor: ['#10b981', '#f59e0b', '#ef4444']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: 'white' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+        // Update contributions chart with real data
+        function updateContributionsChart(contributions) {
+            if (!contributionsChart) return;
+            
+            // Get last 7 days
+            const days = [];
+            const amounts = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                days.push(date.toLocaleDateString('en-US', { weekday: 'short' }));
+                
+                const dayContribs = contributions.filter(c => 
+                    (c.contribution_date || c.created_at || '').startsWith(dateStr)
+                );
+                const dayTotal = dayContribs.reduce((sum, c) => sum + parseFloat(c.amount || 0), 0);
+                amounts.push(dayTotal);
+            }
+            
+            contributionsChart.data.labels = days;
+            contributionsChart.data.datasets[0].data = amounts;
+            contributionsChart.update();
+        }
+        
+        // Load recent activity
+        async function loadRecentActivity() {
+            const activityDiv = document.getElementById('recentActivity');
+            
+            try {
+                // Simulate recent activity (you can fetch from API)
+                const activities = [
+                    { icon: 'fa-user-plus', text: 'New member registered', time: '5 minutes ago', type: 'success' },
+                    { icon: 'fa-money-bill', text: 'Contribution received', time: '15 minutes ago', type: 'info' },
+                    { icon: 'fa-edit', text: 'Member profile updated', time: '1 hour ago', type: 'warning' },
+                    { icon: 'fa-check-circle', text: 'Contribution confirmed', time: '2 hours ago', type: 'success' }
+                ];
+                
+                activityDiv.innerHTML = activities.map(activity => `
+                    <div class="activity-item flex items-center justify-between p-3 rounded-lg transition">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-${activity.type === 'success' ? 'green' : activity.type === 'warning' ? 'yellow' : 'blue'}-500 flex items-center justify-center">
+                                <i class="fas ${activity.icon}"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium">${activity.text}</p>
+                                <p class="text-sm opacity-75">${activity.time}</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-${activity.type}">${activity.type}</span>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error loading activity:', error);
+                activityDiv.innerHTML = '<p class="opacity-75 text-center py-4">Unable to load recent activity</p>';
+            }
+        }
+        
+        // Refresh activity
+        function refreshActivity() {
+            const btn = event.target.closest('button');
+            btn.querySelector('i').classList.add('fa-spin');
+            
+            loadRecentActivity().then(() => {
+                setTimeout(() => {
+                    btn.querySelector('i').classList.remove('fa-spin');
+                    showToast('Activity refreshed!', 'success');
+                }, 500);
+            });
+        }
+        
+        // Auto-refresh every 5 minutes
+        function startAutoRefresh() {
+            refreshInterval = setInterval(() => {
+                loadDashboardStats();
+                loadRecentActivity();
+            }, 300000); // 5 minutes
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast glass-card rounded-lg p-4 text-white`;
+            toast.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} text-xl"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        // Show section function
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('[id$="Section"]').forEach(el => el.classList.add('hidden'));
+            
+            // Show selected section
+            const sectionEl = document.getElementById(section + 'Section');
+            if (sectionEl) {
+                sectionEl.classList.remove('hidden');
+                sectionEl.classList.add('slide-in');
+                
+                // Load section-specific data
+                if (section === 'contributions') {
+                    loadContributionsData();
+                }
+            }
+        }
+        
+        // ===== CONTRIBUTIONS CRUD FUNCTIONS =====
+        
+        // Open Add Contribution Modal
+        async function openAddContributionModal() {
+            const modal = document.getElementById('addContributionModal');
+            
+            // Load members for the dropdown
+            await loadMembersForContribution();
+            
+            // Set default date to today
+            document.getElementById('contributionDate').value = new Date().toISOString().split('T')[0];
+            
+            // Show modal
+            modal.classList.remove('hidden');
+            
+            // Focus on first input
+            setTimeout(() => {
+                document.getElementById('contributionMember').focus();
+            }, 100);
+        }
+        
+        // Close Add Contribution Modal
+        function closeAddContributionModal() {
+            const modal = document.getElementById('addContributionModal');
+            modal.classList.add('hidden');
+            
+            // Reset form
+            document.getElementById('addContributionForm').reset();
+            
+            // Reset modal to "Add" mode
+            const title = modal.querySelector('h3');
+            const saveBtn = modal.querySelector('button[onclick*="Contribution"]');
+            
+            title.textContent = 'Add New Contribution';
+            saveBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Save Contribution';
+            saveBtn.setAttribute('onclick', 'saveContribution()');
+            
+            // Set default values
+            document.getElementById('contributionType').value = 'financial';
+            document.getElementById('contributionPaymentMethod').value = 'cash';
+            document.getElementById('contributionStatus').value = 'pending';
+        }
+        
+        // Load members for contribution dropdown
+        async function loadMembersForContribution() {
+            try {
+                const response = await fetch('api/admin/center-members.php?action=list');
+                const result = await response.json();
+                
+                const select = document.getElementById('contributionMember');
+                select.innerHTML = '<option value="">Select Member</option>';
+                
+                if (result.success && result.data) {
+                    result.data.forEach(member => {
+                        const option = document.createElement('option');
+                        option.value = member.id;
+                        option.textContent = `${member.full_name} (${member.member_id})`;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading members:', error);
+                showToast('Error loading members', 'error');
+            }
+        }
+        
+        // Save Contribution
+        async function saveContribution() {
+            const form = document.getElementById('addContributionForm');
+            
+            // Validate form
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const formData = {
+                member_id: parseInt(document.getElementById('contributionMember').value),
+                title: document.getElementById('contributionTitle').value.trim(),
+                description: document.getElementById('contributionDescription').value.trim() || null,
+                type: document.getElementById('contributionType').value,
+                amount: parseFloat(document.getElementById('contributionAmount').value),
+                contribution_date: document.getElementById('contributionDate').value,
+                payment_method: document.getElementById('contributionPaymentMethod').value,
+                payment_status: document.getElementById('contributionStatus').value,
+                notes: document.getElementById('contributionNotes').value.trim() || null
+            };
+            
+            console.log('Saving contribution with data:', formData);
+            
+            try {
+                const response = await fetch('api/admin/center-contributions.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                console.log('Save response status:', response.status, response.statusText);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const responseText = await response.text();
+                console.log('Save response text:', responseText);
+                
+                if (!responseText || responseText.trim() === '') {
+                    throw new Error('Empty response from server');
+                }
+                
+                let result;
+                try {
+                    result = JSON.parse(responseText);
+                } catch (jsonError) {
+                    console.error('JSON parse error:', jsonError);
+                    throw new Error('Invalid JSON response: ' + responseText.substring(0, 100));
+                }
+                
+                console.log('Save result:', result);
+                
+                if (result.success) {
+                    showToast('Contribution added successfully!', 'success');
+                    closeAddContributionModal();
+                    refreshContributions();
+                    loadDashboardStats(); // Refresh stats
+                } else {
+                    throw new Error(result.error || result.message || 'Save failed');
+                }
+            } catch (error) {
+                console.error('Error saving contribution:', error);
+                showToast('Error saving contribution: ' + error.message, 'error');
+            }
+        }
+        
+        // Refresh Contributions
+        async function refreshContributions() {
+            const tableBody = document.getElementById('contributionsTableBody');
+            const centerFilter = document.getElementById('contributionCenterFilter');
+            
+            // Show loading
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center py-4">
+                        <div class="loading-spinner mx-auto"></div>
+                        <p class="mt-2">Loading contributions...</p>
+                    </td>
+                </tr>
+            `;
+            
+            try {
+                console.log('Fetching contributions from API...');
+                const response = await fetch('api/admin/center-contributions.php?action=list&limit=10');
+                console.log('Response status:', response.status, response.statusText);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const responseText = await response.text();
+                console.log('Raw response:', responseText);
+                
+                if (!responseText || responseText.trim() === '') {
+                    throw new Error('Empty response from server');
+                }
+                
+                let result;
+                try {
+                    result = JSON.parse(responseText);
+                } catch (jsonError) {
+                    console.error('JSON parse error:', jsonError);
+                    throw new Error('Invalid JSON response: ' + responseText.substring(0, 100));
+                }
+                
+                console.log('Parsed result:', result);
+                
+                if (result.success && result.data) {
+                    const contributions = result.data;
+                    
+                    if (contributions.length === 0) {
+                        tableBody.innerHTML = `
+                            <tr>
+                                <td colspan="5" class="text-center py-8 opacity-75">
+                                    <i class="fas fa-inbox text-4xl mb-2"></i>
+                                    <p>No contributions found</p>
+                                </td>
+                            </tr>
+                        `;
+                    } else {
+                        tableBody.innerHTML = contributions.map(contrib => `
+                            <tr class="border-b border-white border-opacity-10 hover:bg-white hover:bg-opacity-5">
+                                <td class="py-3">
+                                    <div>
+                                        <p class="font-semibold">${contrib.member_name || 'Unknown'}</p>
+                                        <p class="text-sm opacity-75">${contrib.member_id || contrib.member_code || ''}</p>
+                                    </div>
+                                </td>
+                                <td class="py-3">
+                                    <span class="font-bold">ETB ${parseFloat(contrib.amount || 0).toLocaleString()}</span>
+                                </td>
+                                <td class="py-3">
+                                    <span class="text-sm">${new Date(contrib.contribution_date || contrib.created_at).toLocaleDateString()}</span>
+                                </td>
+                                <td class="py-3">
+                                    <span class="badge badge-${contrib.payment_status === 'paid' ? 'success' : contrib.payment_status === 'pending' ? 'warning' : 'danger'}">
+                                        ${contrib.payment_status || contrib.status || 'unknown'}
+                                    </span>
+                                </td>
+                                <td class="py-3">
+                                    <div class="flex space-x-2">
+                                        <button onclick="editContribution(${contrib.id})" class="text-blue-400 hover:text-blue-300" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button onclick="deleteContribution(${contrib.id})" class="text-red-400 hover:text-red-300" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('');
+                    }
+                } else {
+                    throw new Error(result.error || result.message || 'API returned success=false');
+                }
+            } catch (error) {
+                console.error('Error loading contributions:', error);
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center py-8 text-red-400">
+                            <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+                            <p>Error loading contributions</p>
+                            <p class="text-sm mt-1">${error.message}</p>
+                        </td>
+                    </tr>
+                `;
+                showToast('Error loading contributions: ' + error.message, 'error');
+            }
+        }
+        
+        // Export Contributions
+        async function exportContributions() {
+            try {
+                showToast('Preparing export...', 'info');
+                
+                const response = await fetch('api/admin/center-contributions.php?action=export&format=csv');
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `contributions_export_${new Date().toISOString().split('T')[0]}.csv`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                    
+                    showToast('Export completed successfully!', 'success');
+                } else {
+                    throw new Error('Export failed');
+                }
+            } catch (error) {
+                console.error('Error exporting contributions:', error);
+                showToast('Error exporting contributions', 'error');
+            }
+        }
+        
+        // Load contributions data when section is shown
+        async function loadContributionsData() {
+            await refreshContributions();
+            await loadCentersForFilter();
+        }
+        
+        // Load centers for filter dropdown
+        async function loadCentersForFilter() {
+            try {
+                const response = await fetch('api/admin/centers-simple-working.php?action=list');
+                const result = await response.json();
+                
+                const select = document.getElementById('contributionCenterFilter');
+                select.innerHTML = '<option value="">All Centers</option>';
+                
+                if (result.success && result.data) {
+                    result.data.forEach(center => {
+                        const option = document.createElement('option');
+                        option.value = center.id;
+                        option.textContent = center.name;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading centers:', error);
+            }
+        }
+        
+        // Edit contribution
+        async function editContribution(id) {
+            try {
+                // Fetch contribution details
+                const response = await fetch(`api/admin/center-contributions.php?action=get&id=${id}`);
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    const contribution = result.data;
+                    
+                    // Populate the form with existing data
+                    await loadMembersForContribution(); // Load members first
+                    
+                    document.getElementById('contributionMember').value = contribution.member_id;
+                    document.getElementById('contributionTitle').value = contribution.title || '';
+                    document.getElementById('contributionDescription').value = contribution.description || '';
+                    document.getElementById('contributionType').value = contribution.type || 'financial';
+                    document.getElementById('contributionAmount').value = contribution.amount;
+                    document.getElementById('contributionDate').value = contribution.contribution_date || contribution.created_at.split(' ')[0];
+                    document.getElementById('contributionPaymentMethod').value = contribution.payment_method || 'cash';
+                    document.getElementById('contributionStatus').value = contribution.payment_status || contribution.status;
+                    document.getElementById('contributionNotes').value = contribution.notes || '';
+                    
+                    // Change modal title and button text
+                    const modal = document.getElementById('addContributionModal');
+                    const title = modal.querySelector('h3');
+                    const saveBtn = modal.querySelector('button[onclick="saveContribution()"]');
+                    
+                    title.textContent = 'Edit Contribution';
+                    saveBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Update Contribution';
+                    saveBtn.setAttribute('onclick', `updateContribution(${id})`);
+                    
+                    // Show modal
+                    modal.classList.remove('hidden');
+                    
+                    // Focus on title field for editing
+                    setTimeout(() => {
+                        document.getElementById('contributionTitle').focus();
+                        document.getElementById('contributionTitle').select();
+                    }, 100);
+                    
+                } else {
+                    showToast('Error loading contribution details', 'error');
+                }
+            } catch (error) {
+                console.error('Error loading contribution for edit:', error);
+                showToast('Error loading contribution details', 'error');
+            }
+        }
+        
+        // Update contribution (separate from save for editing)
+        async function updateContribution(id) {
+            const form = document.getElementById('addContributionForm');
+            
+            // Validate form
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const formData = {
+                id: id,
+                member_id: parseInt(document.getElementById('contributionMember').value),
+                title: document.getElementById('contributionTitle').value.trim(),
+                description: document.getElementById('contributionDescription').value.trim() || null,
+                type: document.getElementById('contributionType').value,
+                amount: parseFloat(document.getElementById('contributionAmount').value),
+                contribution_date: document.getElementById('contributionDate').value,
+                payment_method: document.getElementById('contributionPaymentMethod').value,
+                payment_status: document.getElementById('contributionStatus').value,
+                notes: document.getElementById('contributionNotes').value.trim() || null
+            };
+            
+            console.log('Updating contribution with data:', formData);
+            
+            try {
+                const response = await fetch('api/admin/center-contributions.php', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                console.log('Update response status:', response.status, response.statusText);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const responseText = await response.text();
+                console.log('Update response text:', responseText);
+                
+                if (!responseText || responseText.trim() === '') {
+                    throw new Error('Empty response from server');
+                }
+                
+                let result;
+                try {
+                    result = JSON.parse(responseText);
+                } catch (jsonError) {
+                    console.error('JSON parse error:', jsonError);
+                    throw new Error('Invalid JSON response: ' + responseText.substring(0, 100));
+                }
+                
+                console.log('Update result:', result);
+                
+                if (result.success) {
+                    showToast('Contribution updated successfully!', 'success');
+                    closeAddContributionModal();
+                    refreshContributions();
+                    loadDashboardStats(); // Refresh stats
+                } else {
+                    throw new Error(result.error || result.message || 'Update failed');
+                }
+            } catch (error) {
+                console.error('Error updating contribution:', error);
+                showToast('Error updating contribution: ' + error.message, 'error');
+            }
+        }
+        
+        // Delete contribution
+        async function deleteContribution(id) {
+            if (!confirm('Are you sure you want to delete this contribution?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`api/admin/center-contributions.php?id=${id}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showToast('Contribution deleted successfully!', 'success');
+                    refreshContributions();
+                    loadDashboardStats(); // Refresh stats
+                } else {
+                    showToast('Error: ' + (result.error || 'Failed to delete contribution'), 'error');
+                }
+            } catch (error) {
+                console.error('Error deleting contribution:', error);
+                showToast('Error deleting contribution', 'error');
+            }
+        }
+    </script>
+    <script src="js/announcement-widget.js"></script>
+
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutConfirmModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full transform transition-all">
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-red-500 to-red-600 text-white p-6 rounded-t-2xl">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                        <i class="fas fa-sign-out-alt text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold">Confirm Logout</h3>
+                        <p class="text-red-100 text-sm">Security Confirmation</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-6">
+                <div class="flex items-start space-x-4 mb-6">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-gray-900 font-semibold text-base leading-relaxed">
+                            Dear WDB Center Admin, are you sure you want to log out of your account?
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Additional Info -->
+                <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg mb-6">
+                    <div class="flex items-center">
+                        <i class="fas fa-info-circle text-blue-600 mr-3"></i>
+                        <p class="text-sm text-blue-800">
+                            You will need to log in again to access your dashboard.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="bg-gray-50 px-6 py-4 rounded-b-2xl flex items-center justify-end space-x-3">
+                <button id="cancelLogoutBtn" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition-all duration-200 flex items-center space-x-2">
+                    <i class="fas fa-times"></i>
+                    <span>No, Stay Logged In</span>
+                </button>
+                <button id="confirmLogoutBtn" class="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-200 flex items-center space-x-2 shadow-lg hover:shadow-xl">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Yes, Log Out</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Script -->
+    <script>
+    (function() {
+        'use strict';
+        
+        // Get modal and buttons
+        const logoutModal = document.getElementById('logoutConfirmModal');
+        const cancelBtn = document.getElementById('cancelLogoutBtn');
+        const confirmBtn = document.getElementById('confirmLogoutBtn');
+        
+        // Function to show logout confirmation
+        function showLogoutConfirmation(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            // Show modal with animation
+            logoutModal.classList.remove('hidden');
+            setTimeout(() => {
+                logoutModal.querySelector('.bg-white').classList.add('scale-100');
+            }, 10);
+            
+            return false;
+        }
+        
+        // Function to hide modal
+        function hideLogoutModal() {
+            const modalContent = logoutModal.querySelector('.bg-white');
+            modalContent.classList.remove('scale-100');
+            
+            setTimeout(() => {
+                logoutModal.classList.add('hidden');
+            }, 200);
+        }
+        
+        // Function to perform logout
+                function performLogout() {
+            console.log('performLogout called');
+            
+            // Hide modal first
+            hideLogoutModal();
+            
+            // Show loading indicator
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center';
+            loadingDiv.innerHTML = `
+                <div class="bg-white rounded-2xl p-8 text-center shadow-2xl">
+                    <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-red-500 mx-auto mb-4"></div>
+                    <p class="text-gray-700 font-semibold text-lg">Logging out...</p>
+                    <p class="text-gray-500 text-sm mt-2">Please wait</p>
+                </div>
+            `;
+            document.body.appendChild(loadingDiv);
+            
+            // Perform logout after short delay
+            setTimeout(() => {
+                console.log('Clearing session data...');
+                
+                // Clear ALL localStorage
+                localStorage.clear();
+                
+                // Clear sessionStorage
+                sessionStorage.clear();
+                
+                // Clear cookies
+                document.cookie.split(";").forEach(function(c) { 
+                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+                });
+                
+                console.log('Session cleared, redirecting...');
+                
+                // Direct redirect - no API call needed
+                window.location.href = 'admin-login.html';
+            }, 800);
+        }
+        
+        // Attach event listeners to all logout buttons
+        function attachLogoutListeners() {
+            // Find all logout buttons
+            const logoutButtons = document.querySelectorAll('#logoutBtn, #sidebarLogoutBtn, [data-logout-btn], a[href*="logout"]');
+            
+            logoutButtons.forEach(button => {
+                // Remove existing click handlers
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+                
+                // Add new click handler
+                newButton.addEventListener('click', showLogoutConfirmation);
+            });
+        }
+        
+        // Cancel button - hide modal
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', hideLogoutModal);
+        }
+        
+        // Confirm button - perform logout
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', performLogout);
+        }
+        
+        // Close modal when clicking outside
+        if (logoutModal) {
+            logoutModal.addEventListener('click', function(event) {
+                if (event.target === logoutModal) {
+                    hideLogoutModal();
+                }
+            });
+        }
+        
+        // ESC key to close modal
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && !logoutModal.classList.contains('hidden')) {
+                hideLogoutModal();
+            }
+        });
+        
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', attachLogoutListeners);
+        } else {
+            attachLogoutListeners();
+        }
+        
+        // Re-attach listeners after a short delay (for dynamically loaded content)
+        setTimeout(attachLogoutListeners, 1000);
+        
+        console.log('✅ Logout confirmation modal initialized');
+    })();
+    
+    // Add Contribution Modal Event Handlers
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('addContributionModal');
+        
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeAddContributionModal();
+            }
+        });
+        
+        // ESC key to close modal
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeAddContributionModal();
+            }
+        });
+        
+        // Form submission
+        document.getElementById('addContributionForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            saveContribution();
+        });
+    });
+    </script>
+    
+    <!-- Analytics Integration Scripts -->
+    <link rel="stylesheet" href="css/analytics-widgets.css">
+    <script src="js/analytics-widget-base.js"></script>
+    <script src="js/analytics-widget-manager.js"></script>
+    <script src="js/widgets/kpi-card.js"></script>
+    <script src="js/widgets/chart-widget.js"></script>
+    <script src="js/widgets/filter-panel.js"></script>
+    <script src="js/analytics-security-manager.js"></script>
+    <script src="js/export-manager.js"></script>
+    <script src="js/payment-methods-widget.js"></script>
+    
+    <script>
+        // Analytics Integration for Admin Dashboard
+        class AdminDashboardAnalytics {
+            constructor() {
+                this.widgetManager = null;
+                this.dashboardContext = {
+                    dashboardType: 'admin_main',
+                    context: 'overview',
+                    permissions: this.getUserPermissions()
+                };
+            }
+            
+            async initialize() {
+                try {
+                    // Initialize analytics widget manager
+                    this.widgetManager = new AnalyticsWidgetManager(this.dashboardContext);
+                    
+                    // Get widget configurations
+                    const widgetConfigs = await this.getWidgetConfigurations();
+                    
+                    // Initialize widgets
+                    await this.widgetManager.initializeWidgets(widgetConfigs);
+                    
+                    // Setup event listeners
+                    this.setupEventListeners();
+                    
+                    // Start real-time updates
+                    this.widgetManager.connectRealTime();
+                    
+                    console.log('Admin Dashboard Analytics initialized successfully');
+                } catch (error) {
+                    console.error('Failed to initialize analytics:', error);
+                }
+            }
+            
+            async getWidgetConfigurations() {
+                return [
+                    {
+                        type: 'kpi_card',
+                        id: 'admin_total_members',
+                        position: { row: 1, col: 1 },
+                        config: { 
+                            metric: 'total_members',
+                            title: 'Total Members',
+                            icon: 'users',
+                            threshold_warning: 1000,
+                            threshold_critical: 500,
+                            drill_down_enabled: true
+                        }
+                    },
+                    {
+                        type: 'kpi_card',
+                        id: 'admin_active_centers',
+                        position: { row: 1, col: 2 },
+                        config: { 
+                            metric: 'system_overview',
+                            title: 'Active Centers',
+                            icon: 'building',
+                            threshold_warning: 5,
+                            threshold_critical: 3,
+                            drill_down_enabled: true
+                        }
+                    },
+                    {
+                        type: 'kpi_card',
+                        id: 'admin_monthly_revenue',
+                        position: { row: 1, col: 3 },
+                        config: { 
+                            metric: 'system_overview',
+                            title: 'Monthly Revenue',
+                            icon: 'dollar-sign',
+                            format: 'currency',
+                            currency: 'ETB',
+                            drill_down_enabled: true
+                        }
+                    },
+                    {
+                        type: 'chart',
+                        id: 'admin_member_trend_chart',
+                        position: { row: 2, col: 1 },
+                        config: { 
+                            chart_type: 'line',
+                            metric: 'system_growth_overview',
+                            title: 'System Growth Overview',
+                            time_period: '12_months',
+                            show_legend: true,
+                            export_enabled: true
+                        }
+                    },
+                    {
+                        type: 'chart',
+                        id: 'admin_dashboard_summary',
+                        position: { row: 2, col: 2 },
+                        config: { 
+                            chart_type: 'doughnut',
+                            metric: 'dashboard_kpi_summary',
+                            title: 'System Summary',
+                            show_legend: true,
+                            export_enabled: true
+                        }
+                    },
+                    {
+                        type: 'filter_panel',
+                        id: 'admin_filters',
+                        position: { row: 3, col: 1 },
+                        config: { 
+                            dashboard_specific: true,
+                            sync_across_dashboards: true
+                        }
+                    },
+                    {
+                        type: 'export_button',
+                        id: 'admin_export',
+                        position: { row: 3, col: 2 },
+                        config: { 
+                            formats: ['csv', 'excel', 'pdf'],
+                            include_charts: true
+                        }
+                    }
+                ];
+            }
+            
+            getUserPermissions() {
+                // Get user permissions from session or API
+                return {
+                    viewLevel: 'confidential',
+                    actions: ['view', 'export', 'drill_down'],
+                    centers: 'all'
+                };
+            }
+            
+            setupEventListeners() {
+                // Listen for widget events
+                document.addEventListener('widget-drill-down', (event) => {
+                    this.handleWidgetDrillDown(event.detail);
+                });
+                
+                document.addEventListener('widget-export', (event) => {
+                    this.handleWidgetExport(event.detail);
+                });
+                
+                document.addEventListener('filter-changed', (event) => {
+                    this.handleFilterChange(event.detail);
+                });
+            }
+            
+            handleWidgetDrillDown(detail) {
+                const { widgetId, metric, data } = detail;
+                
+                switch (widgetId) {
+                    case 'admin_total_members':
+                        // Navigate to members management
+                        window.location.href = 'admin-members-management.html';
+                        break;
+                    case 'admin_active_centers':
+                        // Navigate to center management
+                        window.location.href = 'admin-center-management.html';
+                        break;
+                    case 'admin_monthly_revenue':
+                        // Navigate to contributions management
+                        window.location.href = 'admin-contributions-management.html';
+                        break;
+                }
+            }
+            
+            handleWidgetExport(detail) {
+                const { widgetId, format, data } = detail;
+                console.log(`Exporting ${widgetId} as ${format}`, data);
+                
+                // Show export success message
+                showToast(`Dashboard data exported as ${format.toUpperCase()}`, 'success');
+            }
+            
+            handleFilterChange(detail) {
+                const { filters } = detail;
+                
+                // Update all widgets with new filters
+                if (this.widgetManager) {
+                    this.widgetManager.applyContextualFilters(filters);
+                }
+            }
+            
+            destroy() {
+                if (this.widgetManager) {
+                    this.widgetManager.destroy();
+                }
+            }
+        }
+        
+        // Initialize analytics when DOM is loaded
+        let adminAnalytics = null;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize existing dashboard functionality first
+            // ... existing initialization code ...
+            
+            // Then initialize analytics
+            setTimeout(async () => {
+                adminAnalytics = new AdminDashboardAnalytics();
+                await adminAnalytics.initialize();
+            }, 1000); // Delay to ensure other components are loaded
+        });
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (adminAnalytics) {
+                adminAnalytics.destroy();
+            }
+        });
+    </script>
+</body>
+</html>

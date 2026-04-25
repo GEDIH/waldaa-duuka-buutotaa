@@ -1,1361 +1,484 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="or">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WDB Member Login | Ethiopian Orthodox Tewahedo Church</title>
-    <script src="css/tailwind-suppress-warning.js"></script>
+    <title>Member Login - Waldaa Duuka Bu'ootaa</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Import Google Fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
-        /* Professional Design System */
-        :root {
-            --primary-color: #059669;
-            --primary-dark: #047857;
-            --primary-light: #10b981;
-            --primary-gradient: linear-gradient(135deg, #059669 0%, #047857 100%);
-            --secondary-color: #64748b;
-            --success-color: #059669;
-            --warning-color: #d97706;
-            --error-color: #dc2626;
-            --background-gradient: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-            --card-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
-            --card-shadow-hover: 0 35px 70px rgba(0, 0, 0, 0.15);
-            --border-radius: 20px;
-            --border-radius-sm: 12px;
-            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            --glass-bg: rgba(255, 255, 255, 0.95);
-            --glass-border: rgba(255, 255, 255, 0.3);
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-image: url('images/IMG_4569.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-            color: #1f2937;
-            overflow-x: hidden;
-            position: relative;
         }
-
-        /* Background overlay REMOVED to show background image clearly */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            z-index: 0;
-            pointer-events: none;
+        .glass-card {
+            backdrop-filter: blur(25px) saturate(200%);
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
         }
-
-        /* Advanced Background System - DISABLED */
-        /*
-        .advanced-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -10;
-            overflow: hidden;
-            display: none;
-        }
-        */
-
-        /* Morphing Gradient Base */
-        .gradient-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                45deg,
-                rgba(5, 150, 105, 0.8) 0%,
-                rgba(4, 120, 87, 0.9) 25%,
-                rgba(16, 185, 129, 0.7) 50%,
-                rgba(5, 150, 105, 0.8) 75%,
-                rgba(4, 120, 87, 0.9) 100%
-            );
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease-in-out infinite;
-        }
-
-        /* Sacred Geometry Pattern */
-        .geometry-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-                radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
-                linear-gradient(45deg, transparent 49%, rgba(255, 255, 255, 0.03) 50%, transparent 51%),
-                linear-gradient(-45deg, transparent 49%, rgba(255, 255, 255, 0.03) 50%, transparent 51%);
-            background-size: 60px 60px, 80px 80px, 40px 40px, 40px 40px;
-            animation: geometryFloat 25s linear infinite;
-        }
-
-        /* WDB Logo with 3D Effect */
-        .logo-3d-layer {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px;
-            height: 400px;
-            background: url('images/IMG_4569.png') center/cover no-repeat;
-            opacity: 0.25;
-            animation: logo3DFloat 20s ease-in-out infinite;
-            filter: drop-shadow(0 0 50px rgba(5, 150, 105, 0.3));
-        }
-
-        /* Particle System */
-        .particles-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-            animation: particleFloat 15s linear infinite;
-        }
-
-        .particle:nth-child(odd) {
-            background: rgba(5, 150, 105, 0.4);
-            animation-duration: 20s;
-        }
-
-        .particle:nth-child(3n) {
-            background: rgba(16, 185, 129, 0.5);
-            animation-duration: 18s;
-        }
-
-        /* Light Rays */
-        .light-rays {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 800px;
-            height: 800px;
-            background: 
-                conic-gradient(from 0deg, 
-                    transparent 0deg, 
-                    rgba(5, 150, 105, 0.1) 45deg, 
-                    transparent 90deg,
-                    rgba(16, 185, 129, 0.08) 135deg,
-                    transparent 180deg,
-                    rgba(5, 150, 105, 0.1) 225deg,
-                    transparent 270deg,
-                    rgba(16, 185, 129, 0.08) 315deg,
-                    transparent 360deg
-                );
-            animation: rayRotation 30s linear infinite;
-            opacity: 0.7;
-        }
-
-        /* Floating Geometric Shapes */
-        .floating-shape {
-            position: absolute;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            animation: shapeFloat 25s ease-in-out infinite;
-        }
-
-        .shape-circle {
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .shape-triangle {
-            width: 0;
-            height: 0;
-            border-left: 30px solid transparent;
-            border-right: 30px solid transparent;
-            border-bottom: 52px solid rgba(5, 150, 105, 0.1);
-            border: none;
-            background: linear-gradient(45deg, transparent 50%, rgba(5, 150, 105, 0.1) 50%);
-            width: 60px;
-            height: 60px;
-            top: 70%;
-            right: 15%;
-            animation-delay: 5s;
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-        }
-
-        .shape-hexagon {
-            width: 50px;
-            height: 50px;
-            background: rgba(16, 185, 129, 0.08);
-            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-            top: 30%;
-            right: 20%;
-            animation-delay: 10s;
-        }
-
-        /* Interactive Glow Effect */
-        .interactive-glow {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(5, 150, 105, 0.2) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            transition: all 0.3s ease;
-            opacity: 0;
-        }
-
-        /* Animations */
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        @keyframes geometryFloat {
-            0% { transform: translateX(0) translateY(0); }
-            25% { transform: translateX(-10px) translateY(-5px); }
-            50% { transform: translateX(5px) translateY(-10px); }
-            75% { transform: translateX(-5px) translateY(5px); }
-            100% { transform: translateX(0) translateY(0); }
-        }
-
-        @keyframes logo3DFloat {
-            0%, 100% { 
-                transform: translate(-50%, -50%) rotateY(0deg) scale(1);
-                filter: drop-shadow(0 0 50px rgba(5, 150, 105, 0.3));
-            }
-            25% { 
-                transform: translate(-50%, -50%) rotateY(5deg) scale(1.05);
-                filter: drop-shadow(0 0 60px rgba(16, 185, 129, 0.4));
-            }
-            50% { 
-                transform: translate(-50%, -50%) rotateY(0deg) scale(1.1);
-                filter: drop-shadow(0 0 70px rgba(5, 150, 105, 0.5));
-            }
-            75% { 
-                transform: translate(-50%, -50%) rotateY(-5deg) scale(1.05);
-                filter: drop-shadow(0 0 60px rgba(16, 185, 129, 0.4));
-            }
-        }
-
-        @keyframes particleFloat {
-            0% {
-                transform: translateY(100vh) translateX(0px) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-                transform: translateY(90vh) translateX(10px) scale(1);
-            }
-            90% {
-                opacity: 1;
-                transform: translateY(10vh) translateX(-10px) scale(1);
-            }
-            100% {
-                transform: translateY(-10vh) translateX(0px) scale(0);
-                opacity: 0;
-            }
-        }
-
-        @keyframes rayRotation {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        @keyframes shapeFloat {
-            0%, 100% { 
-                transform: translateY(0px) rotate(0deg);
-                opacity: 0.3;
-            }
-            25% { 
-                transform: translateY(-20px) rotate(90deg);
-                opacity: 0.6;
-            }
-            50% { 
-                transform: translateY(-10px) rotate(180deg);
-                opacity: 0.4;
-            }
-            75% { 
-                transform: translateY(-30px) rotate(270deg);
-                opacity: 0.7;
-            }
-        }
-
-
-
-        @keyframes backgroundFloat {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(1deg); }
-        }
-
-        /* Main Container */
-        .login-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Background image fallback - DISABLED to show background image */
-        .background-fallback {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            z-index: -2;
-        }
-
-        /* Login Card */
-        .login-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(15px);
-            border-radius: var(--border-radius);
-            box-shadow: 
-                var(--card-shadow),
-                0 0 0 1px rgba(255, 255, 255, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 3rem;
-            width: 100%;
-            max-width: 450px;
-            position: relative;
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .login-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--primary-gradient);
-        }
-
-        .login-card:hover {
-            box-shadow: 
-                var(--card-shadow-hover),
-                0 0 0 1px rgba(255, 255, 255, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
-            transform: translateY(-5px);
-        }
-
-        /* Logo Section */
-        .logo-section {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .logo-container {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 2rem;
-        }
-
-        .logo {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-            filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.15));
-            transition: var(--transition);
-            border-radius: 50%;
-            background: white;
-            padding: 8px;
-        }
-
-        .logo:hover {
-            transform: scale(1.05) rotate(5deg);
-            filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.2));
-        }
-
-        .logo-glow {
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            background: var(--primary-gradient);
-            border-radius: 50%;
-            opacity: 0.2;
-            animation: pulse 3s ease-in-out infinite;
-            z-index: -1;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.2; }
-            50% { transform: scale(1.1); opacity: 0.3; }
-        }
-
-        .page-title {
-            font-size: 2rem;
-            font-weight: 800;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.025em;
-        }
-
-        .page-subtitle {
-            font-size: 1rem;
-            color: var(--secondary-color);
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
-
-        .page-description {
-            color: #6b7280;
-            font-size: 0.875rem;
-            font-weight: 400;
-        }
-
-        /* Form Styling */
-        .login-form {
-            margin-bottom: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        .form-label {
-            display: block;
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
-        }
-
         .form-input {
-            width: 100%;
-            padding: 1rem 1.25rem;
-            border: 2px solid #e5e7eb;
-            border-radius: var(--border-radius-sm);
-            font-size: 0.9rem;
-            transition: var(--transition);
-            background: white;
-            font-family: inherit;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-        }
-
-        .form-input::placeholder {
-            color: #9ca3af;
-            font-style: italic;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
-            transform: translateY(-1px);
-        }
-
-        .form-input:invalid:not(:focus) {
-            border-color: var(--error-color);
-            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
-        }
-
-        /* Input Groups */
-        .input-group {
-            display: grid;
-            gap: 0;
-            border-radius: var(--border-radius-sm);
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .input-group .form-input {
-            border-radius: 0;
-            border-bottom: 1px solid #e5e7eb;
-            box-shadow: none;
-        }
-
-        .input-group .form-input:last-child {
-            border-bottom: none;
-        }
-
-        .input-group .form-input:first-child {
-            border-top-left-radius: var(--border-radius-sm);
-            border-top-right-radius: var(--border-radius-sm);
-        }
-
-        .input-group .form-input:last-child {
-            border-bottom-left-radius: var(--border-radius-sm);
-            border-bottom-right-radius: var(--border-radius-sm);
-        }
-
-        /* Messages */
-        .message {
-            padding: 1rem 1.25rem;
-            border-radius: var(--border-radius-sm);
-            margin-bottom: 1.5rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .message.error {
-            background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
-            color: #c53030;
-            border-left: 4px solid var(--error-color);
-        }
-
-        .message.success {
-            background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
-            color: #22543d;
-            border-left: 4px solid var(--success-color);
-        }
-
-        .message.error::before {
-            content: '⚠️';
-            font-size: 1.2rem;
-        }
-
-        .message.success::before {
-            content: '✅';
-            font-size: 1.2rem;
-        }
-
-        /* Form Options */
-        .form-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .checkbox {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--primary-color);
-        }
-
-        .checkbox-label {
-            font-size: 0.875rem;
-            color: #374151;
-            font-weight: 500;
-        }
-
-        .forgot-link {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.875rem;
-            transition: var(--transition);
-        }
-
-        .forgot-link:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
-        }
-
-        /* Button Styling */
-        .btn {
-            width: 100%;
-            padding: 1rem 2rem;
-            border-radius: var(--border-radius-sm);
-            font-weight: 700;
-            font-size: 1rem;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary {
-            background: var(--primary-gradient);
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.25);
+            border-radius: 12px;
+            padding: 13px 16px;
             color: white;
-            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.4);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
+            font-size: 1rem;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
+            transition: all 0.3s;
         }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        /* Footer Links */
-        .footer-links {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .footer-link {
-            color: var(--secondary-color);
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-            font-size: 0.875rem;
-        }
-
-        .footer-link:hover {
-            color: var(--primary-color);
-            text-decoration: underline;
-        }
-
-        .footer-link.primary {
-            color: var(--primary-color);
-            font-weight: 600;
-        }
-
-        /* Loading Animation */
-        .loading {
-            position: relative;
-        }
-
-        .loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            margin: -10px 0 0 -10px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 640px) {
-            .login-container {
-                padding: 1rem;
-            }
-
-            .login-card {
-                padding: 2rem;
-            }
-
-            .logo {
-                width: 80px;
-                height: 80px;
-            }
-
-            .page-title {
-                font-size: 1.75rem;
-            }
-
-            .form-options {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            /* Mobile optimizations for advanced background */
-            .logo-3d-layer {
-                width: 300px;
-                height: 300px;
-            }
-            
-            .light-rays {
-                width: 600px;
-                height: 600px;
-            }
-            
-            .floating-shape {
-                display: none; /* Hide floating shapes on mobile for performance */
-            }
-            
-            .particles-container {
-                display: none; /* Reduce particles on mobile */
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo-3d-layer {
-                width: 250px;
-                height: 250px;
-            }
-            
-            .light-rays {
-                width: 400px;
-                height: 400px;
-            }
-        }
-
-
-
-        /* Accessibility */
-        .form-input:focus,
-        .btn:focus,
-        .checkbox:focus {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-        }
-
-        /* High contrast mode support */
-        @media (prefers-contrast: high) {
-            :root {
-                --primary-color: #008000;
-                --primary-dark: #006400;
-                --error-color: #ff0000;
-                --secondary-color: #000000;
-            }
-
-            .login-card {
-                border: 2px solid #000000;
-            }
-        }
-
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Password Field Wrapper */
-        .password-field-wrapper {
-            position: relative;
-        }
-
-        .password-field-wrapper .form-input {
-            padding-right: 50px;
-        }
-
-        /* Password Toggle Button */
-        .password-toggle-btn {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
+        .form-input:focus { outline: none; border-color: #d4af37; background: rgba(255,255,255,0.18); }
+        .form-input::placeholder { color: rgba(255,255,255,0.6); }
+        .btn-gold {
+            background: linear-gradient(135deg, #d4af37, #b8941f);
+            color: #1a3b5c;
+            font-weight: 700;
+            padding: 14px 24px;
+            border-radius: 12px;
             border: none;
             cursor: pointer;
-            font-size: 1.2rem;
-            padding: 5px;
-            transition: var(--transition);
-            z-index: 10;
-            opacity: 0.6;
+            width: 100%;
+            font-size: 1rem;
+            transition: all 0.3s;
         }
-
-        .password-toggle-btn:hover {
-            transform: translateY(-50%) scale(1.1);
-            opacity: 1;
+        .btn-gold:hover { background: linear-gradient(135deg, #1a3b5c, #2c5282); color: white; transform: translateY(-2px); }
+        .btn-gold:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .tab-btn {
+            flex: 1; padding: 12px; border: none; cursor: pointer;
+            font-weight: 600; font-size: 0.95rem; transition: all 0.3s;
+            border-radius: 10px;
         }
-
-        .password-toggle-btn:focus {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-            border-radius: 4px;
-            opacity: 1;
+        .tab-btn.active { background: #d4af37; color: #1a3b5c; }
+        .tab-btn:not(.active) { background: rgba(255,255,255,0.1); color: white; }
+        .error-msg { color: #fca5a5; font-size: 0.85rem; margin-top: 6px; display: none; }
+        .error-msg.show { display: block; }
+        .loading-spinner {
+            display: inline-block; width: 18px; height: 18px;
+            border: 3px solid rgba(255,255,255,0.3); border-radius: 50%;
+            border-top-color: white; animation: spin 0.8s linear infinite; vertical-align: middle;
         }
-
-        /* Password Strength Indicator */
-        .password-strength-container {
-            margin-top: 0.75rem;
-            padding: 0.75rem;
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-            border-radius: var(--border-radius-sm);
-            border: 1px solid #bbf7d0;
-            animation: slideDown 0.3s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .strength-bar-container {
-            height: 6px;
-            background: #e5e7eb;
-            border-radius: 3px;
-            overflow: hidden;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        .strength-bar {
-            height: 100%;
-            width: 0%;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 3px;
-            position: relative;
-        }
-
-        .strength-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .strength-text {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 0.5rem;
-            gap: 1rem;
-        }
-
-        #strength-label {
-            font-size: 0.875rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        #strength-requirements {
-            font-size: 0.75rem;
-            color: #6b7280;
-            font-style: italic;
-            text-align: right;
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .strength-bar { height: 4px; border-radius: 2px; transition: all 0.3s; margin-top: 6px; }
+        .strength-weak   { background: #ef4444; width: 33%; }
+        .strength-medium { background: #f59e0b; width: 66%; }
+        .strength-strong { background: #10b981; width: 100%; }
     </style>
 </head>
-<body>
-    <!-- Advanced Background System - DISABLED to show background image -->
-    <!-- <div class="advanced-background">
-        <div class="gradient-layer"></div>
-        <div class="geometry-layer"></div>
-        <div class="logo-3d-layer"></div>
-        <div class="light-rays"></div>
-        <div class="floating-shape shape-circle"></div>
-        <div class="floating-shape shape-triangle"></div>
-        <div class="floating-shape shape-hexagon"></div>
-        <div class="particles-container" id="particlesContainer"></div>
-        <div class="interactive-glow" id="interactiveGlow"></div>
-    </div> -->
+<body class="flex items-center justify-center min-h-screen p-4">
 
-    <!-- Background fallback -->
-    <div class="background-fallback"></div>
-    
-    <div class="login-container">
-        <div class="login-card">
-            <!-- Logo and Header -->
-            <div class="logo-section">
-                <div class="logo-container">
-                    <div class="logo-glow"></div>
-                    <img class="logo" src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo">
-                </div>
-                <h1 class="page-title">Member Login</h1>
-                <h2 class="page-subtitle">WDB Membership Portal</h2>
-                <p class="page-description">Welcome back! Please sign in to your account</p>
+    <div class="w-full max-w-md">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <img src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo" class="w-20 h-20 mx-auto rounded-full shadow-2xl mb-4">
+            <h1 class="text-3xl font-bold text-white mb-1">Waldaa Duuka Bu'ootaa</h1>
+            <p class="text-white opacity-75">Member Portal</p>
+        </div>
+
+        <!-- Card -->
+        <div class="glass-card rounded-3xl p-8">
+
+            <!-- Tabs: Login / Register -->
+            <div class="flex gap-2 mb-8 p-1 rounded-xl" style="background:rgba(255,255,255,0.08);">
+                <button class="tab-btn active" id="tab-login"    onclick="switchTab('login')">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Login
+                </button>
+                <button class="tab-btn"         id="tab-register" onclick="switchTab('register')">
+                    <i class="fas fa-user-plus mr-2"></i>Register
+                </button>
             </div>
 
-            <!-- Login Form -->
-            <form class="login-form" id="memberLoginForm">
-                <!-- Error Message -->
-                <div id="errorMessage" class="message error hidden">
-                    <span id="errorText"></span>
-                </div>
-
-                <!-- Success Message -->
-                <div id="successMessage" class="message success hidden">
-                    <span id="successText"></span>
-                </div>
-
-                <div class="input-group">
-                    <input id="username" name="username" type="text" required 
-                           class="form-input" 
-                           placeholder="Username or Email Address">
-                    <div class="password-field-wrapper">
-                        <input id="password" name="password" type="password" required 
-                               class="form-input" 
-                               placeholder="Password"
-                               aria-describedby="password-strength">
-                        <button type="button" 
-                                class="password-toggle-btn"
-                                onclick="togglePasswordVisibility('password')"
-                                aria-label="Toggle password visibility"
-                                tabindex="-1">
-                            <span id="password-toggle-icon">👁️</span>
-                        </button>
+            <!-- ── LOGIN FORM ── -->
+            <div id="loginForm">
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-white font-medium mb-2">
+                            <i class="fas fa-user mr-2 text-yellow-400"></i>Username or Member ID
+                        </label>
+                        <input type="text" id="loginUsername" class="form-input"
+                               placeholder="e.g. abebe.kebede or WDB-2024-0001">
+                        <div class="error-msg" id="loginUsernameErr">Please enter your username or Member ID</div>
                     </div>
-                </div>
-
-                <!-- Password Strength Indicator -->
-                <div id="password-strength" class="password-strength-container" style="display: none;">
-                    <div class="strength-bar-container">
-                        <div id="strength-bar" class="strength-bar"></div>
+                    <div>
+                        <label class="block text-white font-medium mb-2">
+                            <i class="fas fa-lock mr-2 text-yellow-400"></i>Password
+                        </label>
+                        <div class="relative">
+                            <input type="password" id="loginPassword" class="form-input pr-12"
+                                   placeholder="Enter your password">
+                            <button type="button" onclick="togglePwd('loginPassword','loginPwdIcon')"
+                                    class="absolute right-4 top-4 text-white opacity-60 hover:opacity-100">
+                                <i class="fas fa-eye" id="loginPwdIcon"></i>
+                            </button>
+                        </div>
+                        <div class="error-msg" id="loginPasswordErr">Please enter your password</div>
                     </div>
-                    <div class="strength-text">
-                        <span id="strength-label"></span>
-                        <span id="strength-requirements"></span>
-                    </div>
-                </div>
 
-                <div class="form-options">
-                    <div class="checkbox-group">
-                        <input id="remember-me" name="remember-me" type="checkbox" class="checkbox">
-                        <label for="remember-me" class="checkbox-label">
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center gap-2 text-white text-sm cursor-pointer">
+                            <input type="checkbox" id="rememberMe" class="rounded">
                             Remember me
                         </label>
+                        <button onclick="switchTab('forgot')" class="text-yellow-400 hover:text-yellow-300 text-sm font-medium">
+                            Forgot password?
+                        </button>
                     </div>
 
-                    <a href="forgot-password.html" class="forgot-link">
-                        Forgot password?
-                    </a>
+                    <div class="error-msg show" id="loginGeneralErr" style="display:none;"></div>
+
+                    <button class="btn-gold" id="loginBtn" onclick="handleLogin()">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login to Dashboard
+                    </button>
                 </div>
 
-                <button type="submit" id="loginButton" class="btn btn-primary">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-                    </svg>
-                    <span id="loginButtonText">Sign In to WDB</span>
-                </button>
-            </form>
-
-            <!-- Footer Links -->
-            <div class="footer-links">
-                <p class="text-sm text-gray-600 mb-3">
-                    Administrator? 
-                    <a href="admin-login.html" class="footer-link primary">
-                        Admin Login
-                    </a>
-                </p>
-                <p class="text-sm text-gray-600 mb-3">
-                    Don't have an account? 
-                    <a href="register.html" class="footer-link primary">
-                        Register here
-                    </a>
-                </p>
-                <p class="text-xs text-gray-500">
-                    <a href="login.html" class="footer-link">← Back to Login Options</a>
-                </p>
+                <div class="mt-6 pt-6 border-t border-white border-opacity-20 text-center">
+                    <p class="text-white opacity-70 text-sm">Don't have an account?</p>
+                    <button onclick="switchTab('register')" class="text-yellow-400 hover:text-yellow-300 font-semibold mt-1">
+                        Register as a Member →
+                    </button>
+                </div>
             </div>
+
+            <!-- ── REGISTER FORM ── -->
+            <div id="registerForm" style="display:none;">
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-white font-medium mb-2 text-sm">First Name *</label>
+                            <input type="text" id="regFirstName" class="form-input" placeholder="Maqaa Jalqabaa">
+                        </div>
+                        <div>
+                            <label class="block text-white font-medium mb-2 text-sm">Last Name *</label>
+                            <input type="text" id="regLastName" class="form-input" placeholder="Maqaa Abbaa">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-white font-medium mb-2 text-sm">
+                            <i class="fas fa-user mr-1 text-yellow-400"></i>Username *
+                        </label>
+                        <input type="text" id="regUsername" class="form-input" placeholder="e.g. abebe.kebede"
+                               oninput="checkUsernameAvailability()">
+                        <div class="error-msg" id="regUsernameErr"></div>
+                    </div>
+                    <div>
+                        <label class="block text-white font-medium mb-2 text-sm">
+                            <i class="fas fa-phone mr-1 text-yellow-400"></i>Phone Number *
+                        </label>
+                        <input type="tel" id="regPhone" class="form-input" placeholder="+251 9XX XXX XXX">
+                        <div class="error-msg" id="regPhoneErr"></div>
+                    </div>
+                    <div>
+                        <label class="block text-white font-medium mb-2 text-sm">
+                            <i class="fas fa-lock mr-1 text-yellow-400"></i>Password *
+                        </label>
+                        <div class="relative">
+                            <input type="password" id="regPassword" class="form-input pr-12"
+                                   placeholder="Min. 8 characters" oninput="checkPasswordStrength()">
+                            <button type="button" onclick="togglePwd('regPassword','regPwdIcon')"
+                                    class="absolute right-4 top-4 text-white opacity-60 hover:opacity-100">
+                                <i class="fas fa-eye" id="regPwdIcon"></i>
+                            </button>
+                        </div>
+                        <div class="strength-bar" id="strengthBar" style="display:none;"></div>
+                        <div class="error-msg" id="regPasswordErr"></div>
+                    </div>
+                    <div>
+                        <label class="block text-white font-medium mb-2 text-sm">
+                            <i class="fas fa-lock mr-1 text-yellow-400"></i>Confirm Password *
+                        </label>
+                        <input type="password" id="regConfirmPassword" class="form-input"
+                               placeholder="Repeat your password">
+                        <div class="error-msg" id="regConfirmErr"></div>
+                    </div>
+
+                    <div class="error-msg" id="regGeneralErr"></div>
+
+                    <button class="btn-gold" id="registerBtn" onclick="handleRegister()">
+                        <i class="fas fa-user-plus mr-2"></i>Create Account
+                    </button>
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-white border-opacity-20 text-center">
+                    <p class="text-white opacity-70 text-sm">Already have an account?</p>
+                    <button onclick="switchTab('login')" class="text-yellow-400 hover:text-yellow-300 font-semibold mt-1">
+                        ← Back to Login
+                    </button>
+                </div>
+            </div>
+
+            <!-- ── FORGOT PASSWORD ── -->
+            <div id="forgotForm" style="display:none;">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                         style="background:rgba(212,175,55,0.2);">
+                        <i class="fas fa-key text-yellow-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-xl mb-2">Reset Password</h3>
+                    <p class="text-white opacity-70 text-sm">Enter your Member ID or phone number to reset your password.</p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-white font-medium mb-2 text-sm">Member ID or Phone</label>
+                        <input type="text" id="forgotIdentifier" class="form-input"
+                               placeholder="WDB-2024-0001 or +251...">
+                    </div>
+                    <div id="resetNewPwdSection" style="display:none;">
+                        <label class="block text-white font-medium mb-2 text-sm">New Password</label>
+                        <input type="password" id="resetNewPwd" class="form-input mb-3" placeholder="New password">
+                        <label class="block text-white font-medium mb-2 text-sm">Confirm New Password</label>
+                        <input type="password" id="resetConfirmPwd" class="form-input" placeholder="Confirm new password">
+                    </div>
+                    <div class="error-msg" id="forgotErr"></div>
+                    <button class="btn-gold" id="forgotBtn" onclick="handleForgot()">
+                        <i class="fas fa-search mr-2"></i>Find My Account
+                    </button>
+                </div>
+                <div class="mt-6 text-center">
+                    <button onclick="switchTab('login')" class="text-yellow-400 hover:text-yellow-300 font-semibold text-sm">
+                        ← Back to Login
+                    </button>
+                </div>
+            </div>
+
+            <!-- ── SUCCESS ── -->
+            <div id="successPanel" style="display:none;" class="text-center py-4">
+                <div class="text-6xl mb-4">🎉</div>
+                <h3 class="text-white font-bold text-2xl mb-3">Account Created!</h3>
+                <p class="text-white opacity-80 mb-2">Your member account has been created successfully.</p>
+                <p class="text-white opacity-60 text-sm mb-6">You can now login with your username and password.</p>
+                <button class="btn-gold" onclick="switchTab('login')">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Go to Login
+                </button>
+            </div>
+        </div>
+
+        <!-- Back to website -->
+        <div class="text-center mt-6">
+            <a href="index.html" class="text-white opacity-70 hover:opacity-100 text-sm transition-opacity">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Website
+            </a>
         </div>
     </div>
 
     <script>
-        // Advanced Background Effects System
-        class AdvancedBackground {
-            constructor() {
-                this.particlesContainer = document.getElementById('particlesContainer');
-                this.interactiveGlow = document.getElementById('interactiveGlow');
-                this.particles = [];
-                this.maxParticles = 50;
-                
-                this.init();
-            }
-            
-            init() {
-                this.createParticles();
-                this.setupInteractiveEffects();
-                this.startAnimationLoop();
-            }
-            
-            createParticles() {
-                for (let i = 0; i < this.maxParticles; i++) {
-                    setTimeout(() => {
-                        this.createParticle();
-                    }, i * 300);
-                }
-            }
-            
-            createParticle() {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                
-                // Random starting position
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-                
-                // Random size variation
-                const size = 2 + Math.random() * 4;
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                
-                this.particlesContainer.appendChild(particle);
-                this.particles.push(particle);
-                
-                // Remove particle after animation
-                setTimeout(() => {
-                    if (particle.parentNode) {
-                        particle.parentNode.removeChild(particle);
-                        this.particles = this.particles.filter(p => p !== particle);
-                    }
-                }, 25000);
-            }
-            
-            setupInteractiveEffects() {
-                let mouseX = 0, mouseY = 0;
-                let targetX = 0, targetY = 0;
-                
-                document.addEventListener('mousemove', (e) => {
-                    mouseX = e.clientX;
-                    mouseY = e.clientY;
-                    
-                    // Show interactive glow
-                    this.interactiveGlow.style.opacity = '1';
-                    this.interactiveGlow.style.left = (mouseX - 100) + 'px';
-                    this.interactiveGlow.style.top = (mouseY - 100) + 'px';
+        // ── Storage key ───────────────────────────────────────
+        const MEMBERS_STORE = 'wdb_member_accounts';
+
+        // Seed a demo account if none exist
+        function seedDemoAccount() {
+            const accounts = getAccounts();
+            if (!accounts.length) {
+                accounts.push({
+                    username:  'abebe.kebede',
+                    password:  btoa('Password123'),   // base64 – demo only
+                    memberId:  'WDB-2024-0001',
+                    firstName: 'Abebe',
+                    lastName:  'Kebede Tesfaye',
+                    phone:     '+251911234567',
+                    createdAt: '2024-01-15'
                 });
-                
-                document.addEventListener('mouseleave', () => {
-                    this.interactiveGlow.style.opacity = '0';
-                });
-                
-                // Smooth glow following
-                const updateGlow = () => {
-                    targetX += (mouseX - targetX) * 0.1;
-                    targetY += (mouseY - targetY) * 0.1;
-                    
-                    if (this.interactiveGlow.style.opacity !== '0') {
-                        this.interactiveGlow.style.left = (targetX - 100) + 'px';
-                        this.interactiveGlow.style.top = (targetY - 100) + 'px';
-                    }
-                    
-                    requestAnimationFrame(updateGlow);
-                };
-                updateGlow();
-            }
-            
-            startAnimationLoop() {
-                // Continuously create new particles
-                setInterval(() => {
-                    if (this.particles.length < this.maxParticles) {
-                        this.createParticle();
-                    }
-                }, 500);
-                
-                // Dynamic color shifts for green theme
-                this.animateColors();
-            }
-            
-            animateColors() {
-                const gradientLayer = document.querySelector('.gradient-layer');
-                let hue = 150; // Start with green
-                
-                setInterval(() => {
-                    hue = 120 + (Math.sin(Date.now() * 0.001) * 30); // Oscillate around green
-                    const color1 = `hsla(${hue}, 70%, 40%, 0.8)`;
-                    const color2 = `hsla(${hue + 20}, 70%, 35%, 0.9)`;
-                    const color3 = `hsla(${hue + 40}, 70%, 45%, 0.7)`;
-                    
-                    gradientLayer.style.background = `linear-gradient(45deg, ${color1} 0%, ${color2} 50%, ${color3} 100%)`;
-                }, 100);
+                saveAccounts(accounts);
             }
         }
-        
-        // Initialize advanced background when page loads - DISABLED
-        /*
-        window.addEventListener('load', () => {
-            new AdvancedBackground();
-        });
-        */
 
-        // Password Visibility Toggle
-        function togglePasswordVisibility(inputId) {
+        function getAccounts()       { return JSON.parse(localStorage.getItem(MEMBERS_STORE) || '[]'); }
+        function saveAccounts(data)  { localStorage.setItem(MEMBERS_STORE, JSON.stringify(data)); }
+
+        // ── Tab switching ─────────────────────────────────────
+        function switchTab(tab) {
+            ['loginForm','registerForm','forgotForm','successPanel'].forEach(id => {
+                document.getElementById(id).style.display = 'none';
+            });
+            ['tab-login','tab-register'].forEach(id => {
+                document.getElementById(id)?.classList.remove('active');
+            });
+
+            if (tab === 'login')    { document.getElementById('loginForm').style.display    = 'block'; document.getElementById('tab-login').classList.add('active'); }
+            if (tab === 'register') { document.getElementById('registerForm').style.display = 'block'; document.getElementById('tab-register').classList.add('active'); }
+            if (tab === 'forgot')   { document.getElementById('forgotForm').style.display   = 'block'; }
+            if (tab === 'success')  { document.getElementById('successPanel').style.display = 'block'; }
+        }
+
+        // ── Helpers ───────────────────────────────────────────
+        function togglePwd(inputId, iconId) {
             const input = document.getElementById(inputId);
-            const icon = document.getElementById('password-toggle-icon');
-            
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.textContent = '🙈';
-                input.setAttribute('aria-label', 'Password visible');
-            } else {
-                input.type = 'password';
-                icon.textContent = '👁️';
-                input.setAttribute('aria-label', 'Password hidden');
-            }
+            const icon  = document.getElementById(iconId);
+            if (input.type === 'password') { input.type = 'text';     icon.classList.replace('fa-eye','fa-eye-slash'); }
+            else                           { input.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
         }
 
-        // Password Strength Calculator
-        function calculatePasswordStrength(password) {
-            let strength = 0;
-            const checks = {
-                length: password.length >= 8,
-                uppercase: /[A-Z]/.test(password),
-                lowercase: /[a-z]/.test(password),
-                number: /[0-9]/.test(password),
-                special: /[^A-Za-z0-9]/.test(password)
-            };
-            
-            // Calculate strength score
-            if (checks.length) strength += 20;
-            if (checks.uppercase) strength += 20;
-            if (checks.lowercase) strength += 20;
-            if (checks.number) strength += 20;
-            if (checks.special) strength += 20;
-            
-            // Bonus for longer passwords
-            if (password.length >= 12) strength += 10;
-            if (password.length >= 16) strength += 10;
-            
-            return {
-                score: Math.min(strength, 100),
-                checks: checks
-            };
+        function showErr(id, msg) {
+            const el = document.getElementById(id);
+            el.textContent = msg; el.style.display = 'block';
+        }
+        function clearErr(id) { const el = document.getElementById(id); el.style.display = 'none'; el.textContent = ''; }
+
+        function checkPasswordStrength() {
+            const pwd = document.getElementById('regPassword').value;
+            const bar = document.getElementById('strengthBar');
+            bar.style.display = pwd.length ? 'block' : 'none';
+            bar.className = 'strength-bar';
+            if (pwd.length < 6)                                                    bar.classList.add('strength-weak');
+            else if (pwd.length < 10 || !/[A-Z]/.test(pwd) || !/\d/.test(pwd))   bar.classList.add('strength-medium');
+            else                                                                    bar.classList.add('strength-strong');
         }
 
-        // Update Password Strength Indicator
-        function updatePasswordStrength(password) {
-            const container = document.getElementById('password-strength');
-            const bar = document.getElementById('strength-bar');
-            const label = document.getElementById('strength-label');
-            const requirements = document.getElementById('strength-requirements');
-            
-            if (!password) {
-                container.style.display = 'none';
-                return;
-            }
-            
-            container.style.display = 'block';
-            const result = calculatePasswordStrength(password);
-            const score = result.score;
-            
-            // Update bar width and color
-            bar.style.width = score + '%';
-            
-            let strengthText, strengthColor, requirementsText;
-            
-            if (score < 40) {
-                strengthText = 'Weak';
-                strengthColor = '#dc2626';
-                requirementsText = 'Add uppercase, numbers, and special characters';
-            } else if (score < 70) {
-                strengthText = 'Medium';
-                strengthColor = '#d97706';
-                requirementsText = 'Add more character variety';
-            } else {
-                strengthText = 'Strong';
-                strengthColor = '#059669';
-                requirementsText = 'Excellent password! 🔐';
-            }
-            
-            bar.style.background = strengthColor;
-            label.textContent = strengthText;
-            label.style.color = strengthColor;
-            requirements.textContent = requirementsText;
+        function checkUsernameAvailability() {
+            const username = document.getElementById('regUsername').value.trim().toLowerCase();
+            if (!username) { clearErr('regUsernameErr'); return; }
+            const taken = getAccounts().some(a => a.username === username);
+            if (taken) showErr('regUsernameErr', 'Username already taken. Choose another.');
+            else        clearErr('regUsernameErr');
         }
 
-        // Attach event listener to password field
-        document.getElementById('password').addEventListener('input', function(e) {
-            updatePasswordStrength(e.target.value);
-        });
+        // ── Login ─────────────────────────────────────────────
+        function handleLogin() {
+            clearErr('loginUsernameErr'); clearErr('loginPasswordErr'); clearErr('loginGeneralErr');
+            const identifier = document.getElementById('loginUsername').value.trim();
+            const password   = document.getElementById('loginPassword').value;
+            const remember   = document.getElementById('rememberMe').checked;
 
-        // Keyboard accessibility for toggle button
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && e.target.classList.contains('password-toggle-btn')) {
-                e.preventDefault();
-                e.target.click();
+            if (!identifier) { showErr('loginUsernameErr','Please enter your username or Member ID'); return; }
+            if (!password)   { showErr('loginPasswordErr','Please enter your password'); return; }
+
+            const btn = document.getElementById('loginBtn');
+            btn.innerHTML = '<div class="loading-spinner"></div> Logging in...';
+            btn.disabled  = true;
+
+            setTimeout(() => {
+                const accounts = getAccounts();
+                const account  = accounts.find(a =>
+                    (a.username === identifier.toLowerCase() || a.memberId === identifier.toUpperCase()) &&
+                    a.password === btoa(password)
+                );
+
+                if (account) {
+                    // Store session
+                    sessionStorage.setItem('wdb_member_logged_in', 'true');
+                    sessionStorage.setItem('wdb_member_user', JSON.stringify(account));
+                    if (remember) localStorage.setItem('wdb_member_remember', identifier);
+                    else          localStorage.removeItem('wdb_member_remember');
+
+                    btn.innerHTML = '✅ Success! Redirecting...';
+                    setTimeout(() => { window.location.href = 'member-dashboard.html'; }, 800);
+                } else {
+                    btn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Login to Dashboard';
+                    btn.disabled  = false;
+                    showErr('loginGeneralErr', '❌ Invalid username/Member ID or password. Please try again.');
+                }
+            }, 1200);
+        }
+
+        // ── Register ──────────────────────────────────────────
+        function handleRegister() {
+            ['regUsernameErr','regPhoneErr','regPasswordErr','regConfirmErr','regGeneralErr'].forEach(clearErr);
+
+            const firstName = document.getElementById('regFirstName').value.trim();
+            const lastName  = document.getElementById('regLastName').value.trim();
+            const username  = document.getElementById('regUsername').value.trim().toLowerCase();
+            const phone     = document.getElementById('regPhone').value.trim();
+            const password  = document.getElementById('regPassword').value;
+            const confirm   = document.getElementById('regConfirmPassword').value;
+
+            let valid = true;
+            if (!firstName || !lastName) { showErr('regGeneralErr','First and last name are required.'); valid = false; }
+            if (!username || username.length < 3) { showErr('regUsernameErr','Username must be at least 3 characters.'); valid = false; }
+            if (!/^[a-z0-9._]+$/.test(username))  { showErr('regUsernameErr','Only letters, numbers, dots and underscores allowed.'); valid = false; }
+            if (!phone || phone.length < 10)       { showErr('regPhoneErr','Enter a valid phone number.'); valid = false; }
+            if (password.length < 8)               { showErr('regPasswordErr','Password must be at least 8 characters.'); valid = false; }
+            if (password !== confirm)              { showErr('regConfirmErr','Passwords do not match.'); valid = false; }
+            if (!valid) return;
+
+            const accounts = getAccounts();
+            if (accounts.some(a => a.username === username)) {
+                showErr('regUsernameErr','Username already taken.'); return;
             }
-        });
 
-        document.getElementById('memberLoginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const loginButton = document.getElementById('loginButton');
-            const loginButtonText = document.getElementById('loginButtonText');
-            const errorMessage = document.getElementById('errorMessage');
-            const successMessage = document.getElementById('successMessage');
-            
-            // Disable button and show loading
-            loginButton.disabled = true;
-            loginButton.classList.add('loading');
-            loginButtonText.textContent = 'Signing in...';
-            
-            // Hide previous messages
-            errorMessage.classList.add('hidden');
-            successMessage.classList.add('hidden');
-            
-            try {
-                const formData = new FormData(e.target);
-                const loginData = {
-                    username: formData.get('username'),
-                    password: formData.get('password'),
-                    expected_role: 'user'
-                };
-                
-                const response = await fetch('api/auth/login.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(loginData)
+            const btn = document.getElementById('registerBtn');
+            btn.innerHTML = '<div class="loading-spinner"></div> Creating account...';
+            btn.disabled  = true;
+
+            setTimeout(() => {
+                const newId = 'WDB-' + new Date().getFullYear() + '-' + String(accounts.length + 1).padStart(4,'0');
+                accounts.push({
+                    username, password: btoa(password),
+                    memberId: newId, firstName, lastName, phone,
+                    createdAt: new Date().toISOString().split('T')[0]
                 });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    const user = result.data.user;
-                    
-                    // Allow login for users with 'user' role (members)
-                    // Block admin and superadmin from using member login
-                    if (user.role === 'admin' || user.role === 'superadmin') {
-                        document.getElementById('errorText').textContent = 'Access denied: Please use the admin login page.';
-                        errorMessage.classList.remove('hidden');
-                        return;
-                    }
-                    
-                    // Store user data and redirect
-                    localStorage.setItem('wdb_user', JSON.stringify(user));
-                    localStorage.setItem('wdb_csrf_token', result.data.csrf_token);
-                    localStorage.setItem('wdb_permissions', JSON.stringify(result.data.permissions));
-                    
-                    // Show success message
-                    document.getElementById('successText').textContent = `Welcome back, ${user.full_name || user.username}! 🎉`;
-                    successMessage.classList.remove('hidden');
-                    
-                    // Update button text
-                    loginButtonText.textContent = 'Redirecting...';
-                    
-                    // Redirect to member dashboard
-                    setTimeout(() => {
-                        window.location.href = 'member-dashboard.html';
-                    }, 1500);
-                    
-                } else {
-                    // Show error message
-                    document.getElementById('errorText').textContent = result.error || 'Login failed. Please check your credentials.';
-                    errorMessage.classList.remove('hidden');
-                }
-                
-            } catch (error) {
-                console.error('Login error:', error);
-                document.getElementById('errorText').textContent = 'Network error. Please check your connection and try again.';
-                errorMessage.classList.remove('hidden');
-            } finally {
-                // Re-enable button
-                loginButton.disabled = false;
-                loginButton.classList.remove('loading');
-                if (!successMessage.classList.contains('hidden')) {
-                    loginButtonText.textContent = 'Redirecting...';
-                } else {
-                    loginButtonText.textContent = 'Sign In to WDB';
-                }
-            }
-        });
-        
-        // Check if already logged in
-        const userData = localStorage.getItem('wdb_user');
-        if (userData) {
-            try {
-                const user = JSON.parse(userData);
-                // Redirect members to dashboard
-                if (user.role === 'user') {
-                    window.location.href = 'member-dashboard.html';
-                } else if (user.role === 'admin' || user.role === 'superadmin') {
-                    // Show error message for admin/superadmin users
-                    document.getElementById('errorText').textContent = 'Access denied: Please use the admin login page.';
-                    document.getElementById('errorMessage').classList.remove('hidden');
-                    
-                    // Clear the admin session to force proper login
-                    localStorage.removeItem('wdb_user');
-                    localStorage.removeItem('wdb_csrf_token');
-                    localStorage.removeItem('wdb_permissions');
-                }
-            } catch (e) {
-                // Invalid stored data, clear it
-                localStorage.removeItem('wdb_user');
-                localStorage.removeItem('wdb_csrf_token');
-                localStorage.removeItem('wdb_permissions');
+                saveAccounts(accounts);
+
+                btn.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Create Account';
+                btn.disabled  = false;
+                switchTab('success');
+            }, 1200);
+        }
+
+        // ── Forgot Password ───────────────────────────────────
+        let forgotAccount = null;
+        function handleForgot() {
+            clearErr('forgotErr');
+            const identifier = document.getElementById('forgotIdentifier').value.trim();
+            const resetSection = document.getElementById('resetNewPwdSection');
+
+            if (!forgotAccount) {
+                // Step 1: find account
+                if (!identifier) { showErr('forgotErr','Please enter your Member ID or phone.'); return; }
+                const accounts = getAccounts();
+                forgotAccount  = accounts.find(a => a.memberId === identifier.toUpperCase() || a.phone === identifier);
+                if (!forgotAccount) { showErr('forgotErr','No account found with that Member ID or phone.'); return; }
+                resetSection.style.display = 'block';
+                document.getElementById('forgotBtn').innerHTML = '<i class="fas fa-save mr-2"></i>Save New Password';
+                document.getElementById('forgotIdentifier').disabled = true;
+            } else {
+                // Step 2: save new password
+                const newPwd  = document.getElementById('resetNewPwd').value;
+                const confPwd = document.getElementById('resetConfirmPwd').value;
+                if (newPwd.length < 8)    { showErr('forgotErr','Password must be at least 8 characters.'); return; }
+                if (newPwd !== confPwd)   { showErr('forgotErr','Passwords do not match.'); return; }
+
+                const accounts = getAccounts();
+                const idx = accounts.findIndex(a => a.memberId === forgotAccount.memberId);
+                if (idx > -1) { accounts[idx].password = btoa(newPwd); saveAccounts(accounts); }
+
+                forgotAccount = null;
+                resetSection.style.display = 'none';
+                document.getElementById('forgotIdentifier').value    = '';
+                document.getElementById('forgotIdentifier').disabled = false;
+                document.getElementById('forgotBtn').innerHTML = '<i class="fas fa-search mr-2"></i>Find My Account';
+                switchTab('login');
+                setTimeout(() => {
+                    const msg = document.getElementById('loginGeneralErr');
+                    msg.style.color = '#86efac';
+                    showErr('loginGeneralErr','✅ Password reset successfully. Please login.');
+                }, 200);
             }
         }
 
-        // Add smooth scroll to top on page load
-        window.addEventListener('load', function() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        // ── Init ─────────────────────────────────────────────
+        seedDemoAccount();
 
-        // Add keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                window.location.href = 'login.html';
+        // If already logged in, redirect
+        if (sessionStorage.getItem('wdb_member_logged_in')) {
+            window.location.href = 'member-dashboard.html';
+        }
+
+        // Pre-fill remembered username
+        const remembered = localStorage.getItem('wdb_member_remember');
+        if (remembered) {
+            document.getElementById('loginUsername').value = remembered;
+            document.getElementById('rememberMe').checked  = true;
+        }
+
+        // Allow Enter key to submit login
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Enter') {
+                const active = document.getElementById('loginForm').style.display !== 'none' ? 'login'
+                             : document.getElementById('registerForm').style.display !== 'none' ? 'register' : null;
+                if (active === 'login')    handleLogin();
+                if (active === 'register') handleRegister();
             }
         });
     </script>
-    <script src="js/wdb-ai-assistant.js"></script>
 </body>
 </html>

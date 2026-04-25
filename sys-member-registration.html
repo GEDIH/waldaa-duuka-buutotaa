@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDB Member Registration | Comprehensive Registration Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="css/tailwind-suppress-warning.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Enhanced registration form styles */
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            margin: 0 1rem;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+        
+        .step.active .step-number {
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        .step.completed .step-number {
+            background: linear-gradient(135deg, #10B981, #047857);
+            color: white;
+        }
+        
+        .step.inactive .step-number {
+            background: #E5E7EB;
+            color: #6B7280;
+        }
+        
+        .step-label {
+            margin-left: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #6B7280;
+        }
+        
+        .step.active .step-label {
+            color: #3B82F6;
+        }
+        
+        .form-section {
+            display: none;
+            animation: fadeInUp 0.4s ease-out;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #E5E7EB;
+            border-radius: 3px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3B82F6, #1D4ED8);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header Section -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="max-w-4xl mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo" class="h-12 w-12">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">WDB Member Registration</h1>
+                        <p class="text-gray-600">Complete your membership application</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <select id="languageSelector" class="wdb-select text-sm">
+                        <option value="en">English</option>
+                        <option value="om">Afaan Oromoo</option>
+                    </select>
+                    <button onclick="saveDraft()" class="wdb-btn wdb-btn-outline text-sm">
+                        <i class="fas fa-save mr-2"></i>Save Draft
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div id="progressFill" class="progress-fill" style="width: 16.67%"></div>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="step-indicator">
+            <div class="step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Personal Info</div>
+            </div>
+            <div class="step inactive" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Education</div>
+            </div>
+            <div class="step inactive" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Clergy Status</div>
+            </div>
+            <div class="step inactive" data-step="4">
+                <div class="step-number">4</div>
+                <div class="step-label">Location</div>
+            </div>
+            <div class="step inactive" data-step="5">
+                <div class="step-number">5</div>
+                <div class="step-label">Service Areas</div>
+            </div>
+            <div class="step inactive" data-step="6">
+                <div class="step-number">6</div>
+                <div class="step-label">Review</div>
+            </div>
+        </div>
+
+        <!-- Registration Form -->
+        <form id="registrationForm" class="bg-white rounded-lg shadow-lg p-8">
+            <!-- Section 1: Personal Information -->
+            <div class="form-section active" data-section="1">
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-2">Personal Information</h2>
+                    <p class="text-gray-600">Please provide your basic personal details</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                        <input type="text" id="fullName" name="fullName" required 
+                               class="wdb-input" placeholder="Enter your full name">
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Baptism Name</label>
+                        <input type="text" id="baptismName" name="baptismName" 
+                               class="wdb-input" placeholder="Enter your baptism name">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Facebook Name</label>
+                        <input type="text" id="facebookName" name="facebookName" 
+                               class="wdb-input" placeholder="Enter your Facebook name">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth *</label>
+                        <input type="date" id="dateOfBirth" name="dateOfBirth" required 
+                               class="wdb-input">
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Gender *</label>
+                        <select id="gender" name="gender" required class="wdb-select">
+                            <option value="">Select Gender</option>
+                            <option value="male">Male(Dhiira)</option>
+                            <option value="female">Female(Dubara)</option>
+                            <option value="other">Other(Kan biroo)</option>
+                        </select>
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Marital Status *</label>
+                        <select id="maritalStatus" name="maritalStatus" required class="wdb-select">
+                            <option value="">Select Status</option>
+                            <option value="single">Single(Kana Hin fuune)</option>
+                            <option value="married">Married(Kan Fuudhe/Kan Heerumte)</option>
+                            <option value="divorced">Divorced((Kan Hiike/Hiikte))</option>
+                            <option value="widowed">Widowed((Abbaan mana/Haati manaa kana jalaa duute/du'e))</option>
+                        </select>
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <div id="spouseFields" class="hidden col-span-2">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Maqaa Guutuu Haadha/Abbaa Warraa (Spouse Name)</label>
+                                <input type="text" id="spouseName" name="spouseName" 
+                                       class="wdb-input" placeholder="Enter spouse name">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Lakk.Bilbilaa (Spouse Phone)</label>
+                                <input type="tel" id="spousePhone" name="spousePhone" 
+                                       class="wdb-input" placeholder="Enter spouse phone">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Maqaa Abbaa Gaabbii/ Confession Father</label>
+                        <input type="text" id="confessionFather" name="confessionFather" 
+                               class="wdb-input" placeholder="Enter confession father name">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Lakk.Bilbilaa /Mobile Phone *</label>
+                        <input type="tel" id="mobilePhone" name="mobilePhone" required 
+                               class="wdb-input" placeholder="Enter your mobile phone">
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                        <input type="email" id="email" name="email" required 
+                               class="wdb-input" placeholder="Enter your email address">
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password *</label>
+                        <input type="password" id="password" name="password" required minlength="6"
+                               class="wdb-input" placeholder="Enter a secure password (minimum 6 characters)">
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                        <p class="text-sm text-gray-500 mt-1">You can change this password after registration</p>
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Current Address *</label>
+                        <textarea id="currentAddress" name="currentAddress" required rows="3" 
+                                  class="wdb-input" placeholder="Enter your current address"></textarea>
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Section 2: Education & Occupation -->
+            <div class="form-section" data-section="2">
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-2">Education & Occupation</h2>
+                    <p class="text-gray-600">Please provide your educational background and current occupation</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Education Level *</label>
+                        <select id="educationLevel" name="educationLevel" required class="wdb-select">
+                            <option value="">Select Education Level</option>
+                            <option value="primary">Primary School</option>
+                            <option value="secondary">Secondary School</option>
+                            <option value="tvet">TVET/Diploma</option>
+                            <option value="bachelor">Bachelor's Degree</option>
+                            <option value="master">Master's Degree</option>
+                            <option value="phd">PhD/Doctorate</option>
+                            <option value="other">Other/Religious Education</option>
+                        </select>
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Field of Study *</label>
+                        <input type="text" id="fieldOfStudy" name="fieldOfStudy" required 
+                               class="wdb-input" placeholder="Enter your field of study">
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">University/Institution</label>
+                        <input type="text" id="university" name="university" 
+                               class="wdb-input" placeholder="Enter university or institution name">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Graduation Year</label>
+                        <input type="number" id="graduationYear" name="graduationYear" min="1950" max="2030" 
+                               class="wdb-input" placeholder="Enter graduation year">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Current Occupation *</label>
+                        <input type="text" id="occupation" name="occupation" required 
+                               class="wdb-input" placeholder="Enter your current occupation">
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Organization/Company</label>
+                        <input type="text" id="organization" name="organization" 
+                               class="wdb-input" placeholder="Enter organization or company name">
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Membership Plan *</label>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-colors" onclick="selectMembershipPlan('basic')">
+                                <input type="radio" id="planBasic" name="membershipPlan" value="basic" class="sr-only">
+                                <div class="text-center">
+                                    <h3 class="font-semibold text-gray-900">Basic</h3>
+                                    <p class="text-sm text-gray-600 mt-1">Standard membership benefits</p>
+                                    <p class="text-lg font-bold text-blue-600 mt-2">Free</p>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-colors" onclick="selectMembershipPlan('premium')">
+                                <input type="radio" id="planPremium" name="membershipPlan" value="premium" class="sr-only">
+                                <div class="text-center">
+                                    <h3 class="font-semibold text-gray-900">Premium</h3>
+                                    <p class="text-sm text-gray-600 mt-1">Enhanced benefits and services</p>
+                                    <p class="text-lg font-bold text-blue-600 mt-2">500 ETB/year</p>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-colors" onclick="selectMembershipPlan('lifetime')">
+                                <input type="radio" id="planLifetime" name="membershipPlan" value="lifetime" class="sr-only">
+                                <div class="text-center">
+                                    <h3 class="font-semibold text-gray-900">Lifetime</h3>
+                                    <p class="text-sm text-gray-600 mt-1">All benefits for life</p>
+                                    <p class="text-lg font-bold text-blue-600 mt-2">5000 ETB</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Center/Wiirtuu *</label>
+                        <select id="preferredCenter" name="preferredCenter" required class="wdb-select">
+                            <option value="">Loading centers...</option>
+                        </select>
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                        <p class="text-sm text-gray-500 mt-1">Select the WDB center/Wiirtuu you would like to be associated with</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Role at Center</label>
+                        <select id="centerRole" name="centerRole" class="wdb-select">
+                            <option value="">Select Role (Optional)</option>
+                            <option value="member">Regular Member</option>
+                            <option value="volunteer">Volunteer</option>
+                            <option value="coordinator">Coordinator</option>
+                            <option value="leader">Leader</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <p class="text-sm text-gray-500 mt-1">Your intended role or contribution at the selected center</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Clergy Status -->
+            <div class="form-section" data-section="3">
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-2">Clergy Status</h2>
+                    <p class="text-gray-600">Please provide information about your religious ordination (if applicable)</p>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Diaconate Information -->
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Diaconate Information</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Diaconate Year</label>
+                                <input type="number" id="diaconateYear" name="diaconateYear" min="1950" max="2030" 
+                                       class="wdb-input" placeholder="Enter year">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Diaconate Church</label>
+                                <input type="text" id="diaconateChurch" name="diaconateChurch" 
+                                       class="wdb-input" placeholder="Enter church name">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Ordaining Father</label>
+                                <input type="text" id="diaconateFather" name="diaconateFather" 
+                                       class="wdb-input" placeholder="Enter ordaining father name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Priesthood Information -->
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Priesthood Information</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Priesthood Year</label>
+                                <input type="number" id="priesthoodYear" name="priesthoodYear" min="1950" max="2030" 
+                                       class="wdb-input" placeholder="Enter year">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Priesthood Church</label>
+                                <input type="text" id="priesthoodChurch" name="priesthoodChurch" 
+                                       class="wdb-input" placeholder="Enter church name">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Ordaining Father</label>
+                                <input type="text" id="priesthoodFather" name="priesthoodFather" 
+                                       class="wdb-input" placeholder="Enter ordaining father name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Monasticism Information -->
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Monasticism Information</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Monastic Year</label>
+                                <input type="number" id="monasticYear" name="monasticYear" min="1950" max="2030" 
+                                       class="wdb-input" placeholder="Enter year">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Monastery</label>
+                                <input type="text" id="monasticMonastery" name="monasticMonastery" 
+                                       class="wdb-input" placeholder="Enter monastery name">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Monastic Father</label>
+                                <input type="text" id="monasticFather" name="monasticFather" 
+                                       class="wdb-input" placeholder="Enter monastic father name">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Section 4: Regional & Church Information -->
+            <div class="form-section" data-section="4">
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-2">Regional & Church Information</h2>
+                    <p class="text-gray-600">Please provide your location and church information</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Region/State *</label>
+                        <select id="region" name="region" required class="wdb-select">
+                            <option value="">Select Region</option>
+                            <option value="addis_ababa">Addis Ababa</option>
+                            <option value="oromia">Oromia</option>
+                            <option value="amhara">Amhara</option>
+                            <option value="tigray">Tigray</option>
+                            <option value="sidama">Sidama</option>
+                            <option value="snnp">SNNP</option>
+                            <option value="afar">Afar</option>
+                            <option value="somali">Somali</option>
+                            <option value="benishangul">Benishangul-Gumuz</option>
+                            <option value="gambela">Gambela</option>
+                            <option value="harari">Harari</option>
+                            <option value="dire_dawa">Dire Dawa</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Country *</label>
+                        <select id="country" name="country" required class="wdb-select">
+                            <option value="ethiopia">Ethiopia</option>
+                            <option value="usa">United States</option>
+                            <option value="canada">Canada</option>
+                            <option value="uk">United Kingdom</option>
+                            <option value="germany">Germany</option>
+                            <option value="australia">Australia</option>
+                            <option value="south_africa">South Africa</option>
+                            <option value="kenya">Kenya</option>
+                            <option value="sudan">Sudan</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">City/Sub-City *</label>
+                        <input type="text" id="subCity" name="subCity" required 
+                               class="wdb-input" placeholder="Enter your city or sub-city">
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Current Church *</label>
+                        <input type="text" id="currentChurch" name="currentChurch" required 
+                               class="wdb-input" placeholder="Enter your current church name">
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Church Woreda *</label>
+                        <input type="text" id="churchWoreda" name="churchWoreda" required 
+                               class="wdb-input" placeholder="Enter church woreda">
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Current Service *</label>
+                        <input type="text" id="currentService" name="currentService" required 
+                               class="wdb-input" placeholder="Enter your current service role">
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: WDB Service Areas -->
+            <div class="form-section" data-section="5">
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-2">WDB Service Areas</h2>
+                    <p class="text-gray-600">Select up to 3 service areas where you would like to contribute (in order of preference)</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <p class="text-sm text-blue-800">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Please select 1-3 service areas in order of your preference. You can drag to reorder your selections.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="service-area-option" data-service="music-literature">
+                            <input type="checkbox" id="serviceMusicLiterature" name="serviceAreas[]" value="music-literature" class="sr-only">
+                            <div class="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-colors">
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-music text-blue-600 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Kutaa Faaruu fi Ogbarruu / Spiritual Song & Literature</h3>
+                                        <p class="text-sm text-gray-600 mt-1">Contribute to WDB's musical and literary works, including hymns, books, and educational materials.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-area-option" data-service="committee-member">
+                            <input type="checkbox" id="serviceCommitteeMember" name="serviceAreas[]" value="committee-member" class="sr-only">
+                            <div class="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-colors">
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-users text-green-600 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Koree Waldichaa / Committee Member</h3>
+                                        <p class="text-sm text-gray-600 mt-1">Participate in WDB committees and decision-making processes for organizational development.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-area-option" data-service="member-followup">
+                            <input type="checkbox" id="serviceMemberFollowup" name="serviceAreas[]" value="member-followup" class="sr-only">
+                            <div class="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-colors">
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-user-friends text-purple-600 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Kutaa Hordoffii Miseensaa / Member Follow-up</h3>
+                                        <p class="text-sm text-gray-600 mt-1">Help with member engagement, follow-up activities, and community building initiatives.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-area-option" data-service="counseling-mediation">
+                            <input type="checkbox" id="serviceCounselingMediation" name="serviceAreas[]" value="counseling-mediation" class="sr-only">
+                            <div class="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-colors">
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-hands-helping text-yellow-600 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Kutaa Gorsa fi Araaraa / Counseling & Mediation</h3>
+                                        <p class="text-sm text-gray-600 mt-1">Provide counseling services and mediation support for community members in need.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-area-option" data-service="education">
+                            <input type="checkbox" id="serviceEducation" name="serviceAreas[]" value="education" class="sr-only">
+                            <div class="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-colors">
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-graduation-cap text-red-600 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Kutaa Barumsaa / Education</h3>
+                                        <p class="text-sm text-gray-600 mt-1">Contribute to educational programs, teaching, and knowledge sharing within the WDB community.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-area-option" data-service="media-digital-it">
+                            <input type="checkbox" id="serviceMediaDigitalIT" name="serviceAreas[]" value="media-digital-it" class="sr-only">
+                            <div class="border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-colors">
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-laptop text-indigo-600 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Kutaa Media/Digital/IT</h3>
+                                        <p class="text-sm text-gray-600 mt-1">Support digital initiatives, media production, and IT infrastructure for WDB operations.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="selectedServiceAreas" class="hidden">
+                        <h4 class="font-medium text-gray-900 mb-3">Selected Service Areas (in order of preference):</h4>
+                        <div id="serviceAreasList" class="space-y-2"></div>
+                    </div>
+
+                    <div class="error-message hidden text-red-500 text-sm"></div>
+                </div>
+            </div>
+            <!-- Section 6: Review & Submit -->
+            <div class="form-section" data-section="6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-2">Review & Submit</h2>
+                    <p class="text-gray-600">Please review your information before submitting your application</p>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Review Summary -->
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Application Summary</h3>
+                        <div id="reviewSummary" class="space-y-4">
+                            <!-- Summary will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Terms and Conditions</h3>
+                        <div class="max-h-40 overflow-y-auto text-sm text-gray-600 mb-4">
+                            <p class="mb-3">By submitting this application, you agree to the following terms and conditions:</p>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>All information provided is accurate and truthful to the best of your knowledge.</li>
+                                <li>You understand that WDB membership comes with certain responsibilities and commitments.</li>
+                                <li>You agree to participate actively in WDB activities and services as able.</li>
+                                <li>You consent to WDB using your information for membership management and communication purposes.</li>
+                                <li>You understand that membership fees (if applicable) are non-refundable.</li>
+                                <li>You agree to uphold the values and principles of the Ethiopian Orthodox Tewahedo Church.</li>
+                            </ul>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <input type="checkbox" id="agreeTerms" name="agreeTerms" required class="mt-1">
+                            <label for="agreeTerms" class="text-sm text-gray-700">
+                                I have read and agree to the terms and conditions *
+                            </label>
+                        </div>
+                        <div class="error-message hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+
+                    <!-- Privacy Notice -->
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-shield-alt text-blue-600 mt-1"></i>
+                            <div class="text-sm text-blue-800">
+                                <p class="font-medium mb-1">Privacy Notice</p>
+                                <p>Your personal information will be kept confidential and used only for WDB membership purposes. We do not share your information with third parties without your consent.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Navigation -->
+            <div class="flex justify-between items-center mt-8 pt-6 border-t border-gray-200">
+                <button type="button" id="prevBtn" class="wdb-btn wdb-btn-secondary" onclick="previousStep()" style="display: none;">
+                    <i class="fas fa-arrow-left mr-2"></i>Previous
+                </button>
+                <div class="flex space-x-3">
+                    <button type="button" id="saveDraftBtn" class="wdb-btn wdb-btn-outline" onclick="saveDraft()">
+                        <i class="fas fa-save mr-2"></i>Save Draft
+                    </button>
+                    <button type="button" id="previewBtn" class="wdb-btn wdb-btn-secondary hidden" onclick="previewApplication()">
+                        <i class="fas fa-eye mr-2"></i>Preview
+                    </button>
+                    <button type="button" id="nextBtn" class="wdb-btn wdb-btn-primary" onclick="nextStep()">
+                        Next<i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                    <button type="submit" id="submitBtn" class="wdb-btn wdb-btn-success hidden">
+                        <i class="fas fa-paper-plane mr-2"></i>Submit Application
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+            <div class="spinner mx-auto mb-4"></div>
+            <p class="text-gray-700">Processing your application...</p>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-2/3 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-semibold text-gray-900">Application Preview</h3>
+                    <button onclick="closePreview()" class="text-gray-400 hover:text-gray-600 text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="previewContent" class="space-y-6">
+                    <!-- Preview content will be populated here -->
+                </div>
+                <div class="flex justify-end space-x-3 mt-6 pt-4 border-t">
+                    <button onclick="closePreview()" class="wdb-btn wdb-btn-secondary">Close</button>
+                    <button onclick="submitFromPreview()" class="wdb-btn wdb-btn-success">
+                        <i class="fas fa-paper-plane mr-2"></i>Submit Application
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/i18n.js"></script>
+    <script>
+        // Load centers from API for the dropdown
+        async function loadCenters() {
+            const centerSelect = document.getElementById('preferredCenter');
+            
+            try {
+                // Show loading state
+                centerSelect.innerHTML = '<option value="">Loading centers...</option>';
+                centerSelect.disabled = true;
+                
+                const response = await fetch('api/test-centers.php', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success && result.data && Array.isArray(result.data)) {
+                    // Clear loading option and enable dropdown
+                    centerSelect.innerHTML = '<option value="">Select a Center/Wiirtuu</option>';
+                    centerSelect.disabled = false;
+                    
+                    // Add centers to dropdown
+                    result.data.forEach(center => {
+                        const option = document.createElement('option');
+                        option.value = center.id;
+                        option.textContent = `${center.name}${center.location ? ' - ' + center.location : ''}${center.city ? ' - ' + center.city : ''}`;
+                        centerSelect.appendChild(option);
+                    });
+                    
+                    console.log(`Successfully loaded ${result.data.length} centers`);
+                } else {
+                    // Handle case where API returns success but no data
+                    throw new Error('No centers data received from API');
+                }
+                
+            } catch (error) {
+                console.error('Error loading centers:', error);
+                
+                // Re-enable dropdown and show fallback options
+                centerSelect.disabled = false;
+                centerSelect.innerHTML = `
+                    <option value="">Select a Center/Wiirtuu</option>
+                    <option value="main_center">Wiirtuu Muummee (Main Center)</option>
+                    <option value="gorfo_center">Wiirtuu Gorfoo (Gorfo Center)</option>
+                    <option value="east_arsi_center">Wiirtuu Arsii Bahaa (East Arsi Center)</option>
+                    <option value="west_arsi_center">Wiirtuu Arsii Lixaa (West Arsi Center)</option>
+                    <option value="asosa_center">Wiirtuu Asoosaa (Asosa Center)</option>
+                    <option value="bale_center">Wiirtuu Baalee (Bale Center)</option>
+                    <option value="burayyuu_center">Wiirtuu Buraayyuu (Burayyuu Center)</option>
+                    <option value="bunno_bedelle_center">Wiirtuu Bunnoo Beddellee (Bunno Bedelle Center)</option>
+                    <option value="gelan_center">Wiirtuu Galan (Gelan Center)</option>
+                    <option value="west_guji_center">Wiirtuu Gujii Lixaa (West Guji Center)</option>
+                n value="horo_guduru_welega_center">Wiirtuu H/G/Wallaggaa (Horo Guduru Welega Center)</option>
+                    <option value="west_hararghe_center">Wiirtuu Harargee Lixaa (West Hararghe Center)</option>
+                    <option value="illubabor_center">Wiirtuu Iluubaboor (Illubabor Center)</option>
+                    <option value="jimma_center">Wiirtuu Jimmaa (Jimma Center)</option>
+                    <option value="laga_tafo_center">Wiirtuu Laga Xaafoo (Laga Tafo Center)</option>
+                    <option value="east_wollega_center">Wiirtuu Wallagaa Bahaa (East Wollega Center)</option>
+                    <option value="west_wollega_center">Wiirtuu Wallagaa Lixaa (West Wollega Center)</option>
+                    <option value="other">Other Center</option>
+                `;
+                
+                // Show error message to user if there's a message function available
+                if (typeof showMessage === 'function') {
+                    showMessage('Could not load centers from server. Using default options.', 'waing');
+                } else {
+                    // Create a temporary notification
+                    const notification = document.createElement('div');
+                    notification.className = 'fixed top-4 right-4 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded z-50';
+                    notification.innerHTML = `
+                        <div class="flex items-center">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            <span>Could not load centers from server. Using default options.</span>
+                        </div>
+                    `;
+                    document.body.appendChild(notification);
+                    
+                    // Remove notification after 5 seconds
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 5000);
+                }
+            }
+        }
+
+
+
+        // Initialize service area selection functionality
+        function initializeServiceAreaSelection() {
+            const serviceAreaOptions = document.querySelectorAll('.service-area-option');
+            const selectedServiceAreas = document.getElementById('selectedServiceAreas');
+            const serviceAreasList = document.getElementById('serviceAreasList');
+            let selectedAreas = [];
+
+            serviceAreaOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    const serviceValue = checkbox.value;
+                    const serviceName = this.querySelector('h3').textContent;
+
+                    if (checkbox.checked) {
+                        // Uncheck if already selected
+                        checkbox.checked = false;
+                        this.classList.remove('border-blue-500', 'bg-blue-50');
+                        selectedAreas = selectedAreas.filter(area => area.value !== serviceValue);
+                    } else {
+                        // Check if we can add more (max 3)
+                        if (selectedAreas.length >= 3) {
+                            alert('You can select a maximum of 3 service areas.');
+                            return;
+                        }
+                        
+                        checkbox.checked = true;
+                        this.classList.add('border-blue-500', 'bg-blue-50');
+                        selectedAreas.push({
+                            value: serviceValue,
+                            name: serviceName,
+                            priority: selectedAreas.length + 1
+                        });
+                    }
+
+                    updateSelectedServiceAreasDisplay();
+                });
+            });
+
+            function updateSelectedServiceAreasDisplay() {
+                if (selectedAreas.length > 0) {
+                    selectedServiceAreas.classList.remove('hidden');
+                    serviceAreasList.innerHTML = '';
+                    
+                    selectedAreas.forEach((area, index) => {
+                        const div = document.createElement('div');
+                        div.className = 'flex items-center justify-between p-3 bg-gray-50 rounded-lg';
+                        div.innerHTML = `
+                            <div>
+                                <span class="font-medium">${index + 1}. ${area.name}</span>
+                            </div>
+                            <button type="button" onclick="removeServiceArea('${area.value}')" class="text-red-600 hover:text-red-800">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        `;
+                        serviceAreasList.appendChild(div);
+                    });
+                } else {
+                    selectedServiceAreas.classList.add('hidden');
+                }
+            }
+
+            // Make removeServiceArea function global
+            window.removeServiceArea = function(serviceValue) {
+                const option = document.querySelector(`[data-service="${serviceValue}"]`);
+                if (option) {
+                    const checkbox = option.querySelector('input[type="checkbox"]');
+                    checkbox.checked = false;
+                    option.classList.remove('border-blue-500', 'bg-blue-50');
+                    selectedAreas = selectedAreas.filter(area => area.value !== serviceValue);
+                    updateSelectedServiceAreasDisplay();
+                }
+            };
+        }
+
+
+
+        // Initialize form validation
+        function initializeFormValidation() {
+            // Add marital status change handler
+            const maritalStatus = document.getElementById('maritalStatus');
+            const spouseFields = document.getElementById('spouseFields');
+            
+            if (maritalStatus && spouseFields) {
+                maritalStatus.addEventListener('change', function() {
+                    if (this.value === 'married') {
+                        spouseFields.classList.remove('hidden');
+                    } else {
+                        spouseFields.classList.add('hidden');
+                        // Clear spouse fields when hidden
+                        document.getElementById('spouseName').value = '';
+                        document.getElementById('spousePhone').value = '';
+                    }
+                });
+            }
+        }
+
+        // Add membership plan selection handler
+        window.selectMembershipPlan = function(plan) {
+            // Remove selection from all plans
+            document.querySelectorAll('input[name="membershipPlan"]').forEach(radio => {
+                radio.checked = false;
+                radio.closest('.border').classList.remove('border-blue-500', 'bg-blue-50');
+            });
+            
+            // Select the chosen plan
+            const selectedRadio = document.getElementById(`plan${plan.charAt(0).toUpperCase() + plan.slice(1)}`);
+            if (selectedRadio) {
+                selectedRadio.checked = true;
+                selectedRadio.closest('.border').classList.add('border-blue-500', 'bg-blue-50');
+            }
+        };
+
+        // Form navigation functions
+        let currentStep = 1;
+        const totalSteps = 6;
+
+        function nextStep() {
+            if (validateCurrentStep()) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    showStep(currentStep);
+                    updateProgress();
+                }
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+                updateProgress();
+            }
+        }
+
+        function showStep(step) {
+            // Hide all sections
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show current section
+            const currentSection = document.querySelector(`[data-section="${step}"]`);
+            if (currentSection) {
+                currentSection.classList.add('active');
+            }
+
+            // Update step indicators
+            document.querySelectorAll('.step').forEach((stepEl, index) => {
+                stepEl.classList.remove('active', 'completed', 'inactive');
+                if (index + 1 < step) {
+                    stepEl.classList.add('completed');
+                } else if (index + 1 === step) {
+                    stepEl.classList.add('active');
+                } else {
+                    stepEl.classList.add('inactive');
+                }
+            });
+
+            // Update navigation buttons
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const previewBtn = document.getElementById('previewBtn');
+
+            if (step === 1) {
+                prevBtn.style.display = 'none';
+            } else {
+                prevBtn.style.display = 'inline-flex';
+            }
+
+            if (step === totalSteps) {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+                previewBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+                previewBtn.classList.add('hidden');
+            }
+        }
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const percentage = (currentStep / totalSteps) * 100;
+            progressFill.style.width = percentage + '%';
+        }
+
+        function validateCurrentStep() {
+            const currentSection = document.querySelector(`[data-section="${currentStep}"]`);
+            const requiredFields = currentSection.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                const errorDiv = field.parentNode.querySelector('.error-message');
+                
+                if (!field.value.trim()) {
+                    if (errorDiv) {
+                        errorDiv.textContent = 'This field is required';
+                        errorDiv.classList.remove('hidden');
+                    }
+                    field.classList.add('border-red-500');
+                    isValid = false;
+                } else {
+                    if (errorDiv) {
+                        errorDiv.classList.add('hidden');
+                    }
+                    field.classList.remove('border-red-500');
+                }
+            });
+
+            // Special validation for service areas (step 5)
+            if (currentStep === 5) {
+                const selectedServiceAreas = document.querySelectorAll('input[name="serviceAreas[]"]:checked');
+                const errorDiv = document.querySelector('#selectedServiceAreas + .error-message');
+                
+                if (selectedServiceAreas.length === 0) {
+                    if (errorDiv) {
+                        errorDiv.textContent = 'Please select at least one service area';
+                        errorDiv.classList.remove('hidden');
+                    }
+                    isValid = false;
+                } else {
+                    if (errorDiv) {
+                        errorDiv.classList.add('hidden');
+                    }
+                }
+            }
+
+            return isValid;
+        }
+
+        // Save draft functionality
+        function saveDraft() {
+            const formData = new FormData(document.getElementById('registrationForm'));
+            const draftData = {};
+            
+            for (let [key, value] of formData.entries()) {
+                draftData[key] = value;
+            }
+            
+            localStorage.setItem('wdb_registration_draft', JSON.stringify(draftData));
+            
+            // Show success message
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded z-50';
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-check mr-2"></i>
+                    <span>Draft saved successfully!</span>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 3000);
+        }
+
+        // Preview functionality
+        function previewApplication() {
+            const modal = document.getElementById('previewModal');
+            const previewContent = document.getElementById('previewContent');
+            
+            // Generate preview content
+            const formData = new FormData(document.getElementById('registrationForm'));
+            let previewHTML = '';
+            
+            // Personal Information
+            previewHTML += '<div class="mb-6"><h4 class="font-semibold text-lg mb-3">Personal Information</h4>';
+            previewHTML += `<p><strong>Full Name:</strong> ${formData.get('fullName') || 'Not provided'}</p>`;
+            previewHTML += `<p><strong>Email:</strong> ${formData.get('email') || 'Not provided'}</p>`;
+            previewHTML += `<p><strong>Phone:</strong> ${formData.get('mobilePhone') || 'Not provided'}</p>`;
+            previewHTML += `<p><strong>Address:</strong> ${formData.get('currentAddress') || 'Not provided'}</p>`;
+            previewHTML += '</div>';
+            
+            // Education & Occupation
+            previewHTML += '<div class="mb-6"><h4 class="font-semibold text-lg mb-3">Education & Occupation</h4>';
+            previewHTML += `<p><strong>Education Level:</strong> ${formData.get('educationLevel') || 'Not provided'}</p>`;
+            previewHTML += `<p><strong>Field of Study:</strong> ${formData.get('fieldOfStudy') || 'Not provided'}</p>`;
+            previewHTML += `<p><strong>Occupation:</strong> ${formData.get('occupation') || 'Not provided'}</p>`;
+            previewHTML += `<p><strong>Membership Plan:</strong> ${formData.get('membershipPlan') || 'Not provided'}</p>`;
+            previewHTML += '</div>';
+            
+            // Service Areas
+            const selectedServiceAreas = document.querySelectorAll('input[name="serviceAreas[]"]:checked');
+            if (selectedServiceAreas.length > 0) {
+                previewHTML += '<div class="mb-6"><h4 class="font-semibold text-lg mb-3">Selected Service Areas</h4>';
+                selectedServiceAreas.forEach((area, index) => {
+                    const serviceName = area.closest('.service-area-option').querySelector('h3').textContent;
+                    previewHTML += `<p><strong>${index + 1}.</strong> ${serviceName}</p>`;
+                });
+                previewHTML += '</div>';
+            }
+            
+            previewContent.innerHTML = previewHTML;
+            modal.classList.remove('hidden');
+        }
+
+        function closePreview() {
+            document.getElementById('previewModal').classList.add('hidden');
+        }
+
+        function submitFromPreview() {
+            closePreview();
+            submitRegistrationForm();
+        }
+
+        // Form submission handler with improved error handling
+        async function submitRegistrationForm() {
+            const form = document.getElementById('registrationForm');
+            const formData = new FormData(form);
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            // Show loading overlay
+            loadingOverlay.classList.remove('hidden');
+            
+            // Convert FormData to JSON object
+            const registrationData = {};
+            for (let [key, value] of formData.entries()) {
+                // Handle array fields (service areas)
+                if (key.endsWith('[]')) {
+                    const cleanKey = key.replace('[]', '');
+                    if (!registrationData[cleanKey]) {
+                        registrationData[cleanKey] = [];
+                    }
+                    registrationData[cleanKey].push(value);
+                } else {
+                    registrationData[key] = value;
+                }
+            }
+            
+            // Map form fields to API expected fields
+            const apiData = {
+                first_name: registrationData.fullName ? registrationData.fullName.split(' ')[0] : '',
+                last_name: registrationData.fullName ? registrationData.fullName.split(' ').slice(1).join(' ') : '',
+                email: registrationData.email,
+                phone: registrationData.mobilePhone,
+                date_of_birth: registrationData.dateOfBirth,
+                gender: registrationData.gender,
+                marital_status: registrationData.maritalStatus,
+                education_level: registrationData.educationLevel,
+                profession: registrationData.occupation,
+                country: registrationData.country,
+                state_region: registrationData.region,
+                city: registrationData.subCity,
+                address: registrationData.currentAddress,
+                center: registrationData.preferredCenter,
+                password: registrationData.password,
+                // Additional fields
+                baptism_name: registrationData.baptismName,
+                facebook_name: registrationData.facebookName,
+                spouse_name: registrationData.spouseName,
+                spouse_phone: registrationData.spousePhone,
+                confession_father: registrationData.confessionFather,
+                field_of_study: registrationData.fieldOfStudy,
+                university: registrationData.university,
+                graduation_year: registrationData.graduationYear,
+                organization: registrationData.organization,
+                membership_plan: registrationData.membershipPlan,
+                center_role: registrationData.centerRole,
+                // Clergy status
+                diaconate_year: registrationData.diaconateYear,
+                diaconate_church: registrationData.diaconateChurch,
+                diaconate_father: registrationData.diaconateFather,
+                priesthood_year: registrationData.priesthoodYear,
+                priesthood_church: registrationData.priesthoodChurch,
+                priesthood_father: registrationData.priesthoodFather,
+                monastic_year: registrationData.monasticYear,
+                monastic_monastery: registrationData.monasticMonastery,
+                monastic_father: registrationData.monasticFather,
+                // Location
+                current_church: registrationData.currentChurch,
+                church_woreda: registrationData.churchWoreda,
+                current_service: registrationData.currentService,
+                // Service areas
+                service_areas: registrationData.serviceAreas || []
+            };
+            
+            try {
+                console.log('Submitting registration data:', apiData);
+                
+                const response = await fetch('api/members/register.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(apiData)
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                // Get response text first to check if it's valid JSON
+                const responseText = await response.text();
+                console.log('Response text:', responseText);
+                
+                // Hide loading overlay
+                loadingOverlay.classList.add('hidden');
+                
+                // Try to parse as JSON
+                let result;
+                try {
+                    result = JSON.parse(responseText);
+                } catch (jsonError) {
+                    console.error('JSON parse error:', jsonError);
+                    console.error('Response was not valid JSON:', responseText);
+                    alert('Server error: Invalid response format. Please contact support.\n\nResponse: ' + responseText.substring(0, 200));
+                    return;
+                }
+                
+                console.log('Parsed result:', result);
+                
+                if (result.success) {
+                    // Show success message
+                    alert('✅ Registration successful!\n\nYour Member ID is: ' + result.data.member_id + '\n\nYou will be redirected to the login page.');
+                    
+                    // Clear draft
+                    localStorage.removeItem('wdb_registration_draft');
+                    
+                    // Redirect to login
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
+                } else {
+                    // Show error message
+                    alert('❌ Registration failed:\n\n' + (result.error || 'Unknown error occurred'));
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                console.error('Error details:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
+                
+                loadingOverlay.classList.add('hidden');
+                
+                alert('❌ Network error occurred:\n\n' + error.message + '\n\nPlease check:\n1. Your internet connection\n2. The server is running\n3. Browser console for details (F12)');
+            }
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCenters();
+            initializeServiceAreaSelection();
+            initializeFormValidation();
+            
+            // Add form submit handler
+            const form = document.getElementById('registrationForm');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate final step
+                if (!validateCurrentStep()) {
+                    return;
+                }
+                
+                // Check terms agreement
+                const agreeTerms = document.getElementById('agreeTerms');
+                if (!agreeTerms.checked) {
+                    alert('Please agree to the terms and conditions before submitting.');
+                    return;
+                }
+                
+                // Submit the form
+                submitRegistrationForm();
+            });
+            
+            // Load draft data if available
+            const savedDraft = localStorage.getItem('wdb_registration_draft');
+            if (savedDraft) {
+                try {
+                    const draftData = JSON.parse(savedDraft);
+                    Object.keys(draftData).forEach(key => {
+                        const field = document.querySelector(`[name="${key}"]`);
+                        if (field) {
+                            field.value = draftData[key];
+                            
+                            // Trigger change events for special fields
+                            if (key === 'maritalStatus') {
+                                field.dispatchEvent(new Event('change'));
+                            }
+                        }
+                    });
+                } catch (e) {
+                    console.error('Error loading draft:', e);
+                }
+            }
+        });
+    </script>
+    <script src="js/wdb-ai-assistant.js"></script>
+</body>
+</html>

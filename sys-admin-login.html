@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDB Admin Login | Ethiopian Orthodox Tewahedo Church</title>
+    <script>
+        // Force HTTP protocol for local development
+        if (window.location.protocol === 'https:' && window.location.hostname === 'localhost') {
+            window.location.href = window.location.href.replace('https:', 'http:');
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Import Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        /* Professional Design System - Ethiopian Orthodox Theme */
+        :root {
+            --primary-color: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --primary-gradient: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            --secondary-color: #64748b;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --error-color: #dc2626;
+            --gold-accent: #d4af37;
+            --background-gradient: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #dbeafe 100%);
+            --card-shadow: 0 25px 50px rgba(30, 64, 175, 0.15);
+            --card-shadow-hover: 0 35px 70px rgba(30, 64, 175, 0.25);
+            --border-radius: 24px;
+            --border-radius-sm: 16px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --glass-bg: rgba(255, 255, 255, 0.98);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Beautiful Background Image with proper layering */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-image: url('images/IMG_4569.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #1f2937;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background overlay to ensure readability - positioned behind content */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Animated background elements - Ethiopian Orthodox Theme */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(30, 64, 175, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(30, 58, 138, 0.08) 0%, transparent 50%);
+            z-index: 0;
+            animation: backgroundFloat 20s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes backgroundFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+        }
+
+        /* Main Container */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Login Card - Enhanced Ethiopian Orthodox Style */
+        .login-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            border-radius: var(--border-radius);
+            box-shadow: 
+                var(--card-shadow),
+                0 0 0 1px rgba(255, 255, 255, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 2px solid var(--glass-border);
+            padding: 3rem;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-color), var(--gold-accent), var(--primary-color));
+            background-size: 200% 100%;
+            animation: shimmerGold 3s linear infinite;
+        }
+
+        @keyframes shimmerGold {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .login-card:hover {
+            box-shadow: var(--card-shadow-hover);
+            transform: translateY(-5px);
+        }
+
+        /* Logo Section */
+        .logo-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 25px rgba(30, 64, 175, 0.2));
+            transition: var(--transition);
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            padding: 12px;
+            border: 3px solid var(--gold-accent);
+        }
+
+        .logo:hover {
+            transform: scale(1.08) rotate(5deg);
+            filter: drop-shadow(0 15px 35px rgba(212, 175, 55, 0.3));
+            border-color: var(--primary-color);
+        }
+
+        .logo-glow {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--gold-accent));
+            border-radius: 50%;
+            opacity: 0.15;
+            animation: pulseGlow 3s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 0.15; }
+            50% { transform: scale(1.15); opacity: 0.25; }
+        }
+
+        .page-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--gold-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.025em;
+            text-shadow: 0 2px 10px rgba(212, 175, 55, 0.1);
+        }
+
+        .page-subtitle {
+            font-size: 1.125rem;
+            color: var(--primary-dark);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-description {
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        /* Form Styling */
+        .login-form {
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 1.125rem 1.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: var(--border-radius-sm);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            background: white;
+            font-family: inherit;
+            box-shadow: 0 2px 4px rgba(30, 64, 175, 0.05);
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.1), 0 4px 12px rgba(212, 175, 55, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .form-input:invalid:not(:focus),
+        .form-select:invalid:not(:focus) {
+            border-color: var(--error-color);
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+        }
+
+        /* Input Groups */
+        .input-group {
+            display: grid;
+            gap: 0;
+            border-radius: var(--border-radius-sm);
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .input-group .form-input {
+            border-radius: 0;
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: none;
+        }
+
+        .input-group .form-input:last-child {
+            border-bottom: none;
+        }
+
+        .input-group .form-input:first-child {
+            border-top-left-radius: var(--border-radius-sm);
+            border-top-right-radius: var(--border-radius-sm);
+        }
+
+        .input-group .form-input:last-child {
+            border-bottom-left-radius: var(--border-radius-sm);
+            border-bottom-right-radius: var(--border-radius-sm);
+        }
+
+        /* Messages */
+        .message {
+            padding: 1rem 1.25rem;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .message.error {
+            background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+            color: #c53030;
+            border-left: 4px solid var(--error-color);
+        }
+
+        .message.success {
+            background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
+            color: #22543d;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .message.error::before {
+            content: '⚠️';
+            font-size: 1.2rem;
+        }
+
+        .message.success::before {
+            content: '✅';
+            font-size: 1.2rem;
+        }
+
+        /* Form Options */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-color);
+        }
+
+        .checkbox-label {
+            font-size: 0.875rem;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .forgot-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+
+        .forgot-link:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* Button Styling */
+        .btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius-sm);
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.5), 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-primary:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        /* Footer Links */
+        .footer-links {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .footer-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            font-size: 0.875rem;
+        }
+
+        .footer-link:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .footer-link.primary {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            .login-container {
+                padding: 1rem;
+            }
+
+            .login-card {
+                padding: 2rem;
+            }
+
+            .logo {
+                width: 80px;
+                height: 80px;
+            }
+
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* Accessibility */
+        .form-input:focus,
+        .form-select:focus,
+        .btn:focus,
+        .checkbox:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --primary-color: #0000ff;
+                --primary-dark: #000080;
+                --error-color: #ff0000;
+                --secondary-color: #000000;
+            }
+
+            .login-card {
+                border: 2px solid #000000;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Password Field Wrapper */
+        .password-field-wrapper {
+            position: relative;
+        }
+
+        .password-field-wrapper .form-input {
+            padding-right: 50px;
+        }
+
+        /* Password Toggle Button */
+        .password-toggle-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 5px;
+            transition: var(--transition);
+            z-index: 10;
+            opacity: 0.6;
+        }
+
+        .password-toggle-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+            opacity: 1;
+        }
+
+        .password-toggle-btn:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+            border-radius: 4px;
+            opacity: 1;
+        }
+
+        /* Password Strength Indicator */
+        .password-strength-container {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            border-radius: var(--border-radius-sm);
+            border: 1px solid #e5e7eb;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .strength-bar-container {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .strength-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .strength-text {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+            gap: 1rem;
+        }
+
+        #strength-label {
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        #strength-requirements {
+            font-size: 0.75rem;
+            color: #6b7280;
+            font-style: italic;
+            text-align: right;
+        }
+    </style>
+</head>
+<body class="wdb-background-base wdb-bg-IMG_4569">
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Logo and Header -->
+            <div class="logo-section">
+                <div class="logo-container">
+                    <div class="logo-glow"></div>
+                    <img class="logo" src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo">
+                </div>
+                <h1 class="page-title">Administrator Login</h1>
+                <h2 class="page-subtitle">WDB Membership Management System</h2>
+                <p class="page-description">Administrative access to manage members and system settings</p>
+            </div>
+
+            <!-- Login Form -->
+            <form class="login-form" id="adminLoginForm">
+                <!-- Error Message -->
+                <div id="errorMessage" class="message error hidden">
+                    <span id="errorText"></span>
+                </div>
+
+                <!-- Success Message -->
+                <div id="successMessage" class="message success hidden">
+                    <span id="successText"></span>
+                </div>
+
+                <div class="input-group">
+                    <input id="username" name="username" type="text" required 
+                           class="form-input" 
+                           placeholder="Administrator Username">
+                    <div class="password-field-wrapper">
+                        <input id="password" name="password" type="password" required 
+                               class="form-input" 
+                               placeholder="Password"
+                               aria-describedby="password-strength">
+                        <button type="button" 
+                                class="password-toggle-btn"
+                                onclick="togglePasswordVisibility('password')"
+                                aria-label="Toggle password visibility"
+                                tabindex="-1">
+                            <span id="password-toggle-icon">👁️</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Password Strength Indicator -->
+                <div id="password-strength" class="password-strength-container" style="display: none;">
+                    <div class="strength-bar-container">
+                        <div id="strength-bar" class="strength-bar"></div>
+                    </div>
+                    <div class="strength-text">
+                        <span id="strength-label"></span>
+                        <span id="strength-requirements"></span>
+                    </div>
+                </div>
+
+                <!-- Role Selection -->
+                <div class="form-group">
+                    <label for="expectedRole" class="form-label">Login As</label>
+                    <select id="expectedRole" name="expectedRole" required class="form-select">
+                        <option value="">Select Administrative Role</option>
+                        <option value="admin">Administrator</option>
+                        <option value="superadmin">Super Administrator</option>
+                        <option value="system_admin">System Administrator</option>
+                    </select>
+                </div>
+
+                <div class="form-options">
+                    <div class="checkbox-group">
+                        <input id="remember-me" name="remember-me" type="checkbox" class="checkbox">
+                        <label for="remember-me" class="checkbox-label">
+                            Remember me
+                        </label>
+                    </div>
+
+                    <a href="forgot-password.html" class="forgot-link">
+                        Forgot password?
+                    </a>
+                </div>
+
+                <button type="submit" id="loginButton" class="btn btn-primary">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    <span id="loginButtonText">Admin Sign In</span>
+                </button>
+            </form>
+
+            <!-- Footer Links -->
+            <div class="footer-links">
+                <p class="text-sm text-gray-600 mb-3">
+                    Regular member? 
+                    <a href="member-login.html" class="footer-link primary">
+                        Member Login
+                    </a>
+                </p>
+                <p class="text-sm text-gray-600 mb-3">
+                    Don't have an account? 
+                    <a href="register.html" class="footer-link primary">
+                        Register here
+                    </a>
+                </p>
+                <p class="text-xs text-gray-500">
+                    <a href="login.html" class="footer-link">← Back to Login Options</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const loginButton = document.getElementById('loginButton');
+            const loginButtonText = document.getElementById('loginButtonText');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Disable button and show loading
+            loginButton.disabled = true;
+            loginButton.classList.add('loading');
+            loginButtonText.textContent = 'Signing in...';
+            
+            // Hide previous messages
+            errorMessage.classList.add('hidden');
+            successMessage.classList.add('hidden');
+            
+            try {
+                const formData = new FormData(e.target);
+                const loginData = {
+                    username: formData.get('username'),
+                    password: formData.get('password'),
+                    expected_role: formData.get('expectedRole')
+                };
+                
+                // Test API connection first
+                try {
+                    const testResponse = await fetch('api/test-connection.php');
+                    if (!testResponse.ok) {
+                        throw new Error('API server not accessible');
+                    }
+                } catch (error) {
+                    throw new Error('Cannot connect to API server. Please check if XAMPP is running.');
+                }
+
+                // Use simple login API
+                const response = await fetch('api/auth/login-simple.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(loginData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const user = result.data.user;
+                    
+                    // Verify role matches expected role
+                    if (loginData.expected_role && user.role !== loginData.expected_role) {
+                        document.getElementById('errorText').textContent = 'Access denied: Insufficient privileges for selected role';
+                        errorMessage.classList.remove('hidden');
+                        return;
+                    }
+                    
+                    // Verify user has admin or superadmin role
+                    if (!['admin', 'superadmin'].includes(user.role)) {
+                        document.getElementById('errorText').textContent = 'Access denied: Administrative privileges required';
+                        errorMessage.classList.remove('hidden');
+                        return;
+                    }
+                    
+                    // Store user data and redirect
+                    localStorage.setItem('wdb_user', JSON.stringify(user));
+                    localStorage.setItem('wdb_csrf_token', result.data.csrf_token);
+                    localStorage.setItem('wdb_permissions', JSON.stringify(result.data.permissions));
+                    
+                    // Show success message
+                    const roleTitle = user.role === 'superadmin' ? 'Super Administrator' : 'Administrator';
+                    document.getElementById('successText').textContent = `Welcome, ${roleTitle}! 🔐`;
+                    successMessage.classList.remove('hidden');
+                    
+                    // Update button text
+                    loginButtonText.textContent = 'Redirecting to Dashboard...';
+                    
+                    // Redirect to appropriate dashboard based on role
+                    setTimeout(() => {
+                        if (user.role === 'superadmin') {
+                            window.location.href = 'http://localhost:8081/wdb/superadmin-dashboard-advanced.html';
+                        } else if (user.role === 'system_admin') {
+                            window.location.href = 'http://localhost:8081/wdb/system-administrator-dashboard.html';
+                        } else {
+                            // Admin users get the clean, working admin dashboard
+                            window.location.href = 'http://localhost:8081/wdb/admin-dashboard.html';
+                        }
+                    }, 1500);
+                    
+                } else {
+                    // Show error message
+                    document.getElementById('errorText').textContent = result.error || 'Login failed. Please check your credentials and role selection.';
+                    errorMessage.classList.remove('hidden');
+                }
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                
+                // Provide specific error messages
+                let errorMessage = 'Login failed. ';
+                if (error.message.includes('API server not accessible') || error.message.includes('Cannot connect to API server')) {
+                    errorMessage = 'Cannot connect to server. Please ensure XAMPP is running and try again.';
+                } else if (error.message.includes('NetworkError') || error.message.includes('fetch')) {
+                    errorMessage = 'Network connection error. Please check your internet connection and server status.';
+                } else {
+                    errorMessage += error.message || 'Please try again.';
+                }
+                
+                document.getElementById('errorText').textContent = errorMessage;
+                errorMessage.classList.remove('hidden');
+            } finally {
+                // Re-enable button
+                loginButton.disabled = false;
+                loginButton.classList.remove('loading');
+                if (!successMessage.classList.contains('hidden')) {
+                    loginButtonText.textContent = 'Redirecting to Dashboard...';
+                } else {
+                    loginButtonText.textContent = 'Admin Sign In';
+                }
+            }
+        });
+        
+        // Check if already logged in
+        const userData = localStorage.getItem('wdb_user');
+        if (userData) {
+            try {
+                const user = JSON.parse(userData);
+                if (user.role === 'superadmin') {
+                    window.location.href = 'http://localhost:8081/wdb/superadmin-dashboard-advanced.html';
+                } else if (user.role === 'system_admin') {
+                    window.location.href = 'http://localhost:8081/wdb/system-administrator-dashboard.html';
+                } else if (user.role === 'admin') {
+                    // Admin users get the clean, working admin dashboard
+                    window.location.href = 'http://localhost:8081/wdb/admin-dashboard.html';
+                } else if (user.role === 'user') {
+                    window.location.href = 'http://localhost:8081/wdb/member-dashboard.html';
+                }
+            } catch (e) {
+                // Invalid stored data, clear it
+                localStorage.removeItem('wdb_user');
+                localStorage.removeItem('wdb_csrf_token');
+                localStorage.removeItem('wdb_permissions');
+            }
+        }
+
+        // Password Visibility Toggle
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById('password-toggle-icon');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = '🙈';
+                input.setAttribute('aria-label', 'Password visible');
+            } else {
+                input.type = 'password';
+                icon.textContent = '👁️';
+                input.setAttribute('aria-label', 'Password hidden');
+            }
+        }
+
+        // Password Strength Calculator
+        function calculatePasswordStrength(password) {
+            let strength = 0;
+            const checks = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /[0-9]/.test(password),
+                special: /[^A-Za-z0-9]/.test(password)
+            };
+            
+            // Calculate strength score
+            if (checks.length) strength += 20;
+            if (checks.uppercase) strength += 20;
+            if (checks.lowercase) strength += 20;
+            if (checks.number) strength += 20;
+            if (checks.special) strength += 20;
+            
+            // Bonus for longer passwords
+            if (password.length >= 12) strength += 10;
+            if (password.length >= 16) strength += 10;
+            
+            return {
+                score: Math.min(strength, 100),
+                checks: checks
+            };
+        }
+
+        // Update Password Strength Indicator
+        function updatePasswordStrength(password) {
+            const container = document.getElementById('password-strength');
+            const bar = document.getElementById('strength-bar');
+            const label = document.getElementById('strength-label');
+            const requirements = document.getElementById('strength-requirements');
+            
+            if (!password) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            container.style.display = 'block';
+            const result = calculatePasswordStrength(password);
+            const score = result.score;
+            
+            // Update bar width and color
+            bar.style.width = score + '%';
+            
+            let strengthText, strengthColor, requirementsText;
+            
+            if (score < 40) {
+                strengthText = 'Weak';
+                strengthColor = '#dc2626';
+                requirementsText = 'Add uppercase, numbers, and special characters';
+            } else if (score < 70) {
+                strengthText = 'Medium';
+                strengthColor = '#d97706';
+                requirementsText = 'Add more character variety';
+            } else {
+                strengthText = 'Strong';
+                strengthColor = '#059669';
+                requirementsText = 'Excellent password! 🔐';
+            }
+            
+            bar.style.background = strengthColor;
+            label.textContent = strengthText;
+            label.style.color = strengthColor;
+            requirements.textContent = requirementsText;
+        }
+
+        // Attach event listener to password field
+        document.getElementById('password').addEventListener('input', function(e) {
+            updatePasswordStrength(e.target.value);
+        });
+
+        // Keyboard accessibility for toggle button
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.classList.contains('password-toggle-btn')) {
+                e.preventDefault();
+                e.target.click();
+            }
+        });
+
+        // Add smooth scroll to top on page load
+        window.addEventListener('load', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+    
+</body>
+</html>

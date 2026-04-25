@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Administrator Dashboard - WDB Management System</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary: #1e40af;
+            --secondary: #7c3aed;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --dark: #1f2937;
+            --darker: #111827;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #581c87 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .admin-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .admin-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-online { background-color: #10b981; }
+        .status-warning { background-color: #f59e0b; }
+        .status-error { background-color: #ef4444; }
+        .status-offline { background-color: #6b7280; }
+        
+        .metric-card {
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .nav-item {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 4px 0;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid #60a5fa;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .config-section {
+            border-left: 4px solid var(--primary);
+            padding-left: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .permission-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .permission-full { background: #dcfce7; color: #166534; }
+        .permission-admin { background: #dbeafe; color: #1d4ed8; }
+        .permission-write { background: #fef3c7; color: #92400e; }
+        .permission-read { background: #f3f4f6; color: #374151; }
+        
+        .security-alert {
+            border-left: 4px solid #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- Top Navigation -->
+    <nav class="glass-card text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <i class="fas fa-shield-alt text-2xl text-blue-400"></i>
+                <div>
+                    <h1 class="text-xl font-bold">System Administrator Dashboard</h1>
+                    <p class="text-sm opacity-75" id="systemInfo">WDB Management System v1.0.0</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-right">
+                    <p class="text-sm opacity-75">System Administrator</p>
+                    <p class="font-semibold" id="adminName">Loading...</p>
+                    <p class="text-xs opacity-60" id="adminCode">SYS001</p>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="showEmergencyPanel()" class="bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg transition text-sm">
+                        <i class="fas fa-exclamation-triangle mr-1"></i>Emergency
+                    </button>
+                    <button onclick="logout()" class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded-lg transition">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-6 flex">
+        <!-- Sidebar Navigation -->
+        <div class="w-64 mr-6">
+            <div class="glass-card rounded-xl p-4">
+                <h3 class="text-lg font-semibold mb-4">System Management</h3>
+                <nav class="space-y-2">
+                    <a href="#overview" class="nav-item active flex items-center p-3 text-white hover:text-blue-300" onclick="showSection('overview')">
+                        <i class="fas fa-tachometer-alt mr-3"></i>System Overview
+                    </a>
+                    <a href="#configuration" class="nav-item flex items-center p-3 text-white hover:text-blue-300" onclick="showSection('configuration')">
+                        <i class="fas fa-cogs mr-3"></i>Configuration
+                    </a>
+                    <a href="#database" class="nav-item flex items-center p-3 text-white hover:text-blue-300" onclick="showSection('database')">
+                        <i class="fas fa-database mr-3"></i>Database Management
+                    </a>
+                    <a href="#security" class="nav-item flex items-center p-3 text-white hover:text-blue-300" onclick="showSection('security')">
+                        <i class="fas fa-shield-alt mr-3"></i>Security Center
+                    </a>
+                    <a href="#monitoring" class="nav-item flex items-center p-3 text-white hover:text-blue-300" onclick="showSection('monitoring')">
+                        <i class="fas fa-chart-line mr-3"></i>System Monitoring
+                    </a>
+                    <a href="#backup" class="nav-item flex items-center p-3 text-white hover:text-blue-300" onclick="showSection('backup')">
+                        <i class="fas fa-save mr-3"></i>Backup & Recovery
+                    </a>
+                    <a href="#users" class="nav-item flex items-center p-3 text-white hover:text-blue-300" onclick="showSection('users')">
+                        <i class="fas fa-users-cog mr-3"></i>User Management
+                    </a>
+                    <a href="#audit" class="nav-item flex items-center p-3 text-white hover:text-blue-300" onclick="showSection('audit')">
+                        <i class="fas fa-clipboard-list mr-3"></i>Audit Logs
+                    </a>
+                    <a href="#payments" class="nav-item flex items-center p-3 text-white hover:text-blue-300" onclick="showSection('payments')">
+                        <i class="fas fa-credit-card mr-3"></i>Payment Methods
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1">
+            <!-- System Overview Section -->
+            <div id="overview-section" class="section">
+                <!-- System Status Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                    <div class="glass-card rounded-xl p-6 text-white metric-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="bg-green-500 p-3 rounded-lg">
+                                <i class="fas fa-server text-2xl"></i>
+                            </div>
+                            <span class="status-indicator status-online"></span>
+                        </div>
+                        <h3 class="text-lg font-semibold">System Status</h3>
+                        <p class="text-2xl font-bold text-green-400" id="systemStatus">Online</p>
+                        <p class="text-sm opacity-75">Uptime: <span id="systemUptime">99.9%</span></p>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-6 text-white metric-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="bg-blue-500 p-3 rounded-lg">
+                                <i class="fas fa-users text-2xl"></i>
+                            </div>
+                            <span class="text-2xl font-bold" id="activeUsers">0</span>
+                        </div>
+                        <h3 class="text-lg font-semibold">Active Users</h3>
+                        <p class="text-sm opacity-75">Total: <span id="totalUsers">0</span></p>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-6 text-white metric-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="bg-purple-500 p-3 rounded-lg">
+                                <i class="fas fa-database text-2xl"></i>
+                            </div>
+                            <span class="text-2xl font-bold" id="dbSize">0 MB</span>
+                        </div>
+                        <h3 class="text-lg font-semibold">Database Size</h3>
+                        <p class="text-sm opacity-75">Growth: <span id="dbGrowth">+2.3%</span></p>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-6 text-white metric-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="bg-yellow-500 p-3 rounded-lg">
+                                <i class="fas fa-exclamation-triangle text-2xl"></i>
+                            </div>
+                            <span class="text-2xl font-bold" id="alertCount">0</span>
+                        </div>
+                        <h3 class="text-lg font-semibold">System Alerts</h3>
+                        <p class="text-sm opacity-75">Last 24h</p>
+                    </div>
+                </div>
+
+                <!-- System Performance Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="glass-card rounded-xl p-6">
+                        <h3 class="text-lg font-semibold mb-4">
+                            <i class="fas fa-chart-area mr-2"></i>System Performance
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-6">
+                        <h3 class="text-lg font-semibold mb-4">
+                            <i class="fas fa-chart-pie mr-2"></i>Resource Usage
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="resourceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent System Activities -->
+                <div class="glass-card rounded-xl p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold">
+                            <i class="fas fa-history mr-2"></i>Recent System Activities
+                        </h3>
+                        <button onclick="refreshActivities()" class="text-blue-300 hover:text-blue-100 transition">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    <div id="recentActivities" class="space-y-3">
+                        <!-- Activities will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuration Section -->
+            <div id="configuration-section" class="section hidden">
+                <div class="glass-card rounded-xl p-6 mb-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold">
+                            <i class="fas fa-cogs mr-2"></i>System Configuration
+                        </h3>
+                        <div class="flex space-x-2">
+                            <button onclick="exportConfig()" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg transition">
+                                <i class="fas fa-download mr-2"></i>Export
+                            </button>
+                            <button onclick="importConfig()" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg transition">
+                                <i class="fas fa-upload mr-2"></i>Import
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="configSections" class="space-y-6">
+                        <!-- Configuration sections will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Database Management Section -->
+            <div id="database-section" class="section hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="glass-card rounded-xl p-6">
+                        <h3 class="text-lg font-semibold mb-4">
+                            <i class="fas fa-database mr-2"></i>Database Status
+                        </h3>
+                        <div id="databaseStatus" class="space-y-4">
+                            <!-- Database status will be loaded here -->
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-6">
+                        <h3 class="text-lg font-semibold mb-4">
+                            <i class="fas fa-tools mr-2"></i>Database Operations
+                        </h3>
+                        <div class="space-y-3">
+                            <button onclick="optimizeDatabase()" class="w-full bg-blue-500 hover:bg-blue-600 px-4 py-3 rounded-lg transition text-left">
+                                <i class="fas fa-rocket mr-2"></i>Optimize Database
+                            </button>
+                            <button onclick="backupDatabase()" class="w-full bg-green-500 hover:bg-green-600 px-4 py-3 rounded-lg transition text-left">
+                                <i class="fas fa-save mr-2"></i>Create Backup
+                            </button>
+                            <button onclick="showMigrationPanel()" class="w-full bg-purple-500 hover:bg-purple-600 px-4 py-3 rounded-lg transition text-left">
+                                <i class="fas fa-code-branch mr-2"></i>Run Migrations
+                            </button>
+                            <button onclick="showMaintenancePanel()" class="w-full bg-yellow-500 hover:bg-yellow-600 px-4 py-3 rounded-lg transition text-left">
+                                <i class="fas fa-wrench mr-2"></i>Maintenance Mode
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Center Section -->
+            <div id="security-section" class="section hidden">
+                <div class="glass-card rounded-xl p-6 mb-6">
+                    <h3 class="text-lg font-semibold mb-4">
+                        <i class="fas fa-shield-alt mr-2"></i>Security Overview
+                    </h3>
+                    <div id="securityOverview" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Security metrics will be loaded here -->
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold mb-4">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>Security Alerts
+                    </h3>
+                    <div id="securityAlerts" class="space-y-3">
+                        <!-- Security alerts will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Monitoring Section -->
+            <div id="monitoring-section" class="section hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="glass-card rounded-xl p-6">
+                        <h3 class="text-lg font-semibold mb-4">
+                            <i class="fas fa-heartbeat mr-2"></i>System Health
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="healthChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-6">
+                        <h3 class="text-lg font-semibold mb-4">
+                            <i class="fas fa-bell mr-2"></i>Alert Configuration
+                        </h3>
+                        <div id="alertConfig" class="space-y-4">
+                            <!-- Alert configuration will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backup & Recovery Section -->
+            <div id="backup-section" class="section hidden">
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold mb-4">
+                        <i class="fas fa-save mr-2"></i>Backup Management
+                    </h3>
+                    <div id="backupManagement">
+                        <!-- Backup management interface will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management Section -->
+            <div id="users-section" class="section hidden">
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold mb-4">
+                        <i class="fas fa-users-cog mr-2"></i>System User Management
+                    </h3>
+                    <div id="userManagement">
+                        <!-- User management interface will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audit Logs Section -->
+            <div id="audit-section" class="section hidden">
+                <div class="glass-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold mb-4">
+                        <i class="fas fa-clipboard-list mr-2"></i>System Audit Logs
+                    </h3>
+                    <div id="auditLogs">
+                        <!-- Audit logs will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Methods Section -->
+            <div id="payments-section" class="section hidden">
+                <!-- Payment Methods Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                    <div class="glass-card rounded-xl p-6 text-white metric-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="bg-green-500 p-3 rounded-lg">
+                                <i class="fas fa-credit-card text-2xl"></i>
+                            </div>
+                            <span class="text-2xl font-bold" id="totalPaymentMethods">0</span>
+                        </div>
+                        <h3 class="text-lg font-semibold">Payment Methods</h3>
+                        <p class="text-sm opacity-75">Active: <span id="activePaymentMethods">0</span></p>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-6 text-white metric-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="bg-blue-500 p-3 rounded-lg">
+                                <i class="fas fa-exchange-alt text-2xl"></i>
+                            </div>
+                            <span class="text-2xl font-bold" id="monthlyTransactions">0</span>
+                        </div>
+                        <h3 class="text-lg font-semibold">Monthly Transactions</h3>
+                        <p class="text-sm opacity-75">This month</p>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-6 text-white metric-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="bg-purple-500 p-3 rounded-lg">
+                                <i class="fas fa-money-bill-wave text-2xl"></i>
+                            </div>
+                            <span class="text-2xl font-bold" id="monthlyAmount">0 ETB</span>
+                        </div>
+                        <h3 class="text-lg font-semibold">Monthly Amount</h3>
+                        <p class="text-sm opacity-75">Total processed</p>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-6 text-white metric-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="bg-yellow-500 p-3 rounded-lg">
+                                <i class="fas fa-server text-2xl"></i>
+                            </div>
+                            <span class="status-indicator status-online"></span>
+                        </div>
+                        <h3 class="text-lg font-semibold">Gateway Status</h3>
+                        <p class="text-sm opacity-75" id="gatewayStatus">All systems operational</p>
+                    </div>
+                </div>
+
+                <!-- Payment Methods Management -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Payment Methods List -->
+                    <div class="glass-card rounded-xl p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">
+                                <i class="fas fa-list mr-2"></i>Payment Methods
+                            </h3>
+                            <button onclick="showAddPaymentMethodModal()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition text-sm">
+                                <i class="fas fa-plus mr-1"></i>Add Method
+                            </button>
+                        </div>
+                        <div id="paymentMethodsList" class="space-y-3">
+                            <!-- Payment methods will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Recent Transactions -->
+                    <div class="glass-card rounded-xl p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">
+                                <i class="fas fa-history mr-2"></i>Recent Transactions
+                            </h3>
+                            <button onclick="refreshTransactions()" class="text-blue-300 hover:text-blue-100 transition">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <div id="recentTransactions" class="space-y-3">
+                            <!-- Recent transactions will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Gateways -->
+                <div class="glass-card rounded-xl p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold">
+                            <i class="fas fa-server mr-2"></i>Payment Gateways
+                        </h3>
+                        <button onclick="testAllGateways()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition text-sm">
+                            <i class="fas fa-check-circle mr-1"></i>Test All
+                        </button>
+                    </div>
+                    <div id="paymentGatewaysList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Payment gateways will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emergency Panel Modal -->
+    <div id="emergencyModal" class="modal">
+        <div class="modal-content w-full max-w-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-red-600">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>Emergency System Controls
+                </h2>
+                <button onclick="closeEmergencyPanel()" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="security-alert">
+                <p class="font-semibold text-red-600">⚠️ WARNING: Emergency operations can affect system availability</p>
+                <p class="text-sm text-gray-600 mt-1">These actions require additional authentication and are logged for security audit.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                <button onclick="emergencyShutdown()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-4 rounded-lg transition">
+                    <i class="fas fa-power-off mr-2"></i>Emergency Shutdown
+                </button>
+                <button onclick="maintenanceMode()" class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-4 rounded-lg transition">
+                    <i class="fas fa-wrench mr-2"></i>Maintenance Mode
+                </button>
+                <button onclick="lockAllUsers()" class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-4 rounded-lg transition">
+                    <i class="fas fa-lock mr-2"></i>Lock All Users
+                </button>
+                <button onclick="emergencyBackup()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-4 rounded-lg transition">
+                    <i class="fas fa-database mr-2"></i>Emergency Backup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
+        <div class="glass-card rounded-lg p-6 flex items-center space-x-4">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            <span class="text-lg">Processing system operation...</span>
+        </div>
+    </div>
+
+    <script src="js/system-administrator-dashboard.js"></script>
+</body>
+</html>

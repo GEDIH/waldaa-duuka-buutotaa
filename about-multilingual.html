@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page.about">About Us - WDB Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="css/tailwind-suppress-warning.js"></script>
+    <link rel="stylesheet" href="css/language-switcher.css">
+    <link rel="stylesheet" href="css/oromo-fonts.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .language-switcher-header {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .about-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .hero-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            text-align: center;
+            margin-botTesfaye: 2rem;
+        }
+        
+        .content-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-botTesfaye: 2rem;
+        }
+        
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 2rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .navigation-links {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .nav-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 0.875rem 2rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+        
+        .nav-button.secondary {
+            background: #6b7280;
+        }
+        
+        .nav-button.secondary:hover {
+            background: #4b5563;
+            box-shadow: 0 10px 25px rgba(107, 114, 128, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .about-container {
+                padding: 1rem;
+            }
+            
+            .hero-section, .content-section {
+                padding: 2rem 1.5rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .language-switcher-header {
+                top: 0.5rem;
+                right: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Switcher -->
+    <div class="language-switcher-header">
+        <div id="language-switcher-container"></div>
+    </div>
+
+    <div class="about-container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="logo">WDB</div>
+            <h1 class="text-4xl font-bold text-gray-800 mb-4" data-i18n="about.title">About WDB Management System</h1>
+            <p class="text-xl text-gray-600 mb-6" data-i18n="homepage.welcome_subtitle">Ethiopian Orthodox Tewahedo Church Membership Management</p>
+            <p class="text-lg text-gray-700 leading-relaxed" data-i18n="about.description">
+                The WDB Management System is designed to help Ethiopian Orthodox Tewahedo Church communities manage their membership, contributions, and administrative tasks efficiently.
+            </p>
+        </div>
+
+        <!-- Features Section -->
+        <div class="content-section">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center" data-i18n="about.features">Key Features</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2" data-i18n="members.title">Member Management</h3>
+                    <p class="text-gray-600" data-i18n="about.feature_1">Member registration and management</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2" data-i18n="contributions.title">Contribution Tracking</h3>
+                    <p class="text-gray-600" data-i18n="about.feature_2">Contribution tracking and reporting</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2" data-i18n="dashboard.title">Administration</h3>
+                    <p class="text-gray-600" data-i18n="about.feature_3">Administrative dashboard and tools</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2" data-i18n="ui.language">Multi-Language</h3>
+                    <p class="text-gray-600" data-i18n="about.feature_4">Multi-language support (English and Oromo)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mission Section -->
+        <div class="content-section">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center" data-i18n="about.mission">Our Mission</h2>
+            <p class="text-lg text-gray-700 leading-relaxed text-center mb-4" data-i18n="about.mission_text">
+                To provide Ethiopian Orthodox Tewahedo Church communities with modern, efficient tools for managing their membership and administrative needs while preserving cultural and linguistic heritage.
+            </p>
+        </div>
+
+        <!-- Technology Section -->
+        <div class="content-section">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center" data-i18n="about.technology">Technology</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3" data-i18n="about.frontend">Frontend Technologies</h3>
+                    <ul class="text-gray-700 space-y-2">
+                        <li>• HTML5, CSS3, JavaScript</li>
+                        <li>• Tailwind CSS for styling</li>
+                        <li>• Responsive design</li>
+                        <li>• Multi-language support</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3" data-i18n="about.backend">Backend Technologies</h3>
+                    <ul class="text-gray-700 space-y-2">
+                        <li>• PHP for server-side logic</li>
+                        <li>• MySQL database</li>
+                        <li>• RESTful API design</li>
+                        <li>• Secure authentication</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="content-section">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center" data-i18n="about.contact">Contact Information</h2>
+            <div class="text-center">
+                <p class="text-lg text-gray-700 mb-4" data-i18n="about.contact_text">
+                    For support, questions, or feedback about the WDB Management System, please contact us.
+                </p>
+                <div class="space-y-2 text-gray-600">
+                    <p><strong data-i18n="about.email">Email:</strong> support@wdb-system.org</p>
+                    <p><strong data-i18n="about.phone">Phone:</strong> +251-11-XXX-XXXX</p>
+                    <p><strong data-i18n="about.address">Address:</strong> Addis Ababa, Ethiopia</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="navigation-links">
+            <a href="index.html" class="nav-button" data-i18n="nav.home">← Back to Home</a>
+            <a href="login.html" class="nav-button" data-i18n="login.sign_in_button">Member Login</a>
+            <a href="member-registration.html" class="nav-button secondary" data-i18n="register.title">Register</a>
+        </div>
+    </div>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Scripts -->
+    <script src="js/I18nHandler.js"></script>
+    <script src="js/LanguageSwitcher.js"></script>
+    <script>
+        // Initialize multi-language support
+        let i18n;
+        let languageSwitcher;
+        
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Initialize I18n Handler
+            i18n = new I18nHandler({
+                debug: true,
+                apiBaseUrl: '/api'
+            });
+            
+            // Make it globally available
+            window.i18n = i18n;
+            
+            // Initialize Language Switcher
+            const switcherContainer = document.getElementById('language-switcher-container');
+            languageSwitcher = new LanguageSwitcher(switcherContainer, {
+                type: 'dropdown',
+                showFlags: true,
+                showNativeNames: true
+            });
+            
+            // Listen for language changes
+            document.addEventListener('languageChanged', function(e) {
+                console.log('Language changed to:', e.detail.language);
+            });
+        });
+    </script>
+    <script src="js/wdb-ai-assistant.js"></script>
+</body>
+</html>

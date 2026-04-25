@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Photos Management - WDB Center Admin</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Dropzone.js for file uploads -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --darker: #0f172a;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .photo-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .photo-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .photo-placeholder {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+        }
+        
+        .upload-zone {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .stats-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .photo-item {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .photo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .photo-item:hover .photo-overlay {
+            opacity: 1;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- Top Navigation -->
+    <nav class="glass-card text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <i class="fas fa-camera text-2xl text-blue-400"></i>
+                <div>
+                    <h1 class="text-xl font-bold">Member Photos Management</h1>
+                    <p class="text-sm opacity-75" id="centerInfo">Loading center information...</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-right">
+                    <p class="text-sm opacity-75">Center Administrator</p>
+                    <p class="font-semibold" id="adminName">Administrator</p>
+                </div>
+                <button onclick="showBulkUploadModal()" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg transition">
+                    <i class="fas fa-upload mr-2"></i>Bulk Upload
+                </button>
+                <button onclick="logout()" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto p-6">
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            <div class="glass-card rounded-xl p-6 text-white stats-card">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="bg-blue-500 p-3 rounded-lg">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="totalMembers">0</span>
+                </div>
+                <h3 class="text-lg font-semibold">Total Members</h3>
+                <p class="text-sm opacity-75">In your centers</p>
+            </div>
+
+            <div class="glass-card rounded-xl p-6 text-white stats-card">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="bg-green-500 p-3 rounded-lg">
+                        <i class="fas fa-camera text-2xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="membersWithPhotos">0</span>
+                </div>
+                <h3 class="text-lg font-semibold">With Photos</h3>
+                <p class="text-sm opacity-75" id="photoCoverage">0% coverage</p>
+            </div>
+
+            <div class="glass-card rounded-xl p-6 text-white stats-card">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="bg-yellow-500 p-3 rounded-lg">
+                        <i class="fas fa-exclamation-triangle text-2xl"></i>
+                    </div>
+                    <span class="text-3xl font-bold" id="membersWithoutPhotos">0</span>
+                </div>
+                <h3 class="text-lg font-semibold">Missing Photos</h3>
+                <p class="text-sm opacity-75">Need photos</p>
+            </div>
+
+            <div class="glass-card rounded-xl p-6 text-white stats-card">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="bg-purple-500 p-3 rounded-lg">
+                        <i class="fas fa-hdd text-2xl"></i>
+                    </div>
+                    <span class="text-lg font-bold" id="storageUsed">0 MB</span>
+                </div>
+                <h3 class="text-lg font-semibold">Storage Used</h3>
+                <p class="text-sm opacity-75">Photo storage</p>
+            </div>
+        </div>
+
+        <!-- Filters and Search -->
+        <div class="glass-card rounded-xl p-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Search Members</label>
+                    <input type="text" id="searchInput" placeholder="Name, email, or ID..." 
+                           class="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 placeholder-white/60">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Center</label>
+                    <select id="centerFilter" class="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30">
+                        <option value="">All Centers</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Photo Status</label>
+                    <select id="photoStatusFilter" class="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30">
+                        <option value="">All Members</option>
+                        <option value="yes">With Photos</option>
+                        <option value="no">Without Photos</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">View Mode</label>
+                    <select id="viewMode" class="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30">
+                        <option value="grid">Grid View</option>
+                        <option value="list">List View</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button onclick="searchMembers()" class="w-full bg-blue-500 hover:bg-blue-600 px-4 py-3 rounded-lg transition">
+                        <i class="fas fa-search mr-2"></i>Search
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Members Grid/List -->
+        <div class="glass-card rounded-xl p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-semibold">
+                    <i class="fas fa-images mr-2"></i>Member Photos
+                </h3>
+                <div class="flex space-x-2">
+                    <button onclick="refreshPhotos()" class="text-blue-300 hover:text-blue-100 transition">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <button onclick="showMissingPhotosModal()" class="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg transition text-sm">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>Missing Photos
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Grid View -->
+            <div id="gridView" class="photo-grid">
+                <!-- Photos will be loaded here -->
+            </div>
+            
+            <!-- List View -->
+            <div id="listView" class="hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-white bg-opacity-10">
+                            <tr>
+                                <th class="px-4 py-3 font-semibold">Photo</th>
+                                <th class="px-4 py-3 font-semibold">Member</th>
+                                <th class="px-4 py-3 font-semibold">Center</th>
+                                <th class="px-4 py-3 font-semibold">Upload Date</th>
+                                <th class="px-4 py-3 font-semibold">File Size</th>
+                                <th class="px-4 py-3 font-semibold">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listViewBody">
+                            <!-- List items will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Pagination -->
+            <div id="pagination" class="mt-6 flex justify-between items-center">
+                <!-- Pagination controls will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Upload Modal -->
+    <div id="photoUploadModal" class="modal">
+        <div class="modal-content w-full max-w-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">
+                    <i class="fas fa-upload mr-2"></i>Upload Member Photo
+                </h2>
+                <button onclick="closePhotoUploadModal()" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Select Member</label>
+                <select id="uploadMemberSelect" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <option value="">Choose a member...</option>
+                </select>
+            </div>
+            
+            <div class="mb-6">
+                <div class="upload-zone p-8 rounded-lg text-center" id="photoDropZone">
+                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-lg text-gray-600 mb-2">Drag and drop photo here or click to select</p>
+                    <p class="text-sm text-gray-500">Supports JPEG, PNG, GIF, WebP (max 5MB)</p>
+                    <input type="file" id="photoFileInput" accept="image/*" class="hidden">
+                    <button onclick="document.getElementById('photoFileInput').click()" 
+                            class="mt-4 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition">
+                        Select Photo
+                    </button>
+                </div>
+            </div>
+            
+            <div id="photoPreview" class="mb-6 hidden">
+                <img id="previewImage" class="w-full max-w-sm mx-auto rounded-lg shadow-lg">
+                <div class="mt-4">
+                    <div class="progress-bar">
+                        <div id="uploadProgress" class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <p id="uploadStatus" class="text-sm text-gray-600 mt-2"></p>
+                </div>
+            </div>
+            
+            <div class="flex justify-end space-x-4">
+                <button onclick="closePhotoUploadModal()" 
+                        class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                    Cancel
+                </button>
+                <button onclick="uploadPhoto()" id="uploadPhotoBtn" disabled
+                        class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition disabled:opacity-50">
+                    <i class="fas fa-upload mr-2"></i>Upload Photo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Upload Modal -->
+    <div id="bulkUploadModal" class="modal">
+        <div class="modal-content w-full max-w-4xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">
+                    <i class="fas fa-upload mr-2"></i>Bulk Photo Upload
+                </h2>
+                <button onclick="closeBulkUploadModal()" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="mb-6">
+                <div id="bulkDropzone" class="dropzone">
+                    <div class="dz-message">
+                        <i class="fas fa-cloud-upload-alt text-4xl mb-4"></i>
+                        <p class="text-lg">Drop multiple photos here or click to select</p>
+                        <p class="text-sm text-gray-500">You can upload multiple photos at once</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="bulkUploadResults" class="hidden">
+                <h3 class="text-lg font-semibold mb-4">Upload Results</h3>
+                <div id="bulkResultsList" class="space-y-2 max-h-64 overflow-y-auto">
+                    <!-- Results will be shown here -->
+                </div>
+            </div>
+            
+            <div class="flex justify-end space-x-4 mt-6">
+                <button onclick="closeBulkUploadModal()" 
+                        class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo View Modal -->
+    <div id="photoViewModal" class="modal">
+        <div class="modal-content w-full max-w-4xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800" id="photoViewTitle">
+                    <i class="fas fa-image mr-2"></i>Member Photo
+                </h2>
+                <button onclick="closePhotoViewModal()" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                    <img id="fullSizePhoto" class="w-full rounded-lg shadow-lg">
+                </div>
+                <div>
+                    <div id="photoDetails" class="space-y-4">
+                        <!-- Photo details will be loaded here -->
+                    </div>
+                    <div class="mt-6 space-y-3">
+                        <button onclick="replacePhoto()" class="w-full bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 transition">
+                            <i class="fas fa-sync-alt mr-2"></i>Replace Photo
+                        </button>
+                        <button onclick="deletePhoto()" class="w-full bg-red-500 text-white px-4 py-3 rounded-lg hover:bg-red-600 transition">
+                            <i class="fas fa-trash mr-2"></i>Delete Photo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Missing Photos Modal -->
+    <div id="missingPhotosModal" class="modal">
+        <div class="modal-content w-full max-w-4xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>Members Without Photos
+                </h2>
+                <button onclick="closeMissingPhotosModal()" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="missingPhotosList" class="space-y-3 max-h-96 overflow-y-auto">
+                <!-- Missing photos list will be loaded here -->
+            </div>
+            
+            <div class="flex justify-end space-x-4 mt-6">
+                <button onclick="closeMissingPhotosModal()" 
+                        class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
+        <div class="glass-card rounded-lg p-6 flex items-center space-x-4">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            <span class="text-lg">Processing...</span>
+        </div>
+    </div>
+
+    <script src="js/center-member-photos-dashboard.js"></script>
+</body>
+</html>

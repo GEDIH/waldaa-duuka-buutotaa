@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="or">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDB Portal - Waldaa Duuka Bu'ootaa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a3b5c 0%, #2c5282 50%, #1a3b5c 100%);
+            min-height: 100vh;
+        }
+        .glass {
+            backdrop-filter: blur(20px);
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .portal-card {
+            backdrop-filter: blur(25px);
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+        .portal-card:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+        .portal-card .icon-wrap {
+            width: 72px; height: 72px;
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; margin-bottom: 16px;
+        }
+        .badge {
+            display: inline-block; padding: 3px 10px;
+            border-radius: 20px; font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-new  { background: rgba(16,185,129,0.25); color: #6ee7b7; }
+        .badge-full { background: rgba(212,175,55,0.25); color: #d4af37; }
+        .badge-admin{ background: rgba(239,68,68,0.25);  color: #fca5a5; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="glass sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <img src="images/WDB_LOGO_CIRCLE.png" alt="WDB" class="w-12 h-12 rounded-full shadow-lg">
+                <div>
+                    <h1 class="text-white font-bold text-xl">Waldaa Duuka Bu'ootaa</h1>
+                    <p class="text-white opacity-60 text-sm">Member Portal</p>
+                </div>
+            </div>
+            <a href="index.html" class="text-white opacity-70 hover:opacity-100 text-sm transition-opacity">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Website
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="py-16 px-6 text-center">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-6xl mb-6">✝️</div>
+            <h2 class="text-4xl font-bold text-white mb-4">Baga Nagaan Dhuftan</h2>
+            <p class="text-white opacity-80 text-xl mb-2">Welcome to the WDB Membership Portal</p>
+            <p class="text-white opacity-60">Maqaa Abbaa, Kan Ilmaa, Kan Hafuura Qulqulluu, Waaqa Tokko. Ameen.</p>
+        </div>
+    </section>
+
+    <!-- Portal Cards -->
+    <main class="flex-1 px-6 pb-16">
+        <div class="max-w-6xl mx-auto">
+
+            <!-- Member Section -->
+            <h3 class="text-white font-semibold text-lg mb-6 flex items-center gap-3">
+                <i class="fas fa-users text-yellow-400"></i>
+                Member Access
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+
+                <a href="member-login.html" class="portal-card p-6">
+                    <div class="icon-wrap" style="background:rgba(16,185,129,0.2);">
+                        <i class="fas fa-sign-in-alt" style="color:#10b981;"></i>
+                    </div>
+                    <span class="badge badge-new mb-3">Member Login</span>
+                    <h4 class="text-white font-bold text-lg mb-2">Member Login</h4>
+                    <p class="text-white opacity-70 text-sm">Login to your member dashboard with your username and password.</p>
+                </a>
+
+                <a href="member-registration.html" class="portal-card p-6">
+                    <div class="icon-wrap" style="background:rgba(59,130,246,0.2);">
+                        <i class="fas fa-user-plus" style="color:#3b82f6;"></i>
+                    </div>
+                    <span class="badge badge-new mb-3">Registration</span>
+                    <h4 class="text-white font-bold text-lg mb-2">Miseensa Ta'i</h4>
+                    <p class="text-white opacity-70 text-sm">Register as a new member of Waldaa Duuka Bu'ootaa.</p>
+                </a>
+
+                <a href="member-dashboard.html" class="portal-card p-6">
+                    <div class="icon-wrap" style="background:rgba(139,92,246,0.2);">
+                        <i class="fas fa-tachometer-alt" style="color:#8b5cf6;"></i>
+                    </div>
+                    <span class="badge badge-full mb-3">Dashboard</span>
+                    <h4 class="text-white font-bold text-lg mb-2">Member Dashboard</h4>
+                    <p class="text-white opacity-70 text-sm">View your profile, contributions, announcements and events.</p>
+                </a>
+
+            </div>
+
+            <!-- Admin Section -->
+            <h3 class="text-white font-semibold text-lg mb-6 flex items-center gap-3">
+                <i class="fas fa-shield-alt text-yellow-400"></i>
+                Administration
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+
+                <a href="admin-login.html" class="portal-card p-6">
+                    <div class="icon-wrap" style="background:rgba(245,158,11,0.2);">
+                        <i class="fas fa-user-shield" style="color:#f59e0b;"></i>
+                    </div>
+                    <span class="badge badge-admin mb-3">Admin</span>
+                    <h4 class="text-white font-bold text-lg mb-2">Admin Login</h4>
+                    <p class="text-white opacity-70 text-sm">Administrator login for managing members and system settings.</p>
+                </a>
+
+                <a href="admin-dashboard.html" class="portal-card p-6">
+                    <div class="icon-wrap" style="background:rgba(239,68,68,0.2);">
+                        <i class="fas fa-cogs" style="color:#ef4444;"></i>
+                    </div>
+                    <span class="badge badge-admin mb-3">Admin</span>
+                    <h4 class="text-white font-bold text-lg mb-2">Admin Dashboard</h4>
+                    <p class="text-white opacity-70 text-sm">Manage members, announcements, contributions and reports.</p>
+                </a>
+
+                <a href="system-administrator-dashboard.html" class="portal-card p-6">
+                    <div class="icon-wrap" style="background:rgba(220,38,38,0.2);">
+                        <i class="fas fa-server" style="color:#dc2626;"></i>
+                    </div>
+                    <span class="badge badge-admin mb-3">Super Admin</span>
+                    <h4 class="text-white font-bold text-lg mb-2">System Dashboard</h4>
+                    <p class="text-white opacity-70 text-sm">Full system administration, analytics, backups and security.</p>
+                </a>
+
+            </div>
+
+            <!-- System Features -->
+            <h3 class="text-white font-semibold text-lg mb-6 flex items-center gap-3">
+                <i class="fas fa-star text-yellow-400"></i>
+                System Features
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+
+                <a href="center-member-photos-dashboard.html" class="portal-card p-5">
+                    <i class="fas fa-camera text-blue-400 text-2xl mb-3"></i>
+                    <h4 class="text-white font-semibold mb-1">Photo Management</h4>
+                    <p class="text-white opacity-60 text-xs">Member photo upload and management</p>
+                </a>
+
+                <a href="center-admin-security-dashboard.html" class="portal-card p-5">
+                    <i class="fas fa-lock text-red-400 text-2xl mb-3"></i>
+                    <h4 class="text-white font-semibold mb-1">Security Dashboard</h4>
+                    <p class="text-white opacity-60 text-xs">Security monitoring and audit logs</p>
+                </a>
+
+                <a href="authentication-hub.html" class="portal-card p-5">
+                    <i class="fas fa-key text-yellow-400 text-2xl mb-3"></i>
+                    <h4 class="text-white font-semibold mb-1">Auth Hub</h4>
+                    <p class="text-white opacity-60 text-xs">Central authentication management</p>
+                </a>
+
+                <a href="health-check.php" class="portal-card p-5">
+                    <i class="fas fa-heartbeat text-green-400 text-2xl mb-3"></i>
+                    <h4 class="text-white font-semibold mb-1">System Health</h4>
+                    <p class="text-white opacity-60 text-xs">Monitor system status and performance</p>
+                </a>
+
+            </div>
+
+            <!-- Setup Info -->
+            <div class="glass rounded-2xl p-6">
+                <h3 class="text-white font-bold text-lg mb-4 flex items-center gap-3">
+                    <i class="fas fa-info-circle text-yellow-400"></i>
+                    Setup Information
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <h4 class="text-yellow-400 font-semibold mb-2">Database Setup</h4>
+                        <p class="text-white opacity-70 mb-2">Import the SQL schema to set up the database:</p>
+                        <code class="text-green-400 text-xs bg-black bg-opacity-30 px-3 py-1 rounded block">
+                            mysql -u root -p &lt; sql/production-database-setup.sql
+                        </code>
+                    </div>
+                    <div>
+                        <h4 class="text-yellow-400 font-semibold mb-2">Configuration</h4>
+                        <p class="text-white opacity-70 mb-2">Update database credentials in:</p>
+                        <code class="text-green-400 text-xs bg-black bg-opacity-30 px-3 py-1 rounded block">
+                            config.php &amp; config/.env.production
+                        </code>
+                    </div>
+                    <div>
+                        <h4 class="text-yellow-400 font-semibold mb-2">Demo Credentials</h4>
+                        <p class="text-white opacity-70">Member: <span class="text-green-400">abebe.kebede</span> / <span class="text-green-400">Password123</span></p>
+                        <p class="text-white opacity-70">Admin: any username/password (demo mode)</p>
+                    </div>
+                    <div>
+                        <h4 class="text-yellow-400 font-semibold mb-2">Documentation</h4>
+                        <p class="text-white opacity-70">See <code class="text-green-400">installation-guide.md</code> and <code class="text-green-400">docs/</code> folder for full setup guide.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass py-6 text-center">
+        <p class="text-white opacity-60 text-sm">
+            © 2026 Waldaa Duuka Bu'ootaa — Membership Management System v2.0
+        </p>
+    </footer>
+
+</body>
+</html>

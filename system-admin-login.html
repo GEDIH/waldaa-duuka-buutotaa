@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Administrator Login - WDB Management System</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #1e40af;
+            --secondary: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --darker: #0f172a;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .login-card {
+            width: 100%;
+            max-width: 450px;
+            padding: 2rem;
+            border-radius: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .btn-primary {
+            width: 100%;
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .alert-success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+        }
+        
+        .alert-error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+        
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #f59e0b;
+        }
+        
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .feature-list li i {
+            color: var(--success);
+            width: 16px;
+        }
+        
+        .system-status {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+        
+        .quick-access {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        
+        .quick-access a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            margin: 0 8px;
+            transition: color 0.3s ease;
+        }
+        
+        .quick-access a:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card glass-card">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="mb-4">
+                    <i class="fas fa-shield-alt text-4xl text-blue-300"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-white mb-2">System Administrator</h1>
+                <p class="text-blue-200">WDB Management System</p>
+            </div>
+            
+            <!-- Alert Messages -->
+            <div id="alertContainer"></div>
+            
+            <!-- Session Management -->
+            <div id="sessionInfo" style="display: none;" class="mb-4 p-3 bg-yellow-500 bg-opacity-20 border border-yellow-500 border-opacity-30 rounded-lg">
+                <div class="flex items-center justify-between">
+                    <span class="text-yellow-300 text-sm">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        You have an active session
+                    </span>
+                    <button id="clearSessionBtn" class="text-yellow-300 hover:text-white text-sm underline">
+                        Clear Session
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username" class="block text-white text-sm font-medium mb-2">
+                        <i class="fas fa-user mr-2"></i>Username
+                    </label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        class="form-input" 
+                        placeholder="Enter your username"
+                        required
+                        autocomplete="username"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="block text-white text-sm font-medium mb-2">
+                        <i class="fas fa-lock mr-2"></i>Password
+                    </label>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-input pr-12" 
+                            placeholder="Enter your password"
+                            required
+                            autocomplete="current-password"
+                        >
+                        <button 
+                            type="button" 
+                            id="togglePassword" 
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-white opacity-70 hover:opacity-100"
+                        >
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="flex items-center text-white text-sm">
+                        <input type="checkbox" id="rememberMe" class="mr-2">
+                        <span>Remember me for 30 days</span>
+                    </label>
+                </div>
+                
+                <button type="submit" id="loginBtn" class="btn-primary">
+                    <span id="loginText">Sign In</span>
+                    <div id="loginSpinner" class="loading-spinner" style="display: none;"></div>
+                </button>
+            </form>
+            
+            <!-- System Features -->
+            <div class="mt-6">
+                <h3 class="text-white text-sm font-medium mb-3">System Access Includes:</h3>
+                <ul class="feature-list">
+                    <li><i class="fas fa-camera"></i> Member Photo Management</li>
+                    <li><i class="fas fa-shield-alt"></i> Center-Based Security Control</li>
+                    <li><i class="fas fa-users"></i> Multi-Center Administration</li>
+                    <li><i class="fas fa-chart-bar"></i> Analytics & Reporting</li>
+                    <li><i class="fas fa-cog"></i> System Configuration</li>
+                </ul>
+            </div>
+            
+            <!-- System Status -->
+            <div class="system-status">
+                <h4 class="text-white text-sm font-medium mb-2">System Status</h4>
+                <div class="status-item">
+                    <span>Photo Management System</span>
+                    <div class="status-indicator" id="photoSystemStatus"></div>
+                </div>
+                <div class="status-item">
+                    <span>Database Connection</span>
+                    <div class="status-indicator" id="databaseStatus"></div>
+                </div>
+                <div class="status-item">
+                    <span>Security Services</span>
+                    <div class="status-indicator" id="securityStatus"></div>
+                </div>
+            </div>
+            
+            <!-- Quick Access Links -->
+            <div class="quick-access">
+                <a href="verify-photo-system.php" target="_blank">System Verification</a>
+                <span>•</span>
+                <a href="debug-photo-api.php" target="_blank">Debug Tools</a>
+                <span>•</span>
+                <a href="MEMBER-PHOTOS-MANAGEMENT-GUIDE.md" target="_blank">Documentation</a>
+            </div>
+            
+            <!-- Footer -->
+            <div class="text-center mt-6 pt-4 border-t border-white border-opacity-20">
+                <p class="text-blue-200 text-sm">
+                    WDB Management System v2.0
+                    <br>
+                    <span class="text-xs opacity-75">Secure • Reliable • Scalable</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class SystemAdminLogin {
+            constructor() {
+                this.form = document.getElementById('loginForm');
+                this.usernameInput = document.getElementById('username');
+                this.passwordInput = document.getElementById('password');
+                this.loginBtn = document.getElementById('loginBtn');
+                this.loginText = document.getElementById('loginText');
+                this.loginSpinner = document.getElementById('loginSpinner');
+                this.togglePasswordBtn = document.getElementById('togglePassword');
+                this.rememberMeCheckbox = document.getElementById('rememberMe');
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.checkSystemStatus();
+                // Only check existing session if not forcing fresh login
+                const urlParams = new URLSearchParams(window.location.search);
+                if (!urlParams.has('force_login')) {
+                    this.checkExistingSession();
+                }
+            }
+            
+            setupEventListeners() {
+                this.form.addEventListener('submit', (e) => this.handleLogin(e));
+                this.togglePasswordBtn.addEventListener('click', () => this.togglePassword());
+                
+                // Clear session button
+                const clearSessionBtn = document.getElementById('clearSessionBtn');
+                if (clearSessionBtn) {
+                    clearSessionBtn.addEventListener('click', () => this.clearSession());
+                }
+                
+                // Enter key handling
+                this.usernameInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.passwordInput.focus();
+                    }
+                });
+                
+                this.passwordInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.form.dispatchEvent(new Event('submit'));
+                    }
+                });
+            }
+            
+            async handleLogin(e) {
+                e.preventDefault();
+                
+                const username = this.usernameInput.value.trim();
+                const password = this.passwordInput.value;
+                const rememberMe = this.rememberMeCheckbox.checked;
+                
+                if (!username || !password) {
+                    this.showAlert('Please enter both username and password', 'error');
+                    return;
+                }
+                
+                this.setLoading(true);
+                
+                try {
+                    const response = await fetch('system-admin-auth-integration.php?action=login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            username: username,
+                            password: password,
+                            remember_me: rememberMe
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.showAlert('Login successful! Redirecting...', 'success');
+                        
+                        // Store user info for dashboard
+                        sessionStorage.setItem('admin_user', JSON.stringify(data.user));
+                        
+                        // Redirect based on user role and redirect_url
+                        setTimeout(() => {
+                            window.location.href = data.redirect_url || 'system-administrator-dashboard.html';
+                        }, 1500);
+                        
+                    } else {
+                        this.showAlert(data.error || 'Login failed. Please check your credentials.', 'error');
+                    }
+                    
+                } catch (error) {
+                    console.error('Login error:', error);
+                    this.showAlert('Connection error. Please try again.', 'error');
+                } finally {
+                    this.setLoading(false);
+                }
+            }
+            
+            togglePassword() {
+                const type = this.passwordInput.type === 'password' ? 'text' : 'password';
+                this.passwordInput.type = type;
+                
+                const icon = this.togglePasswordBtn.querySelector('i');
+                icon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+            }
+            
+            setLoading(loading) {
+                this.loginBtn.disabled = loading;
+                this.loginText.style.display = loading ? 'none' : 'inline';
+                this.loginSpinner.style.display = loading ? 'inline-block' : 'none';
+            }
+            
+            showAlert(message, type) {
+                const alertContainer = document.getElementById('alertContainer');
+                
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type}`;
+                alert.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span>${message}</span>
+                        <button onclick="this.parentElement.parentElement.remove()" class="ml-4 opacity-70 hover:opacity-100">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                
+                alertContainer.appendChild(alert);
+                alert.style.display = 'block';
+                
+                // Auto-remove success messages
+                if (type === 'success') {
+                    setTimeout(() => {
+                        if (alert.parentElement) {
+                            alert.remove();
+                        }
+                    }, 3000);
+                }
+            }
+            
+            async checkSystemStatus() {
+                try {
+                    // Check photo system
+                    const photoResponse = await fetch('api/admin/center-member-photos.php?action=stats');
+                    const photoStatus = document.getElementById('photoSystemStatus');
+                    if (photoResponse.ok) {
+                        photoStatus.style.background = '#10b981';
+                    } else {
+                        photoStatus.style.background = '#ef4444';
+                    }
+                } catch (error) {
+                    document.getElementById('photoSystemStatus').style.background = '#ef4444';
+                }
+                
+                try {
+                    // Check database
+                    const dbResponse = await fetch('verify-photo-system.php');
+                    const dbStatus = document.getElementById('databaseStatus');
+                    if (dbResponse.ok) {
+                        dbStatus.style.background = '#10b981';
+                    } else {
+                        dbStatus.style.background = '#ef4444';
+                    }
+                } catch (error) {
+                    document.getElementById('databaseStatus').style.background = '#ef4444';
+                }
+                
+                // Security status (assume good if we can load the page)
+                document.getElementById('securityStatus').style.background = '#10b981';
+            }
+            
+            async checkExistingSession() {
+                try {
+                    const response = await fetch('system-admin-auth-integration.php?action=session');
+                    const data = await response.json();
+                    
+                    if (data.success && data.authenticated) {
+                        // Show session info instead of auto-redirecting
+                        const sessionInfo = document.getElementById('sessionInfo');
+                        if (sessionInfo) {
+                            sessionInfo.style.display = 'block';
+                            sessionInfo.querySelector('span').innerHTML = `
+                                <i class="fas fa-info-circle mr-2"></i>
+                                Active session: ${data.user.username} (${data.user.role})
+                            `;
+                        }
+                        
+                        this.showAlert(`Active session found for ${data.user.username} (${data.user.role}). Clear session to login as different user.`, 'warning');
+                    }
+                } catch (error) {
+                    // No existing session, continue with login
+                    console.log('No existing session found');
+                }
+            }
+            
+            async clearSession() {
+                try {
+                    const response = await fetch('clear-session.php');
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.showAlert('Session cleared successfully. You can now login.', 'success');
+                        
+                        // Hide session info
+                        const sessionInfo = document.getElementById('sessionInfo');
+                        if (sessionInfo) {
+                            sessionInfo.style.display = 'none';
+                        }
+                        
+                        // Clear any existing alerts after a delay
+                        setTimeout(() => {
+                            const alerts = document.querySelectorAll('.alert');
+                            alerts.forEach(alert => alert.remove());
+                        }, 3000);
+                    } else {
+                        this.showAlert('Failed to clear session', 'error');
+                    }
+                } catch (error) {
+                    console.error('Clear session error:', error);
+                    this.showAlert('Error clearing session', 'error');
+                }
+            }
+        }
+        
+        // Initialize login system when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new SystemAdminLogin();
+        });
+        
+        // Add some demo credentials info for development
+        if (window.location.hostname === 'localhost') {
+            setTimeout(() => {
+                const alertContainer = document.getElementById('alertContainer');
+                const demoAlert = document.createElement('div');
+                demoAlert.className = 'alert alert-warning';
+                demoAlert.innerHTML = `
+                    <div>
+                        <strong>Development Mode:</strong> Use demo credentials or create test session via 
+                        <a href="quick-login-test.php" class="underline">quick-login-test.php</a>
+                    </div>
+                `;
+                alertContainer.appendChild(demoAlert);
+                demoAlert.style.display = 'block';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

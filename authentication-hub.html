@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Hub - WDB System</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .auth-option {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .auth-option:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-online {
+            background: #10b981;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+        }
+        
+        .status-offline {
+            background: #ef4444;
+        }
+        
+        .status-warning {
+            background: #f59e0b;
+        }
+    </style>
+</head>
+<body class="text-white">
+    <div class="container mx-auto px-6 py-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="mb-6">
+                <i class="fas fa-key text-6xl text-blue-300"></i>
+            </div>
+            <h1 class="text-4xl font-bold mb-4">Authentication Hub</h1>
+            <p class="text-xl text-blue-200">Choose your login method to access the WDB Management System</p>
+        </div>
+        
+        <!-- Current Session Status -->
+        <div class="glass-card rounded-xl p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">
+                <i class="fas fa-user-circle mr-2"></i>Current Session Status
+            </h2>
+            <div id="sessionStatus" class="text-center py-4">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
+                <p>Checking session...</p>
+            </div>
+        </div>
+        
+        <!-- Authentication Options -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Test Login -->
+            <div class="glass-card rounded-xl p-6 auth-option" onclick="window.open('test-admin-login.php', '_blank')">
+                <div class="text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-flask text-3xl text-green-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Test Login</h3>
+                    <p class="text-sm text-gray-300 mb-4">Quick login with test credentials for development</p>
+                    <div class="text-xs text-green-400">
+                        <span class="status-indicator status-online"></span>Ready
+                    </div>
+                </div>
+            </div>
+            
+            <!-- System Admin Login -->
+            <div class="glass-card rounded-xl p-6 auth-option" onclick="window.open('system-admin-login.html', '_blank')">
+                <div class="text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-shield-alt text-3xl text-blue-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">System Admin</h3>
+                    <p class="text-sm text-gray-300 mb-4">Full system administrator login with advanced features</p>
+                    <div class="text-xs text-blue-400">
+                        <span class="status-indicator status-online"></span>Available
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Session -->
+            <div class="glass-card rounded-xl p-6 auth-option" onclick="window.open('quick-login-test.php', '_blank')">
+                <div class="text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-bolt text-3xl text-yellow-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Quick Session</h3>
+                    <p class="text-sm text-gray-300 mb-4">Instant session creation for testing purposes</p>
+                    <div class="text-xs text-yellow-400">
+                        <span class="status-indicator status-warning"></span>Debug Only
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- System Access -->
+        <div class="glass-card rounded-xl p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">
+                <i class="fas fa-door-open mr-2"></i>System Access
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="center-member-photos-dashboard.html" class="block p-4 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition">
+                    <div class="flex items-center">
+                        <i class="fas fa-camera text-2xl text-purple-400 mr-4"></i>
+                        <div>
+                            <h3 class="font-semibold">Photo Management</h3>
+                            <p class="text-sm text-gray-300">Manage member profile photos</p>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="system-administrator-dashboard.html" class="block p-4 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition">
+                    <div class="flex items-center">
+                        <i class="fas fa-cogs text-2xl text-blue-400 mr-4"></i>
+                        <div>
+                            <h3 class="font-semibold">System Dashboard</h3>
+                            <p class="text-sm text-gray-300">System administration panel</p>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="center-admin-security-dashboard.html" class="block p-4 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition">
+                    <div class="flex items-center">
+                        <i class="fas fa-shield-alt text-2xl text-green-400 mr-4"></i>
+                        <div>
+                            <h3 class="font-semibold">Security Dashboard</h3>
+                            <p class="text-sm text-gray-300">Center-based security control</p>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="admin-dashboard.html" class="block p-4 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition">
+                    <div class="flex items-center">
+                        <i class="fas fa-tachometer-alt text-2xl text-orange-400 mr-4"></i>
+                        <div>
+                            <h3 class="font-semibold">Admin Dashboard</h3>
+                            <p class="text-sm text-gray-300">General administration panel</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Diagnostic Tools -->
+        <div class="glass-card rounded-xl p-6">
+            <h2 class="text-xl font-semibold mb-4">
+                <i class="fas fa-tools mr-2"></i>Diagnostic Tools
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="verify-photo-system.php" target="_blank" class="block p-3 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition text-center">
+                    <i class="fas fa-check-circle text-green-400 mb-2"></i>
+                    <div class="text-sm">System Verification</div>
+                </a>
+                
+                <a href="debug-photo-api.php" target="_blank" class="block p-3 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition text-center">
+                    <i class="fas fa-bug text-yellow-400 mb-2"></i>
+                    <div class="text-sm">Debug Tools</div>
+                </a>
+                
+                <a href="fix-photo-system.php" target="_blank" class="block p-3 bg-white bg-opacity-10 rounded-lg hover:bg-opacity-20 transition text-center">
+                    <i class="fas fa-wrench text-blue-400 mb-2"></i>
+                    <div class="text-sm">System Fix</div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="text-center mt-8 pt-6 border-t border-white border-opacity-20">
+            <p class="text-blue-200">
+                WDB Management System v2.0 - Authentication Hub
+                <br>
+                <span class="text-sm opacity-75">Port 8081 • Secure • Reliable</span>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Check current session status
+        async function checkSessionStatus() {
+            const statusDiv = document.getElementById('sessionStatus');
+            
+            try {
+                const response = await fetch('api/auth/session.php');
+                const data = await response.json();
+                
+                if (data.success && data.authenticated) {
+                    statusDiv.innerHTML = `
+                        <div class="text-green-400">
+                            <i class="fas fa-check-circle text-2xl mb-2"></i>
+                            <h3 class="font-semibold">Authenticated</h3>
+                            <p class="text-sm">Logged in as: ${data.user.full_name || data.user.username}</p>
+                            <p class="text-xs">Role: ${data.user.role}</p>
+                            <div class="mt-3">
+                                <a href="center-member-photos-dashboard.html" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg text-white text-sm transition">
+                                    Go to Dashboard
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    statusDiv.innerHTML = `
+                        <div class="text-yellow-400">
+                            <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+                            <h3 class="font-semibold">Not Authenticated</h3>
+                            <p class="text-sm">Please login to access the system</p>
+                            <div class="mt-3">
+                                <button onclick="window.open('test-admin-login.php', '_blank')" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-white text-sm transition">
+                                    Login Now
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `
+                    <div class="text-red-400">
+                        <i class="fas fa-times-circle text-2xl mb-2"></i>
+                        <h3 class="font-semibold">Connection Error</h3>
+                        <p class="text-sm">Unable to check session status</p>
+                        <div class="mt-3">
+                            <button onclick="checkSessionStatus()" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-white text-sm transition">
+                                Retry
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Check session on page load
+        document.addEventListener('DOMContentLoaded', checkSessionStatus);
+        
+        // Auto-refresh session status every 30 seconds
+        setInterval(checkSessionStatus, 30000);
+    </script>
+</body>
+</html>

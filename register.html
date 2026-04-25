@@ -1,0 +1,2263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDB Registration Portal</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Import Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        /* Professional Design System - Enhanced */
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --primary-glow: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --background-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            --card-shadow-hover: 0 35px 70px rgba(0, 0, 0, 0.2);
+            --card-shadow-glow: 0 0 60px rgba(99, 102, 241, 0.15);
+            --border-radius: 20px;
+            --border-radius-sm: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background-gradient);
+            background-image: 
+                linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%),
+                url('images/IMG_4569.png');
+            background-size: cover, 200px 200px;
+            background-position: center, center;
+            background-attachment: fixed, fixed;
+            background-repeat: no-repeat, repeat;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #1f2937;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Enhanced background with better fallback */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--background-gradient);
+            z-index: -3;
+            pointer-events: none;
+        }
+
+        /* Background image loading state */
+        body.bg-loading {
+            background-image: var(--background-gradient);
+        }
+
+        /* Background image error fallback */
+        body.bg-error {
+            background-image: 
+                linear-gradient(135deg, rgba(99, 102, 241, 0.85) 0%, rgba(139, 92, 246, 0.85) 100%),
+                linear-gradient(45deg, #667eea 25%, transparent 25%), 
+                linear-gradient(-45deg, #667eea 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #764ba2 75%), 
+                linear-gradient(-45deg, transparent 75%, #764ba2 75%);
+            background-size: cover, 20px 20px, 20px 20px, 20px 20px, 20px 20px;
+            background-position: center, 0 0, 0 0, 10px 10px, 10px 10px;
+        }
+
+        /* Fallback background pattern if image doesn't load */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.03) 0%, transparent 50%);
+            z-index: -2;
+            pointer-events: none;
+            animation: backgroundFloat 20s ease-in-out infinite;
+        }
+
+        /* Animated background particles */
+        .background-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.01) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.01) 0%, transparent 50%);
+            animation: backgroundFloat 20s ease-in-out infinite;
+        }
+
+        /* Logo pattern overlay for better integration */
+        .background-particles::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at center, rgba(255, 255, 255, 0.01) 0%, transparent 70%);
+            background-size: 200px 200px;
+            background-repeat: repeat;
+            opacity: 0.2;
+            animation: logoFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); opacity: 0.4; }
+            50% { transform: translateY(-8px) scale(1.01) rotate(1deg); opacity: 0.3; }
+        }
+
+        @keyframes backgroundFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+            50% { transform: translateY(-20px) rotate(2deg); opacity: 0.8; }
+        }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(25px);
+            padding: 0.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            z-index: 10;
+        }
+
+        .nav-left {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-left span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.9;
+            transition: var(--transition);
+        }
+
+        .nav-left span:hover {
+            opacity: 1;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .language-selector {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 0.25rem 0.75rem;
+            color: white;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .language-selector:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Language Switcher */
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .lang-btn {
+            padding: 0.4rem 0.9rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .lang-btn.active {
+            border-color: white;
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Navigation */
+        .main-nav {
+            background: rgba(255, 255, 255, 0.90);
+            backdrop-filter: blur(15px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .nav-brand img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+            transition: var(--transition);
+        }
+
+        .nav-brand img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-brand-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .nav-brand-subtitle {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 400;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gradient);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links .register-btn {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-links .register-btn:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .nav-links .register-btn::after {
+            display: none;
+        }
+
+        /* Container */
+        .container {
+            max-width: 480px;
+            margin: 1.5rem auto;
+            padding: 1rem;
+            position: relative;
+        }
+
+        /* Registration Card - Enhanced */
+        .registration-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            border-radius: var(--border-radius);
+            box-shadow: 
+                var(--card-shadow),
+                0 0 0 1px rgba(255, 255, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                var(--card-shadow-glow);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: var(--transition);
+            animation: slideInUp 0.6s ease-out, cardGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes cardGlow {
+            0%, 100% { box-shadow: var(--card-shadow), 0 0 0 1px rgba(255, 255, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 0 40px rgba(99, 102, 241, 0.1); }
+            50% { box-shadow: var(--card-shadow), 0 0 0 1px rgba(255, 255, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 0 60px rgba(99, 102, 241, 0.2); }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .registration-card:hover {
+            box-shadow: var(--card-shadow-hover), 0 0 80px rgba(99, 102, 241, 0.25);
+            transform: translateY(-4px) scale(1.01);
+        }
+
+        .registration-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .card-header img {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2), 0 0 40px rgba(99, 102, 241, 0.15);
+            transition: var(--transition-bounce);
+            animation: logoFloat 3s ease-in-out infinite, logoPulse 2s ease-in-out infinite;
+            border: 3px solid rgba(99, 102, 241, 0.1);
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(3deg); }
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2), 0 0 40px rgba(99, 102, 241, 0.15); }
+            50% { box-shadow: 0 12px 35px rgba(99, 102, 241, 0.3), 0 0 60px rgba(99, 102, 241, 0.25); }
+        }
+
+        .card-header img:hover {
+            transform: scale(1.15) rotate(10deg);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4), 0 0 80px rgba(99, 102, 241, 0.3);
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #1f2937 0%, #4f46e5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleShine 3s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes titleShine {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .card-subtitle {
+            color: #6b7280;
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Form Styling */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            font-size: 1.125rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 2px solid #e5e7eb;
+            border-radius: var(--border-radius-sm);
+            font-size: 1.125rem;
+            transition: var(--transition);
+            background: white;
+            position: relative;
+            box-sizing: border-box;
+            min-height: 3.5rem;
+            line-height: 1.4;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1), 0 4px 15px rgba(99, 102, 241, 0.15);
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+        }
+
+        .form-group input:valid:not(:placeholder-shown) {
+            border-color: var(--success-color);
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+        }
+
+        .form-group input::placeholder {
+            color: #9ca3af;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus::placeholder {
+            opacity: 0.5;
+            transform: translateX(5px);
+        }
+
+        /* Floating label effect */
+        .form-group {
+            position: relative;
+        }
+
+        .form-group.has-value label,
+        .form-group input:focus + label {
+            transform: translateY(-1.5rem) scale(0.85);
+            color: var(--primary-color);
+        }
+
+        /* Button Styling - Enhanced */
+        .btn {
+            width: 100%;
+            padding: 1.25rem 1.75rem;
+            border-radius: var(--border-radius-sm);
+            font-weight: 600;
+            font-size: 1.125rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.625rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+            position: relative;
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--border-radius-sm);
+            padding: 2px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4), 0 0 60px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-primary:hover::after {
+            opacity: 1;
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        /* Success state */
+        .btn.success {
+            background: var(--success-gradient);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Progress Dots - Enhanced */
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            transition: var(--transition-bounce);
+            position: relative;
+        }
+
+        .progress-dot::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: transparent;
+            transition: var(--transition);
+        }
+
+        .progress-dot.active {
+            background: var(--primary-gradient);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            animation: dotPulse 1.5s ease-in-out infinite;
+        }
+
+        .progress-dot.active::after {
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+            animation: dotRipple 1.5s ease-out infinite;
+        }
+
+        .progress-dot.completed {
+            background: var(--success-gradient);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+            transform: scale(1.2);
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        @keyframes dotRipple {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        /* Button enhancements */
+        .btn-text {
+            transition: var(--transition);
+        }
+
+        .btn-icon {
+            transition: var(--transition);
+            opacity: 0.8;
+        }
+
+        .btn:hover .btn-icon {
+            transform: translateX(3px);
+            opacity: 1;
+        }
+
+        /* Form validation states - Enhanced */
+        .form-group.success input {
+            border-color: var(--success-color);
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            animation: successPulse 0.5s ease-out;
+        }
+
+        .form-group.success input::after {
+            content: '✓';
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        .form-group.error input {
+            border-color: var(--error-color);
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            animation: shake 0.5s ease-out;
+        }
+
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Tooltip system */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #1f2937;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.75rem;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Loading States */
+        .btn.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .btn.loading::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Alert Boxes - Enhanced */
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            line-height: 1.4;
+            animation: slideInDown 0.5s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 1px solid #10b981;
+            color: #065f46;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+            color: #92400e;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+        }
+
+        .alert-icon {
+            flex-shrink: 0;
+            width: 16px;
+            height: 16px;
+            margin-top: 0.125rem;
+            animation: iconBounce 0.6s ease-out;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Footer - Enhanced */
+        .footer-text {
+            text-align: center;
+            margin-top: 1.75rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .footer-text a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 2px;
+            transition: var(--transition);
+        }
+
+        .footer-text a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: var(--transition);
+        }
+
+        .footer-text a:hover {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .footer-text a:hover::after {
+            width: 100%;
+        }
+
+        /* Field Error Styling */
+        .field-error {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Password Strength Indicator */
+        .password-strength {
+            margin-top: 0.375rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .strength-bar {
+            flex: 1;
+            height: 2px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .strength-weak { background: #ef4444; width: 25%; }
+        .strength-fair { background: #f59e0b; width: 50%; }
+        .strength-good { background: #10b981; width: 75%; }
+        .strength-strong { background: #059669; width: 100%; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                background-attachment: scroll; /* Better performance on mobile */
+                background-size: cover, 150px 150px; /* Smaller logo pattern on mobile */
+                background-image: 
+                    linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%),
+                    url('images/IMG_4569.png');
+            }
+            
+            .top-nav, .main-nav {
+                padding: 0.25rem 0.5rem;
+            }
+
+            .nav-links {
+                gap: 0.5rem;
+            }
+
+            .container {
+                padding: 0.75rem;
+                margin: 0.75rem auto;
+                max-width: 95%;
+            }
+
+            .registration-card {
+                padding: 1.5rem;
+                background: rgba(255, 255, 255, 0.99); /* More opaque on mobile */
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .card-title {
+                font-size: 1.75rem;
+            }
+
+            .card-subtitle {
+                font-size: 1rem;
+            }
+
+            .card-header img {
+                width: 70px;
+                height: 70px;
+            }
+
+            .nav-brand img {
+                width: 45px;
+                height: 45px;
+            }
+
+            .nav-brand-title {
+                font-size: 1.125rem;
+            }
+
+            .nav-brand-subtitle {
+                font-size: 0.75rem;
+            }
+
+            .form-group label {
+                font-size: 0.875rem;
+            }
+
+            .form-group input,
+            .form-group select {
+                font-size: 1rem;
+                padding: 0.875rem 1rem;
+                min-height: 3rem;
+            }
+
+            .btn {
+                font-size: 0.875rem;
+                padding: 1rem 1.5rem;
+            }
+
+            .background-particles::after {
+                background-size: 150px 150px; /* Smaller pattern on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background particles for enhanced visual effect -->
+    <div class="background-particles"></div>
+    
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="nav-left">
+            <span>📧 info@wdb.org</span>
+            <span>📞 +251 11 810 6602</span>
+        </div>
+        <div class="nav-right">
+            <div class="language-switcher">
+                <button onclick="languageSwitcher.setLanguage('en')" class="wdb-lang-btn" id="wdb-lang-en">
+                    �🇧 English
+                </button>
+                <button onclick="languageSwitcher.setLanguage('om')" class="wdb-lang-btn" id="wdb-lang-om">
+                    🇪🇹 Afaan Oromoo
+                </button>
+            <button onclick="languageSwitcher.setLanguage('am')" class="wdb-lang-btn" id="wdb-lang-am">
+                🇪🇹 አማርኛ
+            </button>
+            <button onclick="languageSwitcher.setLanguage('ti')" class="wdb-lang-btn" id="wdb-lang-ti">
+                🇪🇹 ትግርኛ
+            </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <div class="main-nav">
+        <div class="nav-brand">
+            <img src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo">
+            <div class="nav-brand-text">
+                <div class="nav-brand-title">WDB Registration Portal</div>
+                <div class="nav-brand-subtitle">Ethiopian Orthodox Tewahedo Church</div>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="member-login.html">Login</a>
+            <a href="#" class="register-btn">Register</a>
+            <a href="about.html">About</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Registration Card -->
+        <div class="registration-card">
+            <div class="card-header">
+                <img src="images/WDB_LOGO_CIRCLE.png" alt="WDB Logo">
+                <h1 class="card-title" data-i18n="register.member">Register New Member</h1>
+                <p class="card-subtitle" data-i18n="page.subtitle">Join Waldaa Duuka Bu'ootaa • Ethiopian Orthodox Tewahedo Church</p>
+            </div>
+
+            <!-- Success Message Area -->
+            <div id="successMessage" class="alert alert-success" style="display: none;">
+                <svg class="alert-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <div id="successText">Account created successfully!</div>
+            </div>
+
+            <!-- Error Message Area -->
+            <div id="errorMessage" class="alert alert-warning" style="display: none;">
+                <svg class="alert-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                <div id="errorText">Please fix the errors below.</div>
+            </div>
+            
+            <form id="quickRegisterForm">
+                <!-- Progress indicator -->
+                <div style="display: flex; justify-content: center; margin-bottom: 1rem;">
+                    <div style="display: flex; gap: 0.5rem;">
+                        <div class="progress-dot active" data-step="1"></div>
+                        <div class="progress-dot" data-step="2"></div>
+                        <div class="progress-dot" data-step="3"></div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quickFullName" data-i18n="field.fullname">Full Name *</label>
+                        <input type="text" id="quickFullName" name="fullName" required 
+                               data-i18n-placeholder="field.fullname.placeholder"
+                               placeholder="Your Full Name (First, Middle, Last)"
+                               autocomplete="name">
+                        <div class="field-error" id="fullNameError" style="display: none;"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quickEmail" data-i18n="field.email">Email Address *</label>
+                        <input type="email" id="quickEmail" name="email" required 
+                               data-i18n-placeholder="field.email.placeholder"
+                               placeholder="e.g. Name@example.com"
+                               autocomplete="email">
+                        <div class="field-error" id="emailError" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quickUsername" data-i18n="field.username">Choose Username *</label>
+                        <input type="text" id="quickUsername" name="username" required 
+                               data-i18n-placeholder="field.username.placeholder"
+                               placeholder="Username (First 8 characters)"
+                               autocomplete="username">
+                        <div class="field-error" id="usernameError" style="display: none;"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quickPassword" data-i18n="field.password">Password *</label>
+                        <input type="password" id="quickPassword" name="password" required 
+                               data-i18n-placeholder="field.password.placeholder"
+                               placeholder="Your Password"
+                               autocomplete="new-password">
+                        <div class="password-strength" id="passwordStrength"></div>
+                        <div class="field-error" id="passwordError" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quickPhone" data-i18n="field.phone">Mobile Phone *</label>
+                        <input type="tel" id="quickPhone" name="mobilePhone" required 
+                               data-i18n-placeholder="field.phone.placeholder"
+                               placeholder="+251 XXX XXX XXX"
+                               autocomplete="tel">
+                        <div class="field-error" id="phoneError" style="display: none;"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quickGender" data-i18n="field.gender">Gender *</label>
+                        <select id="quickGender" name="gender" required>
+                            <option value="" data-i18n="field.gender.select">Select Gender</option>
+                            <option value="male" data-i18n="field.gender.male">Male</option>
+                            <option value="female" data-i18n="field.gender.female">Female</option>
+                            <option value="other" data-i18n="field.gender.other">Other</option>
+                        </select>
+                        <div class="field-error" id="genderError" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="quickBirthDate" data-i18n="field.membership.date">Today's Date Membership Start Date *</label>
+                    <input type="date" id="quickBirthDate" name="membershipStartDate" required>
+                    <div class="field-error" id="birthDateError" style="display: none;"></div>
+                </div>
+
+                
+                <button type="submit" class="btn btn-primary" id="createAccountBtn">
+                    <span class="btn-text" data-i18n="button.submit">Sign Up and Join</span>
+                    <span class="btn-icon">→</span>
+                </button>
+
+                <!-- Security notice -->
+                <div style="text-align: center; margin-top: 1rem; font-size: 0.7rem; color: #6b7280;">
+                    🔒 <span data-i18n="message.security">Your information is encrypted and secure</span>
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer Text -->
+        <div class="footer-text">
+            Already have an account? <a href="member-login.html">Sign in here</a>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        // Enhanced Registration System with Professional Features
+        class WDBRegistrationManager {
+            constructor() {
+                this.form = document.getElementById('quickRegisterForm');
+                this.submitButton = document.getElementById('createAccountBtn');
+                this.fields = {
+                    fullName: document.getElementById('quickFullName'),
+                    email: document.getElementById('quickEmail'),
+                    username: document.getElementById('quickUsername'),
+                    password: document.getElementById('quickPassword'),
+                    mobilePhone: document.getElementById('quickPhone'),
+                    gender: document.getElementById('quickGender'),
+                    membershipStartDate: document.getElementById('quickBirthDate')
+                };
+                this.errors = {
+                    fullName: document.getElementById('fullNameError'),
+                    email: document.getElementById('emailError'),
+                    username: document.getElementById('usernameError'),
+                    password: document.getElementById('passwordError'),
+                    mobilePhone: document.getElementById('phoneError'),
+                    gender: document.getElementById('genderError'),
+                    membershipStartDate: document.getElementById('birthDateError')
+                };
+                this.successMessage = document.getElementById('successMessage');
+                this.errorMessage = document.getElementById('errorMessage');
+                this.passwordStrength = document.getElementById('passwordStrength');
+                
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.checkExistingAuth();
+                this.addFieldValidation();
+                this.setupPasswordStrengthChecker();
+                this.setupPasswordAndUsernameHandlers();
+                this.setDefaultDate();
+                this.initializeProgressDots();
+                this.addProfessionalEnhancements();
+            }
+
+            initializeProgressDots() {
+                this.progressDots = document.querySelectorAll('.progress-dot');
+                this.updateProgress(1);
+            }
+
+            updateProgress(step) {
+                this.progressDots.forEach((dot, index) => {
+                    dot.classList.remove('active', 'completed');
+                    if (index + 1 < step) {
+                        dot.classList.add('completed');
+                    } else if (index + 1 === step) {
+                        dot.classList.add('active');
+                    }
+                });
+            }
+
+            addProfessionalEnhancements() {
+                // Add real-time form validation feedback
+                Object.keys(this.fields).forEach(fieldName => {
+                    const field = this.fields[fieldName];
+                    if (field) {
+                        field.addEventListener('input', () => {
+                            this.validateFieldRealTime(fieldName);
+                        });
+                    }
+                });
+
+                // Add form completion tracking
+                this.trackFormCompletion();
+            }
+
+            validateFieldRealTime(fieldName) {
+                const field = this.fields[fieldName];
+                const formGroup = field.closest('.form-group');
+                
+                if (field.value.trim()) {
+                    const isValid = this.validateField(fieldName);
+                    if (isValid) {
+                        formGroup.classList.add('success');
+                        formGroup.classList.remove('error');
+                    } else {
+                        formGroup.classList.add('error');
+                        formGroup.classList.remove('success');
+                    }
+                } else {
+                    formGroup.classList.remove('success', 'error');
+                }
+            }
+
+            trackFormCompletion() {
+                const totalFields = Object.keys(this.fields).length;
+                let completedFields = 0;
+
+                Object.keys(this.fields).forEach(fieldName => {
+                    const field = this.fields[fieldName];
+                    if (field) {
+                        field.addEventListener('input', () => {
+                            completedFields = Object.values(this.fields).filter(f => f && f.value.trim()).length;
+                            const progress = Math.min(Math.ceil((completedFields / totalFields) * 3), 3);
+                            this.updateProgress(progress);
+                        });
+                    }
+                });
+            }
+
+            setupEventListeners() {
+                this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+                
+                // Real-time validation
+                Object.keys(this.fields).forEach(fieldName => {
+                    const field = this.fields[fieldName];
+                    if (field) {
+                        field.addEventListener('blur', () => this.validateField(fieldName));
+                        field.addEventListener('input', () => this.clearFieldError(fieldName));
+                    }
+                });
+
+                // File upload handlers
+                this.setupFileUploadHandlers();
+            }
+
+            setupFileUploadHandlers() {
+                // Member Photo upload with enhanced features
+                const memberPhotoInput = document.getElementById('memberPhoto');
+                const photoUploadArea = document.getElementById('photoUploadArea');
+                const uploadPrompt = document.getElementById('uploadPrompt');
+                const photoPreview = document.getElementById('photoPreview');
+                const photoPreviewImg = document.getElementById('photoPreviewImg');
+                const memberPhotoError = document.getElementById('memberPhotoError');
+                const removePhotoBtn = document.getElementById('removePhotoBtn');
+
+                if (memberPhotoInput && photoUploadArea) {
+                    // Drag and drop functionality
+                    photoUploadArea.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        photoUploadArea.style.borderColor = 'var(--primary-color)';
+                        photoUploadArea.style.background = 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)';
+                    });
+
+                    photoUploadArea.addEventListener('dragleave', (e) => {
+                        e.preventDefault();
+                        photoUploadArea.style.borderColor = '#d1d5db';
+                        photoUploadArea.style.background = 'linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%)';
+                    });
+
+                    photoUploadArea.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        photoUploadArea.style.borderColor = '#d1d5db';
+                        photoUploadArea.style.background = 'linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%)';
+                        
+                        const files = e.dataTransfer.files;
+                        if (files.length > 0) {
+                            memberPhotoInput.files = files;
+                            this.handlePhotoUpload(files[0]);
+                        }
+                    });
+
+                    // File input change
+                    memberPhotoInput.addEventListener('change', (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            this.handlePhotoUpload(file);
+                        }
+                    });
+
+                    // Remove photo button
+                    if (removePhotoBtn) {
+                        removePhotoBtn.addEventListener('click', () => {
+                            memberPhotoInput.value = '';
+                            photoPreview.style.display = 'none';
+                            uploadPrompt.style.display = 'block';
+                            memberPhotoError.style.display = 'none';
+                        });
+                    }
+                }
+
+                // Clergy Documents upload with enhanced features
+                const clergyDocsInput = document.getElementById('clergyDocuments');
+                const clergyDocsUploadArea = document.getElementById('clergyDocsUploadArea');
+                const clergyUploadPrompt = document.getElementById('clergyUploadPrompt');
+                const clergyDocsPreview = document.getElementById('clergyDocsPreview');
+                const clergyDocsError = document.getElementById('clergyDocumentsError');
+                const removeClergyDocsBtn = document.getElementById('removeClergyDocsBtn');
+
+                if (clergyDocsInput && clergyDocsUploadArea) {
+                    // Drag and drop functionality
+                    clergyDocsUploadArea.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        clergyDocsUploadArea.style.borderColor = '#ca8a04';
+                        clergyDocsUploadArea.style.background = 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)';
+                    });
+
+                    clergyDocsUploadArea.addEventListener('dragleave', (e) => {
+                        e.preventDefault();
+                        clergyDocsUploadArea.style.borderColor = '#d1d5db';
+                        clergyDocsUploadArea.style.background = 'linear-gradient(135deg, #fefce8 0%, #fef9c3 100%)';
+                    });
+
+                    clergyDocsUploadArea.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        clergyDocsUploadArea.style.borderColor = '#d1d5db';
+                        clergyDocsUploadArea.style.background = 'linear-gradient(135deg, #fefce8 0%, #fef9c3 100%)';
+                        
+                        const files = e.dataTransfer.files;
+                        if (files.length > 0) {
+                            clergyDocsInput.files = files;
+                            this.handleClergyDocsUpload(files[0]);
+                        }
+                    });
+
+                    // File input change
+                    clergyDocsInput.addEventListener('change', (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            this.handleClergyDocsUpload(file);
+                        }
+                    });
+
+                    // Remove document button
+                    if (removeClergyDocsBtn) {
+                        removeClergyDocsBtn.addEventListener('click', () => {
+                            clergyDocsInput.value = '';
+                            clergyDocsPreview.style.display = 'none';
+                            clergyUploadPrompt.style.display = 'block';
+                            clergyDocsError.style.display = 'none';
+                        });
+                    }
+                }
+            }
+
+            handleClergyDocsUpload(file) {
+                const clergyDocsError = document.getElementById('clergyDocumentsError');
+                const clergyDocsPreview = document.getElementById('clergyDocsPreview');
+                const clergyUploadPrompt = document.getElementById('clergyUploadPrompt');
+                const clergyDocsPreviewContent = document.getElementById('clergyDocsPreviewContent');
+                const clergyDocsFileName = document.getElementById('clergyDocsFileName');
+                const clergyDocsFileSize = document.getElementById('clergyDocsFileSize');
+                const clergyDocsFileType = document.getElementById('clergyDocsFileType');
+
+                // Validate file size (5MB max)
+                if (file.size > 5 * 1024 * 1024) {
+                    clergyDocsError.textContent = '❌ Document size must not exceed 5MB';
+                    clergyDocsError.style.display = 'block';
+                    document.getElementById('clergyDocuments').value = '';
+                    clergyDocsPreview.style.display = 'none';
+                    clergyUploadPrompt.style.display = 'block';
+                    return;
+                }
+
+                // Validate file type (images and PDF)
+                const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+                if (!validTypes.includes(file.type)) {
+                    clergyDocsError.textContent = '❌ Please upload an image (JPG, PNG) or PDF file';
+                    clergyDocsError.style.display = 'block';
+                    document.getElementById('clergyDocuments').value = '';
+                    clergyDocsPreview.style.display = 'none';
+                    clergyUploadPrompt.style.display = 'block';
+                    return;
+                }
+
+                // Clear error
+                clergyDocsError.style.display = 'none';
+                
+                // Update file info
+                if (clergyDocsFileName) {
+                    clergyDocsFileName.textContent = file.name;
+                }
+                if (clergyDocsFileSize) {
+                    const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                    clergyDocsFileSize.textContent = `${sizeMB} MB`;
+                }
+                if (clergyDocsFileType) {
+                    clergyDocsFileType.textContent = file.type.includes('pdf') ? 'PDF Document' : 'Image';
+                }
+
+                // Show preview based on file type
+                if (file.type.includes('pdf')) {
+                    // PDF preview - show icon
+                    clergyDocsPreviewContent.innerHTML = `
+                        <div style="padding: 2rem; background: #fee2e2; border-radius: var(--border-radius-sm); border: 2px solid #fca5a5;">
+                            <div style="font-size: 4rem; margin-bottom: 1rem;">📄</div>
+                            <div style="color: #991b1b; font-weight: 600; font-size: 1.1rem;">PDF Document</div>
+                            <div style="color: #7f1d1d; font-size: 0.875rem; margin-top: 0.5rem;">${file.name}</div>
+                        </div>
+                    `;
+                    clergyDocsPreview.style.display = 'block';
+                    clergyUploadPrompt.style.display = 'none';
+                } else {
+                    // Image preview
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        clergyDocsPreviewContent.innerHTML = `
+                            <img src="${e.target.result}" alt="Document preview" 
+                                 style="max-width: 100%; max-height: 300px; border-radius: var(--border-radius-sm); box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 4px solid white;">
+                        `;
+                        clergyDocsPreview.style.display = 'block';
+                        clergyUploadPrompt.style.display = 'none';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            handlePhotoUpload(file) {
+                const memberPhotoError = document.getElementById('memberPhotoError');
+                const photoPreview = document.getElementById('photoPreview');
+                const photoPreviewImg = document.getElementById('photoPreviewImg');
+                const uploadPrompt = document.getElementById('uploadPrompt');
+                const photoFileName = document.getElementById('photoFileName');
+                const photoFileSize = document.getElementById('photoFileSize');
+                const photoDimensions = document.getElementById('photoDimensions');
+
+                // Validate file size (5MB max)
+                if (file.size > 5 * 1024 * 1024) {
+                    memberPhotoError.textContent = '❌ Photo size must not exceed 5MB';
+                    memberPhotoError.style.display = 'block';
+                    document.getElementById('memberPhoto').value = '';
+                    photoPreview.style.display = 'none';
+                    uploadPrompt.style.display = 'block';
+                    return;
+                }
+
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    memberPhotoError.textContent = '❌ Please upload an image file (JPG, PNG, GIF)';
+                    memberPhotoError.style.display = 'block';
+                    document.getElementById('memberPhoto').value = '';
+                    photoPreview.style.display = 'none';
+                    uploadPrompt.style.display = 'block';
+                    return;
+                }
+
+                // Clear error
+                memberPhotoError.style.display = 'none';
+                
+                // Read and display photo
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    photoPreviewImg.src = e.target.result;
+                    
+                    // Get image dimensions
+                    const img = new Image();
+                    img.onload = () => {
+                        const width = img.width;
+                        const height = img.height;
+                        
+                        // Check minimum dimensions
+                        if (width < 300 || height < 300) {
+                            memberPhotoError.textContent = '⚠️ Photo resolution is low. Minimum 300x300 pixels recommended.';
+                            memberPhotoError.style.display = 'block';
+                            memberPhotoError.style.background = '#fef3c7';
+                            memberPhotoError.style.color = '#92400e';
+                            memberPhotoError.style.borderLeft = '4px solid #f59e0b';
+                        }
+                        
+                        // Update photo info
+                        if (photoDimensions) {
+                            photoDimensions.textContent = `${width} x ${height} px`;
+                        }
+                    };
+                    img.src = e.target.result;
+                    
+                    // Update file info
+                    if (photoFileName) {
+                        photoFileName.textContent = file.name;
+                    }
+                    if (photoFileSize) {
+                        const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                        photoFileSize.textContent = `${sizeMB} MB`;
+                    }
+                    
+                    // Show preview, hide upload prompt
+                    photoPreview.style.display = 'block';
+                    uploadPrompt.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+
+            setupPasswordAndUsernameHandlers() {
+                // Enhanced password field
+                if (this.fields.password) {
+                    this.fields.password.addEventListener('input', () => this.checkPasswordStrength());
+                }
+
+                // Username generation from full name
+                if (this.fields.fullName && this.fields.username) {
+                    this.fields.fullName.addEventListener('input', () => this.generateUsername());
+                }
+            }
+
+            setDefaultDate() {
+                if (this.fields.membershipStartDate) {
+                    const today = new Date().toISOString().split('T')[0];
+                    this.fields.membershipStartDate.value = today;
+                }
+            }
+
+            generateUsername() {
+                const fullName = this.fields.fullName.value.trim();
+                if (fullName && this.fields.username && !this.fields.username.value) {
+                    // Generate username from first 8 characters of name (no spaces)
+                    const username = fullName.replace(/\s+/g, '').toLowerCase().substring(0, 8);
+                    this.fields.username.value = username;
+                }
+            }
+
+            checkExistingAuth() {
+                if (typeof authManager !== 'undefined' && authManager && authManager.isLoggedIn()) {
+                    const user = authManager.getCurrentUser();
+                    if (user) {
+                        this.showMessage('You are already logged in. Redirecting to dashboard...', 'success');
+                        setTimeout(() => {
+                            authManager.redirectToDashboard();
+                        }, 2000);
+                    }
+                }
+            }
+
+            addFieldValidation() {
+                // Add visual feedback for field states
+                Object.values(this.fields).forEach(field => {
+                    if (field) {
+                        field.addEventListener('focus', (e) => {
+                            e.target.style.transform = 'translateY(-1px)';
+                            e.target.style.boxShadow = '0 4px 15px rgba(99, 102, 241, 0.15)';
+                        });
+
+                        field.addEventListener('blur', (e) => {
+                            e.target.style.transform = '';
+                            e.target.style.boxShadow = '';
+                        });
+                    }
+                });
+            }
+
+            setupPasswordStrengthChecker() {
+                if (!this.passwordStrength) return;
+
+                this.passwordStrength.innerHTML = `
+                    <div class="strength-bar">
+                        <div class="strength-fill" id="strengthFill"></div>
+                    </div>
+                    <span id="strengthText">Enter password</span>
+                `;
+            }
+
+            checkPasswordStrength() {
+                const password = this.fields.password.value;
+                const strengthFill = document.getElementById('strengthFill');
+                const strengthText = document.getElementById('strengthText');
+
+                if (!password) {
+                    strengthFill.className = 'strength-fill';
+                    strengthText.textContent = 'Enter password';
+                    return;
+                }
+
+                let score = 0;
+                let feedback = [];
+
+                // Length check
+                if (password.length >= 8) score++;
+                else feedback.push('at least 8 characters');
+
+                // Uppercase check
+                if (/[A-Z]/.test(password)) score++;
+                else feedback.push('uppercase letter');
+
+                // Lowercase check
+                if (/[a-z]/.test(password)) score++;
+                else feedback.push('lowercase letter');
+
+                // Number check
+                if (/\d/.test(password)) score++;
+                else feedback.push('number');
+
+                // Special character check
+                if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++;
+                else feedback.push('special character');
+
+                // Update visual indicator
+                if (score <= 1) {
+                    strengthFill.className = 'strength-fill strength-weak';
+                    strengthText.textContent = 'Weak - Add ' + feedback.slice(0, 2).join(', ');
+                } else if (score <= 2) {
+                    strengthFill.className = 'strength-fill strength-fair';
+                    strengthText.textContent = 'Fair - Add ' + feedback.slice(0, 1).join(', ');
+                } else if (score <= 3) {
+                    strengthFill.className = 'strength-fill strength-good';
+                    strengthText.textContent = 'Good - Almost there!';
+                } else {
+                    strengthFill.className = 'strength-fill strength-strong';
+                    strengthText.textContent = 'Strong password ✓';
+                }
+            }
+
+            validateField(fieldName) {
+                const field = this.fields[fieldName];
+                if (!field) return true;
+
+                const errorElement = this.errors[fieldName];
+                let isValid = true;
+                let errorMessage = '';
+
+                switch (fieldName) {
+                    case 'fullName':
+                        if (!field.value.trim()) {
+                            errorMessage = 'Full name is required';
+                            isValid = false;
+                        } else if (field.value.trim().length < 2) {
+                            errorMessage = 'Full name must be at least 2 characters';
+                            isValid = false;
+                        } else if (!/^[a-zA-Z\s'-]+$/.test(field.value.trim())) {
+                            errorMessage = 'Full name can only contain letters, spaces, hyphens, and apostrophes';
+                            isValid = false;
+                        }
+                        break;
+
+                    case 'email':
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!field.value.trim()) {
+                            errorMessage = 'Email address is required';
+                            isValid = false;
+                        } else if (!emailRegex.test(field.value.trim())) {
+                            errorMessage = 'Please enter a valid email address';
+                            isValid = false;
+                        }
+                        break;
+
+                    case 'username':
+                        if (!field.value.trim()) {
+                            errorMessage = 'Username is required';
+                            isValid = false;
+                        } else if (field.value.trim().length < 3) {
+                            errorMessage = 'Username must be at least 3 characters';
+                            isValid = false;
+                        } else if (!/^[a-zA-Z0-9_]+$/.test(field.value.trim())) {
+                            errorMessage = 'Username can only contain letters, numbers, and underscores';
+                            isValid = false;
+                        }
+                        break;
+
+                    case 'password':
+                        if (!field.value) {
+                            errorMessage = 'Password is required';
+                            isValid = false;
+                        } else if (field.value.length < 8) {
+                            errorMessage = 'Password must be at least 8 characters long';
+                            isValid = false;
+                        } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(field.value)) {
+                            errorMessage = 'Password must contain uppercase, lowercase, and number';
+                            isValid = false;
+                        }
+                        break;
+
+                    case 'mobilePhone':
+                        if (!field.value.trim()) {
+                            errorMessage = 'Mobile phone is required';
+                            isValid = false;
+                        } else if (!/^[\+]?[0-9\-\s\(\)]+$/.test(field.value.trim())) {
+                            errorMessage = 'Please enter a valid phone number';
+                            isValid = false;
+                        }
+                        break;
+
+                    case 'gender':
+                        if (!field.value) {
+                            errorMessage = 'Please select your gender';
+                            isValid = false;
+                        }
+                        break;
+
+                    case 'membershipStartDate':
+                        if (!field.value) {
+                            errorMessage = 'Membership start date is required';
+                            isValid = false;
+                        }
+                        break;
+                }
+
+                this.showFieldError(fieldName, errorMessage, !isValid);
+                return isValid;
+            }
+
+            showFieldError(fieldName, message, show) {
+                const field = this.fields[fieldName];
+                const errorElement = this.errors[fieldName];
+
+                if (!field || !errorElement) return;
+
+                if (show && message) {
+                    field.style.borderColor = '#ef4444';
+                    field.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
+                    errorElement.innerHTML = `
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                        </svg>
+                        ${message}
+                    `;
+                    errorElement.style.display = 'flex';
+                } else {
+                    field.style.borderColor = '';
+                    field.style.boxShadow = '';
+                    errorElement.style.display = 'none';
+                }
+            }
+
+            clearFieldError(fieldName) {
+                this.showFieldError(fieldName, '', false);
+            }
+
+            validateForm() {
+                let isValid = true;
+                Object.keys(this.fields).forEach(fieldName => {
+                    if (!this.validateField(fieldName)) {
+                        isValid = false;
+                    }
+                });
+                return isValid;
+            }
+
+            async handleSubmit(e) {
+                e.preventDefault();
+                
+                if (!this.validateForm()) {
+                    this.showMessage('Please fix the errors above before continuing.', 'error');
+                    return;
+                }
+
+                this.setLoadingState(true);
+
+                const formData = new FormData(this.form);
+                const userData = {
+                    fullName: formData.get('fullName').trim(),
+                    email: formData.get('email').trim().toLowerCase(),
+                    username: formData.get('username').trim(),
+                    password: formData.get('password'),
+                    mobilePhone: formData.get('mobilePhone').trim(),
+                    gender: formData.get('gender'),
+                    membershipStartDate: formData.get('membershipStartDate'),
+                    quickRegistration: true
+                };
+
+                console.log('Sending registration data:', { ...userData, password: '[HIDDEN]' });
+
+                try {
+                    // Check if we're running on a local server
+                    const isLocalhost = window.location.hostname === 'localhost' || 
+                                      window.location.hostname === '127.0.0.1' || 
+                                      window.location.hostname === '';
+
+                    // First, test the connection with better error handling
+                    console.log('Testing API connection...');
+                    
+                    let testResponse;
+                    try {
+                        testResponse = await fetch('api/test-connection.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ test: true })
+                        });
+                    } catch (fetchError) {
+                        console.error('Network fetch error:', fetchError);
+                        throw new Error('Unable to connect to the server. Please ensure:\n' +
+                                      '1. You are running a web server (XAMPP, WAMP, MAMP, etc.)\n' +
+                                      '2. The web server is started and running\n' +
+                                      '3. You are accessing this page via http://localhost/ (not file://)\n' +
+                                      '4. The database is set up and running\n\n' +
+                                      'Technical error: ' + fetchError.message);
+                    }
+
+                    // Read response as text first, then handle based on status
+                    const testResponseText = await testResponse.text();
+                    
+                    if (!testResponse.ok) {
+                        console.error('API test HTTP error:', testResponse.status, testResponseText);
+                        throw new Error(`Server error (${testResponse.status}): ${testResponse.statusText}\n\nResponse: ${testResponseText}`);
+                    }
+
+                    let testResult;
+                    try {
+                        testResult = JSON.parse(testResponseText);
+                    } catch (jsonError) {
+                        console.error('JSON parse error:', jsonError, 'Response:', testResponseText);
+                        throw new Error('Invalid server response. The server may not be configured correctly.\n\nResponse: ' + testResponseText.substring(0, 200));
+                    }
+
+                    console.log('API test result:', testResult);
+
+                    if (!testResult.success) {
+                        console.error('API test failed:', testResult);
+                        let errorDetails = '';
+                        if (testResult.tests) {
+                            const failedTests = Object.entries(testResult.tests)
+                                .filter(([key, test]) => test.status === 'error')
+                                .map(([key, test]) => `${key}: ${test.message}`);
+                            if (failedTests.length > 0) {
+                                errorDetails = '\n\nFailed tests:\n' + failedTests.join('\n');
+                            }
+                        }
+                        throw new Error('System configuration error. Please contact support.' + errorDetails);
+                    }
+
+                    // Now proceed with registration
+                    console.log('Proceeding with registration...');
+                    
+                    const response = await fetch('api/register.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(userData)
+                    });
+
+                    console.log('Registration response status:', response.status);
+                    console.log('Registration response headers:', [...response.headers.entries()]);
+
+                    let result;
+                    let registrationResponseText;
+                    
+                    try {
+                        // Read response as text first, then parse as JSON
+                        registrationResponseText = await response.text();
+                        
+                        if (!response.ok) {
+                            console.error('HTTP Error Response:', registrationResponseText);
+                            throw new Error(`Registration failed (HTTP ${response.status}): ${response.statusText}\n\nServer response: ${registrationResponseText}`);
+                        }
+
+                        result = JSON.parse(registrationResponseText);
+                    } catch (jsonError) {
+                        if (jsonError.name === 'SyntaxError') {
+                            console.error('JSON parse error:', jsonError, 'Response:', registrationResponseText);
+                            throw new Error('Invalid server response format.\n\nResponse: ' + (registrationResponseText ? registrationResponseText.substring(0, 200) : 'No response'));
+                        } else {
+                            throw jsonError; // Re-throw non-JSON errors
+                        }
+                    }
+                    
+                    console.log('Registration result:', result);
+
+                    if (result.success) {
+                        // CRITICAL: Handle photo upload after successful registration
+                        await this.handlePostRegistrationPhoto(result);
+                        this.handleRegistrationSuccess(result);
+                    } else {
+                        this.handleRegistrationError(result);
+                    }
+                } catch (error) {
+                    console.error('Registration error details:', error);
+                    
+                    let errorMessage = 'Registration failed. ';
+                    
+                    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                        errorMessage = 'Network connection error. Please check:\n' +
+                                     '• Your internet connection\n' +
+                                     '• Web server is running (XAMPP/WAMP/MAMP)\n' +
+                                     '• Accessing via http://localhost/ (not file://)\n' +
+                                     '• Database server is running';
+                    } else if (error.message.includes('HTTP')) {
+                        errorMessage = 'Server error: ' + error.message;
+                    } else if (error.message.includes('JSON')) {
+                        errorMessage = 'Invalid server response: ' + error.message;
+                    } else {
+                        errorMessage += error.message || 'Unknown error occurred.';
+                    }
+                    
+                    // Add debugging information for development
+                    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                        errorMessage += '\n\n--- Debug Information ---\n';
+                        errorMessage += 'Current URL: ' + window.location.href + '\n';
+                        errorMessage += 'Protocol: ' + window.location.protocol + '\n';
+                        errorMessage += 'Host: ' + window.location.hostname + '\n';
+                        if (error.stack) {
+                            errorMessage += 'Stack trace: ' + error.stack.substring(0, 500);
+                        }
+                    }
+                    
+                    this.showMessage(errorMessage, 'error');
+                } finally {
+                    this.setLoadingState(false);
+                }
+            }
+
+            // NEW: Handle photo upload after successful registration
+            async handlePostRegistrationPhoto(registrationResult) {
+                const memberPhotoInput = document.getElementById('memberPhoto');
+                
+                // Check if user uploaded a photo
+                if (!memberPhotoInput || !memberPhotoInput.files || !memberPhotoInput.files[0]) {
+                    console.log('[Photo] No photo uploaded during registration');
+                    return;
+                }
+
+                const photoFile = memberPhotoInput.files[0];
+                const memberRecordId = registrationResult.data.member_record_id;
+                
+                if (!memberRecordId) {
+                    console.error('[Photo] No member_record_id in registration response');
+                    return;
+                }
+
+                console.log('[Photo] Uploading photo for member record:', memberRecordId);
+                
+                try {
+                    // Show photo upload status
+                    this.showMessage('Registration successful! Uploading your photo...', 'success');
+                    
+                    const formData = new FormData();
+                    formData.append('photo', photoFile);
+                    formData.append('member_record_id', memberRecordId);
+                    
+                    const photoResponse = await fetch('api/register-photo-upload.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const photoResult = await photoResponse.json();
+                    
+                    if (photoResult.success) {
+                        console.log('[Photo] Photo uploaded successfully:', photoResult.data);
+                        this.showMessage('Registration and photo upload completed successfully!', 'success');
+                    } else {
+                        console.error('[Photo] Photo upload failed:', photoResult.error);
+                        // Don't fail the entire registration for photo upload issues
+                        this.showMessage('Registration successful! Photo upload failed: ' + photoResult.error, 'warning');
+                    }
+                } catch (photoError) {
+                    console.error('[Photo] Photo upload error:', photoError);
+                    // Don't fail the entire registration for photo upload issues
+                    this.showMessage('Registration successful! Photo upload encountered an error.', 'warning');
+                }
+            }
+
+            handleRegistrationSuccess(result) {
+                // Store user data
+                if (result.data.member_id) {
+                    localStorage.setItem('wdb_member_id', result.data.member_id);
+                    localStorage.setItem('wdb_user_data', JSON.stringify({
+                        user_id: result.data.user_id,
+                        member_id: result.data.member_id,
+                        username: result.data.username,
+                        center_id: result.data.center_id,
+                        email: this.fields.email.value.trim(),
+                        full_name: this.fields.fullName.value.trim()
+                    }));
+
+                    this.showMessage(
+                        `🎉 Success! Your WDB Member ID is: ${result.data.member_id}. Redirecting...`, 
+                        'success'
+                    );
+
+                    // Redirect to beautiful success page
+                    setTimeout(() => {
+                        window.location.href = `registration-success-new.html?member_id=${result.data.member_id}&user_id=${result.data.user_id}&username=${result.data.username}`;
+                    }, 1500);
+                } else {
+                    // Fallback if member_id is not in response
+                    console.error('No member_id in response:', result);
+                    this.showMessage('Registration successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'registration-success-new.html';
+                    }, 1500);
+                }
+            }
+
+            handleRegistrationError(result) {
+                const errorMessage = Array.isArray(result.errors) 
+                    ? result.errors.join(', ') 
+                    : (result.error || 'Registration failed. Please try again.');
+                
+                this.showMessage(errorMessage, 'error');
+
+                // Handle specific field errors
+                if (result.errors && Array.isArray(result.errors)) {
+                    result.errors.forEach(error => {
+                        if (error.includes('email') || error.includes('Email')) {
+                            this.showFieldError('email', error, true);
+                        }
+                        if (error.includes('password') || error.includes('Password')) {
+                            this.showFieldError('password', error, true);
+                        }
+                        if (error.includes('name') || error.includes('Name')) {
+                            this.showFieldError('fullName', error, true);
+                        }
+                        if (error.includes('username') || error.includes('Username')) {
+                            this.showFieldError('username', error, true);
+                        }
+                    });
+                }
+            }
+
+            setLoadingState(loading) {
+                const btnText = this.submitButton.querySelector('.btn-text');
+                const btnIcon = this.submitButton.querySelector('.btn-icon');
+                
+                if (loading) {
+                    this.submitButton.classList.add('loading');
+                    this.submitButton.disabled = true;
+                    if (btnText) btnText.textContent = i18n.translate('button.submitting');
+                    if (btnIcon) btnIcon.textContent = '⏳';
+                } else {
+                    this.submitButton.classList.remove('loading');
+                    this.submitButton.disabled = false;
+                    if (btnText) btnText.textContent = i18n.translate('button.submit');
+                    if (btnIcon) btnIcon.textContent = '→';
+                }
+            }
+
+            showMessage(message, type) {
+                const isError = type === 'error';
+                const isWarning = type === 'warning';
+                const messageElement = isError ? this.errorMessage : this.successMessage;
+                const otherElement = isError ? this.successMessage : this.errorMessage;
+                const textElement = isError ? document.getElementById('errorText') : document.getElementById('successText');
+
+                // Hide other message
+                if (otherElement) otherElement.style.display = 'none';
+
+                // Show current message
+                if (textElement) {
+                    textElement.textContent = message;
+                }
+                if (messageElement) {
+                    // Change styling for warnings
+                    if (isWarning) {
+                        messageElement.style.background = 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)';
+                        messageElement.style.color = '#92400e';
+                        messageElement.style.borderLeft = '4px solid #f59e0b';
+                    } else if (isError) {
+                        messageElement.style.background = '';
+                        messageElement.style.color = '';
+                        messageElement.style.borderLeft = '';
+                    } else {
+                        messageElement.style.background = '';
+                        messageElement.style.color = '';
+                        messageElement.style.borderLeft = '';
+                    }
+                    
+                    messageElement.style.display = 'flex';
+
+                    // Scroll to message
+                    messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    // Auto-hide after delay (except for success messages)
+                    if (isError || isWarning) {
+                        setTimeout(() => {
+                            messageElement.style.display = 'none';
+                        }, 8000);
+                    }
+                }
+            }
+        }
+
+        // Initialize the registration manager when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize background image loading
+            const backgroundImage = new Image();
+            backgroundImage.onload = function() {
+                document.body.classList.remove('bg-loading');
+                console.log('Background image loaded successfully');
+            };
+            backgroundImage.onerror = function() {
+                document.body.classList.add('bg-error');
+                console.warn('Background image failed to load, using fallback pattern');
+            };
+            
+            // Start loading background image
+            document.body.classList.add('bg-loading');
+            backgroundImage.src = 'images/WDB_LOGO_CIRCLE.png';
+            
+            // Initialize registration manager
+            new WDBRegistrationManager();
+        });
+    </script>
+
+    <!-- Translation System -->
+    <script src="js/translations.js"></script>
+    <script>
+        // Update active language button on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentLang = i18n.getCurrentLanguage();
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('lang-' + currentLang).classList.add('active');
+        });
+        
+        // Override setLanguage to update button states
+        const originalSetLanguage = i18n.setLanguage.bind(i18n);
+        i18n.setLanguage = function(lang) {
+            originalSetLanguage(lang);
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('lang-' + lang).classList.add('active');
+        };
+    </script>
+
+    <!-- Photo Upload Integration -->
+    <script src="js/member-photo-handler.js"></script>
+    <script>
+    // Photo upload handler for registration context
+    const photoHandler = {
+        async uploadPhoto(file, memberRecordId) {
+            console.log('[Photo] Uploading photo for member record:', memberRecordId);
+            
+            // Show loading indicator
+            const photoInput = document.getElementById('memberPhoto');
+            if (photoInput && photoInput.parentElement) {
+                const loadingDiv = document.createElement('div');
+                loadingDiv.id = 'photo-upload-loading';
+                loadingDiv.style.cssText = 'margin-top: 10px; color: #007bff; font-size: 14px;';
+                loadingDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading photo...';
+                photoInput.parentElement.appendChild(loadingDiv);
+            }
+            
+            const formData = new FormData();
+            formData.append('photo', file);
+            formData.append('member_record_id', memberRecordId); // Use member_record_id for registration context
+            
+            try {
+                // Use registration-specific endpoint (no session authentication required)
+                const response = await fetch('api/register-photo-upload.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                // Remove loading indicator
+                const loadingDiv = document.getElementById('photo-upload-loading');
+                if (loadingDiv) {
+                    loadingDiv.remove();
+                }
+                
+                if (!response.ok) {
+                    throw new Error(result.error || `Photo upload failed: ${response.statusText}`);
+                }
+                
+                if (!result.success) {
+                    throw new Error(result.error || 'Photo upload failed');
+                }
+                
+                console.log('[Photo] Upload successful:', result);
+                return result;
+            } catch (error) {
+                // Remove loading indicator on error
+                const loadingDiv = document.getElementById('photo-upload-loading');
+                if (loadingDiv) {
+                    loadingDiv.remove();
+                }
+                throw error;
+            }
+        }
+    };
+    
+    // Override form submission to include photo upload
+    const originalSubmit = document.getElementById('quickRegisterForm')?.onsubmit;
+    const form = document.getElementById('quickRegisterForm');
+    
+    if (form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                // Submit registration
+                const response = await fetch('api/register.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.data.member_record_id) {
+                    // Upload photo if selected
+                    const photoInput = document.getElementById('memberPhoto');
+                    if (photoInput && photoInput.files.length > 0) {
+                        try {
+                            await photoHandler.uploadPhoto(
+                                photoInput.files[0],
+                                result.data.member_record_id
+                            );
+                            console.log('[Photo] Photo uploaded successfully');
+                            alert('Registration successful! Your WDB Member ID is ' + result.data.member_id + '. Your photo has been uploaded.');
+                        } catch (photoError) {
+                            console.error('[Photo] Photo upload failed:', photoError);
+                            // Show specific error message
+                            alert('Registration successful! Your WDB Member ID is ' + result.data.member_id + 
+                                  '.\n\nHowever, photo upload failed: ' + photoError.message + 
+                                  '\n\nYou can upload your photo later from your profile after logging in.');
+                        }
+                    } else {
+                        alert('Registration successful! Your WDB Member ID is ' + result.data.member_id);
+                    }
+                    window.location.href = 'member-login.html';
+                } else {
+                    alert('Registration failed: ' + (result.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('Registration failed. Please try again.');
+            }
+        });
+    }
+    </script>
+    <script src="js/wdb-ai-assistant.js"></script>
+    <script src="js/language-switcher.js"></script>
+</body>
+</html>

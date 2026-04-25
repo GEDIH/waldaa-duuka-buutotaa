@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to Dashboard...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .redirect-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 500px;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .login-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .login-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="redirect-container">
+        <h1>🔄 Redirecting to Dashboard</h1>
+        <p>Please wait while we redirect you to the appropriate dashboard...</p>
+        <div class="spinner"></div>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        // Redirect to appropriate dashboard based on user role
+        (function() {
+            const messageEl = document.getElementById('message');
+            
+            try {
+                // Check if user is logged in
+                const storedUser = localStorage.getItem('wdb_user');
+                
+                if (!storedUser) {
+                    // No user data, redirect to login
+                    messageEl.innerHTML = '<p>No active session found. Redirecting to login...</p>';
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
+                    return;
+                }
+                
+                // Parse user data
+                let user;
+                try {
+                    user = JSON.parse(storedUser);
+                } catch (e) {
+                    console.error('Failed to parse user data:', e);
+                    messageEl.innerHTML = '<div class="error">Invalid session data. Please log in again.</div><a href="login.html" class="login-link">Go to Login</a>';
+                    return;
+                }
+                
+                // Determine redirect URL based on role
+                let redirectUrl;
+                let roleName;
+                
+                switch (user.role) {
+                    case 'superadmin':
+                        redirectUrl = 'superadmin-dashboard.html';
+                        roleName = 'Super Administrator';
+                        break;
+                    case 'admin':
+                        redirectUrl = 'admin-dashboard.html';
+                        roleName = 'Administrator';
+                        break;
+                    case 'user':
+                    case 'member':
+                        redirectUrl = 'member-dashboard.html';
+                        roleName = 'Member';
+                        break;
+                    default:
+                        messageEl.innerHTML = '<div class="error">Unknown user role: ' + user.role + '</div><a href="login.html" class="login-link">Go to Login</a>';
+                        return;
+                }
+                
+                messageEl.innerHTML = '<p>Redirecting to ' + roleName + ' Dashboard...</p>';
+                
+                // Redirect after short delay
+                setTimeout(() => {
+                    window.location.href = redirectUrl;
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Redirect error:', error);
+                messageEl.innerHTML = '<div class="error">An error occurred. Please log in again.</div><a href="login.html" class="login-link">Go to Login</a>';
+            }
+        })();
+    </script>
+</body>
+</html>

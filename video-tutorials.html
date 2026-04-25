@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDB System - Video Tutorials</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .video-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .video-thumbnail {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.7);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .play-button:hover {
+            background: rgba(0,0,0,0.9);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+        }
+        .video-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .video-container {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+        .close-button {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        .progress-bar {
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            transition: width 0.3s ease;
+        }
+        .tutorial-category {
+            border-left: 4px solid #3b82f6;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-arrow-left text-lg"></i>
+                    </a>
+                    <h1 class="text-2xl font-bold text-gray-800">
+                        <i class="fas fa-video text-blue-500 mr-2"></i>
+                        WDB System Video Tutorials
+                    </h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-600">
+                        <i class="fas fa-clock mr-1"></i>
+                        Total: 2h 45m
+                    </span>
+                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                        <i class="fas fa-check mr-1"></i>
+                        Free Access
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-6 py-8">
+        <!-- Introduction Section -->
+        <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-8 text-white mb-8">
+            <div class="max-w-3xl">
+                <h2 class="text-3xl font-bold mb-4">Master the WDB System</h2>
+                <p class="text-lg mb-6">
+                    Comprehensive step-by-step video guides to help you understand, deploy, and manage 
+                    your WDB Membership Management System effectively.
+                </p>
+                <div class="flex items-center space-x-6">
+                    <div class="flex items-center">
+                        <i class="fas fa-play-circle text-2xl mr-2"></i>
+                        <span>15 Video Tutorials</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-users text-2xl mr-2"></i>
+                        <span>All Skill Levels</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-language text-2xl mr-2"></i>
+                        <span>4 Languages</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Video Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <div class="flex items-center mb-4">
+                <i class="fas fa-star text-yellow-500 text-xl mr-2"></i>
+                <h3 class="text-2xl font-bold text-gray-800">Featured Tutorial</h3>
+                <span class="ml-3 bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
+                    <i class="fab fa-youtube mr-1"></i>New
+                </span>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div class="order-2 lg:order-1">
+                    <h4 class="text-xl font-semibold text-gray-800 mb-3">
+                        WDB System Complete Tutorial
+                    </h4>
+                    <p class="text-gray-600 mb-4">
+                        Watch our comprehensive video tutorial that covers all aspects of the WDB Membership Management System. 
+                        This tutorial includes system overview, installation, configuration, and advanced features.
+                    </p>
+                    <div class="flex items-center space-x-4 mb-4">
+                        <span class="flex items-center text-sm text-gray-500">
+                            <i class="fas fa-clock mr-1"></i>
+                            Full Tutorial
+                        </span>
+                        <span class="flex items-center text-sm text-gray-500">
+                            <i class="fas fa-eye mr-1"></i>
+                            HD Quality
+                        </span>
+                        <span class="flex items-center text-sm text-gray-500">
+                            <i class="fas fa-cc mr-1"></i>
+                            Subtitles Available
+                        </span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="https://www.youtube.com/watch?v=KenJQouAYzg" 
+                           target="_blank" 
+                           class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center">
+                            <i class="fab fa-youtube mr-2"></i>
+                            Watch on YouTube
+                        </a>
+                        <button onclick="openEmbeddedVideo()" 
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center">
+                            <i class="fas fa-play mr-2"></i>
+                            Watch Here
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="order-1 lg:order-2">
+                    <div class="relative rounded-lg overflow-hidden shadow-lg cursor-pointer" onclick="openEmbeddedVideo()">
+                        <img src="https://img.youtube.com/vi/KenJQouAYzg/maxresdefault.jpg" 
+                             alt="WDB System Tutorial Thumbnail" 
+                             class="w-full h-64 object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center hover:bg-opacity-20 transition-all">
+                            <div class="bg-red-600 rounded-full w-16 h-16 flex items-center justify-center hover:scale-110 transition-transform">
+                                <i class="fas fa-play text-white text-xl ml-1"></i>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-4 right-4 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-sm">
+                            <i class="fab fa-youtube mr-1"></i>
+                            YouTube
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tutorial Categories -->
+        <div class="space-y-8">
+            <!-- Getting Started -->
+            <div class="tutorial-category rounded-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-rocket text-blue-500 mr-2"></i>
+                    Getting Started (4 videos - 45 minutes)
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="video-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="openVideo('intro-overview')">
+                        <div class="video-thumbnail bg-gradient-to-br from-blue-400 to-blue-600 h-32 relative">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                12:30
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">System Overview</h4>
+                            <p class="text-sm text-gray-600 mb-3">Introduction to WDB system features and capabilities</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="openVideo('installation-setup')">
+                        <div class="video-thumbnail bg-gradient-to-br from-green-400 to-green-600 h-32 relative">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                18:45
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">Installation & Setup</h4>
+                            <p class="text-sm text-gray-600 mb-3">Step-by-step installation and initial configuration</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="openVideo('first-login')">
+                        <div class="video-thumbnail bg-gradient-to-br from-purple-400 to-purple-600 h-32 relative">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                8:20
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">First Login & Navigation</h4>
+                            <p class="text-sm text-gray-600 mb-3">How to log in and navigate the system interface</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="openVideo('basic-configuration')">
+                        <div class="video-thumbnail bg-gradient-to-br from-orange-400 to-orange-600 h-32 relative">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                15:30
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">Basic Configuration</h4>
+                            <p class="text-sm text-gray-600 mb-3">Essential settings and system configuration</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Member Management -->
+            <div class="tutorial-category rounded-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-users text-green-500 mr-2"></i>
+                    Member Management (4 videos - 52 minutes)
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="video-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="openVideo('member-registration')">
+                        <div class="video-thumbnail bg-gradient-to-br from-teal-400 to-teal-600 h-32 relative">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                14:15
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">Member Registration</h4>
+                            <p class="text-sm text-gray-600 mb-3">How to register new members and manage profiles</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="openVideo('photo-management')">
+                        <div class="video-thumbnail bg-gradient-to-br from-pink-400 to-pink-600 h-32 relative">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                11:40
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">Photo Management</h4>
+                            <p class="text-sm text-gray-600 mb-3">Upload, manage, and organize member photos</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="openVideo('member-dashboard')">
+                        <div class="video-thumbnail bg-gradient-to-br from-indigo-400 to-indigo-600 h-32 relative">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                13:25
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">Member Dashboard</h4>
+                            <p class="text-sm text-gray-600 mb-3">Navigate and use the member dashboard features</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="openVideo('member-reports')">
+                        <div class="video-thumbnail bg-gradient-to-br from-red-400 to-red-600 h-32 relative">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                12:50
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">Member Reports</h4>
+                            <p class="text-sm text-gray-600 mb-3">Generate and export member reports and analytics</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment System -->
+            <div class="tutorial-category rounded-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-credit-card text-yellow-500 mr-2"></i>
+                    Payment System (3 videos - 38 minutes)
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="video-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="openVideo('payment-setup')">
+                        <div class="video-thumbnail bg-gradient-to-br from-yellow-400 to-yellow-600 h-32 relative">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                16:20
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">Payment Methods Setup</h4>
+                            <p class="text-sm text-gray-600 mb-3">Configure Ethiopian payment methods (M-Birr, Telebirr, etc.)</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="openVideo('contribution-management')">
+                        <div class="video-thumbnail bg-gradient-to-br from-emerald-400 to-emerald-600 h-32 relative">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                12:15
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">Contribution Management</h4>
+                            <p class="text-sm text-gray-600 mb-3">Track and manage member contributions and payments</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="openVideo('financial-reports')">
+                        <div class="video-thumbnail bg-gradient-to-br from-cyan-400 to-cyan-600 h-32 relative">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                9:30
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">Financial Reports</h4>
+                            <p class="text-sm text-gray-600 mb-3">Generate financial reports and analytics</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Administration -->
+            <div class="tutorial-category rounded-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-shield-alt text-red-500 mr-2"></i>
+                    System Administration (4 videos - 50 minutes)
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="video-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="openVideo('admin-dashboard')">
+                        <div class="video-thumbnail bg-gradient-to-br from-slate-400 to-slate-600 h-32 relative">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                15:45
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">Admin Dashboard</h4>
+                            <p class="text-sm text-gray-600 mb-3">Master the system administrator dashboard</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="openVideo('user-management')">
+                        <div class="video-thumbnail bg-gradient-to-br from-violet-400 to-violet-600 h-32 relative">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                11:20
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">User Management</h4>
+                            <p class="text-sm text-gray-600 mb-3">Manage users, roles, and permissions</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="openVideo('security-settings')">
+                        <div class="video-thumbnail bg-gradient-to-br from-rose-400 to-rose-600 h-32 relative">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                13:10
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">Security Settings</h4>
+                            <p class="text-sm text-gray-600 mb-3">Configure security policies and audit logs</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card bg-white rounded-lg shadow-md overflow-hidden cursor-pointer" onclick="openVideo('system-maintenance')">
+                        <div class="video-thumbnail bg-gradient-to-br from-amber-400 to-amber-600 h-32 relative">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-xs">
+                                9:45
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-800 mb-2">System Maintenance</h4>
+                            <p class="text-sm text-gray-600 mb-3">Backup, monitoring, and system health</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Resources -->
+        <div class="mt-12 bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-download text-blue-500 mr-2"></i>
+                Additional Resources
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-semibold text-gray-800 mb-2">
+                        <i class="fas fa-file-pdf text-red-500 mr-2"></i>
+                        PDF Guides
+                    </h4>
+                    <p class="text-sm text-gray-600 mb-3">Downloadable PDF versions of all tutorials</p>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm">
+                        Download All PDFs
+                    </button>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-semibold text-gray-800 mb-2">
+                        <i class="fas fa-code text-green-500 mr-2"></i>
+                        Sample Code
+                    </h4>
+                    <p class="text-sm text-gray-600 mb-3">Code examples and configuration files</p>
+                    <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm">
+                        Download Samples
+                    </button>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <h4 class="font-semibold text-gray-800 mb-2">
+                        <i class="fas fa-question-circle text-purple-500 mr-2"></i>
+                        FAQ & Support
+                    </h4>
+                    <p class="text-sm text-gray-600 mb-3">Frequently asked questions and support</p>
+                    <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded text-sm">
+                        Get Support
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="video-modal">
+        <div class="video-container">
+            <div class="close-button" onclick="closeVideo()">
+                <i class="fas fa-times"></i>
+            </div>
+            <div id="videoContent" class="bg-white rounded-lg overflow-hidden">
+                <!-- Video content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const videoData = {
+            'intro-overview': {
+                title: 'WDB System Overview',
+                description: 'Complete introduction to the WDB Membership Management System',
+                duration: '12:30',
+                videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Replace with actual video URL
+                content: `
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-4">WDB System Overview</h3>
+                        <div class="bg-gray-100 rounded-lg mb-4 overflow-hidden">
+                            <iframe width="100%" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen class="w-full">
+                            </iframe>
+                        </div>
+                        <div class="space-y-4">
+                            <h4 class="font-semibold">What you'll learn:</h4>
+                            <ul class="list-disc list-inside space-y-2 text-sm text-gray-600">
+                                <li>Overview of WDB system features and capabilities</li>
+                                <li>Understanding the system architecture</li>
+                                <li>Key components and modules</li>
+                                <li>User roles and permissions</li>
+                                <li>System requirements and compatibility</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'installation-setup': {
+                title: 'Installation & Setup',
+                description: 'Step-by-step installation and configuration guide',
+                duration: '18:45',
+                videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Replace with actual video URL
+                content: `
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-4">Installation & Setup</h3>
+                        <div class="bg-gray-100 rounded-lg mb-4 overflow-hidden">
+                            <iframe width="100%" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen class="w-full">
+                            </iframe>
+                        </div>
+                        <div class="space-y-4">
+                            <h4 class="font-semibold">What you'll learn:</h4>
+                            <ul class="list-disc list-inside space-y-2 text-sm text-gray-600">
+                                <li>Server requirements and preparation</li>
+                                <li>Database setup and configuration</li>
+                                <li>File upload and permissions</li>
+                                <li>Environment configuration</li>
+                                <li>Initial system setup and testing</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'first-login': {
+                title: 'First Login & Navigation',
+                description: 'How to log in and navigate the system interface',
+                duration: '8:20',
+                videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Replace with actual video URL
+                content: `
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-4">First Login & Navigation</h3>
+                        <div class="bg-gray-100 rounded-lg mb-4 overflow-hidden">
+                            <iframe width="100%" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen class="w-full">
+                            </iframe>
+                        </div>
+                        <div class="space-y-4">
+                            <h4 class="font-semibold">What you'll learn:</h4>
+                            <ul class="list-disc list-inside space-y-2 text-sm text-gray-600">
+                                <li>How to access the login page</li>
+                                <li>Understanding user roles and permissions</li>
+                                <li>Navigating the dashboard interface</li>
+                                <li>Basic system orientation</li>
+                                <li>Getting help and support</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'basic-configuration': {
+                title: 'Basic Configuration',
+                description: 'Essential settings and system configuration',
+                duration: '15:30',
+                videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Replace with actual video URL
+                content: `
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-4">Basic Configuration</h3>
+                        <div class="bg-gray-100 rounded-lg mb-4 overflow-hidden">
+                            <iframe width="100%" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen class="w-full">
+                            </iframe>
+                        </div>
+                        <div class="space-y-4">
+                            <h4 class="font-semibold">What you'll learn:</h4>
+                            <ul class="list-disc list-inside space-y-2 text-sm text-gray-600">
+                                <li>System settings configuration</li>
+                                <li>User management setup</li>
+                                <li>Security settings</li>
+                                <li>Language preferences</li>
+                                <li>Basic customization options</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'member-registration': {
+                title: 'Member Registration',
+                description: 'How to register new members and manage profiles',
+                duration: '14:15',
+                videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Replace with actual video URL
+                content: `
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-4">Member Registration</h3>
+                        <div class="bg-gray-100 rounded-lg mb-4 overflow-hidden">
+                            <iframe width="100%" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen class="w-full">
+                            </iframe>
+                        </div>
+                        <div class="space-y-4">
+                            <h4 class="font-semibold">What you'll learn:</h4>
+                            <ul class="list-disc list-inside space-y-2 text-sm text-gray-600">
+                                <li>Member registration process</li>
+                                <li>Profile information management</li>
+                                <li>Photo upload procedures</li>
+                                <li>Service area assignments</li>
+                                <li>Member verification steps</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            }
+            // Add more video data as needed
+        };
+
+        function openVideo(videoId) {
+            const modal = document.getElementById('videoModal');
+            const content = document.getElementById('videoContent');
+            const video = videoData[videoId];
+            
+            if (video) {
+                content.innerHTML = video.content;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function openEmbeddedVideo() {
+            const modal = document.getElementById('videoModal');
+            const content = document.getElementById('videoContent');
+            
+            content.innerHTML = `
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fab fa-youtube text-red-600 mr-2"></i>
+                        WDB System Complete Tutorial
+                    </h3>
+                    <div class="relative" style="padding-bottom: 56.25%; height: 0;">
+                        <iframe 
+                            src="https://www.youtube.com/embed/KenJQouAYzg?autoplay=1&rel=0&modestbranding=1" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen
+                            class="absolute top-0 left-0 w-full h-full rounded-lg">
+                        </iframe>
+                    </div>
+                    <div class="mt-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <span class="flex items-center text-sm text-gray-600">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    HD Quality
+                                </span>
+                                <span class="flex items-center text-sm text-gray-600">
+                                    <i class="fas fa-cc mr-1"></i>
+                                    Subtitles Available
+                                </span>
+                                <span class="flex items-center text-sm text-gray-600">
+                                    <i class="fas fa-share mr-1"></i>
+                                    Shareable
+                                </span>
+                            </div>
+                            <a href="https://www.youtube.com/watch?v=KenJQouAYzg" 
+                               target="_blank" 
+                               class="text-red-600 hover:text-red-700 text-sm font-medium">
+                                <i class="fas fa-external-link-alt mr-1"></i>
+                                Open in YouTube
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">Tutorial Contents:</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li>Complete system overview and features</li>
+                                <li>Step-by-step installation guide</li>
+                                <li>Configuration and setup process</li>
+                                <li>Member management and registration</li>
+                                <li>Payment system integration</li>
+                                <li>Administrative features and security</li>
+                                <li>Troubleshooting and maintenance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVideo() {
+            const modal = document.getElementById('videoModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVideo();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVideo();
+            }
+        });
+    </script>
+</body>
+</html>
