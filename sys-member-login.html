@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1291,9 +1291,19 @@
                     // Update button text
                     loginButtonText.textContent = 'Redirecting...';
                     
+                    // Check if membership form has been completed
+                    const membershipComplete = localStorage.getItem('wdb_membership_form_complete');
+                    const pendingMemberId = localStorage.getItem('wdb_pending_member_id');
+
                     // Redirect to member dashboard
                     setTimeout(() => {
-                        window.location.href = 'member-dashboard.html';
+                        if (membershipComplete === 'false' || (membershipComplete === null && pendingMemberId)) {
+                            // Membership form not yet completed — redirect there first
+                            const mid = pendingMemberId || user.member_id || '';
+                            window.location.href = 'wdb-membership-form.html?member_id=' + encodeURIComponent(mid) + '&new_registration=true';
+                        } else {
+                            window.location.href = 'member-dashboard.html';
+                        }
                     }, 1500);
                     
                 } else {
@@ -1325,7 +1335,14 @@
                 const user = JSON.parse(userData);
                 // Redirect members to dashboard
                 if (user.role === 'user') {
-                    window.location.href = 'member-dashboard.html';
+                    const membershipComplete = localStorage.getItem('wdb_membership_form_complete');
+                    const pendingMemberId = localStorage.getItem('wdb_pending_member_id');
+                    if (membershipComplete === 'false' || (membershipComplete === null && pendingMemberId)) {
+                        const mid = pendingMemberId || user.member_id || '';
+                        window.location.href = 'wdb-membership-form.html?member_id=' + encodeURIComponent(mid) + '&new_registration=true';
+                    } else {
+                        window.location.href = 'member-dashboard.html';
+                    }
                 } else if (user.role === 'admin' || user.role === 'superadmin') {
                     // Show error message for admin/superadmin users
                     document.getElementById('errorText').textContent = 'Access denied: Please use the admin login page.';
