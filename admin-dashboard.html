@@ -899,8 +899,43 @@
             { id:4, member:'Hanan Mohammed',type:'Building', amount:'ETB 300', date:'2025-12-01', status:'confirmed' },
         ];
 
-        // ── Shared storage key (same as member-login.html) ───
+        // ── Shared storage key (same as member-login.html & registration.js) ──
         const MEMBERS_STORE = 'wdb_member_accounts';
+
+        function getMembersFromStorage() {
+            return JSON.parse(localStorage.getItem(MEMBERS_STORE) || '[]');
+        }
+        function saveMembersToStorage(data) {
+            localStorage.setItem(MEMBERS_STORE, JSON.stringify(data));
+        }
+
+        // Convert a stored account → admin display row.
+        // Handles BOTH shapes:
+        //   • member-login.html Register tab  → { firstName, lastName, memberId, phone, createdAt, status }
+        //   • registration.js (member-registration.html) → same shape (we normalised it there)
+        function accountToMember(a) {
+            const first = a.firstName || a.fname || '';
+            const last  = a.lastName  || a.lname  || '';
+            return {
+                id:         a.memberId   || a.member_id || '—',
+                name:       `${first} ${last}`.trim() || a.name || '—',
+                username:   a.username   || '—',
+                phone:      a.phone      || '—',
+                email:      a.email      || '—',
+                address:    a.address    || '—',
+                gender:     a.gender     || '—',
+                baptized:   a.baptized   || '—',
+                service:    a.service    || '—',
+                howHeard:   a.howHeard   || '—',
+                status:     a.status     || 'pending',
+                registered: a.createdAt  || a.registered || '—'
+            };
+        }
+
+        // Always read fresh from localStorage so new registrations appear instantly
+        function getLiveMembers() {
+            return getMembersFromStorage().map(accountToMember);
+        }
 
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
