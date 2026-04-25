@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -3510,7 +3510,9 @@
                     <h1>WDB Membership Application Preview</h1>
                     ${generatePreviewContent()}
                     <button onclick="window.close()">Close Preview</button>
-                </body>
+                
+    <div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;gap:12px;"><a href="member-login.html" style="background:rgba(255,255,255,0.92);color:#1a3b5c;padding:8px 18px;border-radius:20px;font-size:0.82rem;font-weight:600;text-decoration:none;box-shadow:0 4px 15px rgba(0,0,0,0.2);">← Login</a><a href="index.html" style="background:rgba(212,175,55,0.92);color:#1a3b5c;padding:8px 18px;border-radius:20px;font-size:0.82rem;font-weight:600;text-decoration:none;box-shadow:0 4px 15px rgba(0,0,0,0.2);">WDB Website</a></div>
+</body>
                 </html>
             `;
         }
@@ -3670,7 +3672,43 @@
                 
                 console.log('Parsed result:', result);
                 
-                if (result.success) {
+                                if (result.success) {
+                    //  Also save to localStorage so admin dashboard sees it ─
+                    try {
+                        const STORE = 'wdb_member_accounts';
+                        const accounts = JSON.parse(localStorage.getItem(STORE) || '[]');
+                        const newMemberId = result.data?.member_id || ('WDB-' + new Date().getFullYear() + '-' + String(accounts.length + 1).padStart(4,'0'));
+                        const nameParts = (comprehensiveData.fullName || '').trim().split(' ');
+                        const alreadyExists = accounts.some(a => a.phone === comprehensiveData.mobilePhone);
+                        if (!alreadyExists) {
+                            accounts.unshift({
+                                memberId:   newMemberId,
+                                firstName:  nameParts[0] || '',
+                                lastName:   nameParts.slice(1).join(' ') || '',
+                                username:   (comprehensiveData.fullName || '').toLowerCase().replace(/\s+/g,'.'),
+                                phone:      comprehensiveData.mobilePhone || '',
+                                email:      comprehensiveData.email || '',
+                                address:    comprehensiveData.currentAddress || '',
+                                gender:     comprehensiveData.gender || '',
+                                dob:        comprehensiveData.dateOfBirth || '',
+                                church:     comprehensiveData.currentChurch || '',
+                                baptized:   'Yes',
+                                service:    (comprehensiveData.serviceAreas || []).join(', '),
+                                howHeard:   '',
+                                notes:      comprehensiveData.notes || '',
+                                status:     'pending',
+                                createdAt:  new Date().toISOString().split('T')[0],
+                                password:   '',
+                                // Extended fields from full membership form
+                                baptismName:    comprehensiveData.baptismName || '',
+                                maritalStatus:  comprehensiveData.maritalStatus || '',
+                                occupation:     comprehensiveData.occupation || '',
+                                membershipPlan: comprehensiveData.membershipPlan || '',
+                                preferredCenter:comprehensiveData.preferredCenter || ''
+                            });
+                            localStorage.setItem(STORE, JSON.stringify(accounts));
+                        }
+                    } catch(e) { console.warn('localStorage save failed:', e); }
                     showMessage('✅ Registration completed successfully! Your membership profile has been updated.', 'success');
                     localStorage.removeItem('wdb_membership_draft');
                     
@@ -3931,5 +3969,7 @@
         }
     };
     </script>
+
+    <div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;gap:12px;"><a href="member-login.html" style="background:rgba(255,255,255,0.92);color:#1a3b5c;padding:8px 18px;border-radius:20px;font-size:0.82rem;font-weight:600;text-decoration:none;box-shadow:0 4px 15px rgba(0,0,0,0.2);">← Login</a><a href="index.html" style="background:rgba(212,175,55,0.92);color:#1a3b5c;padding:8px 18px;border-radius:20px;font-size:0.82rem;font-weight:600;text-decoration:none;box-shadow:0 4px 15px rgba(0,0,0,0.2);">WDB Website</a></div>
 </body>
 </html>

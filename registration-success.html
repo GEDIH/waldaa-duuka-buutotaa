@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Successful - WDB</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+            padding: 50px 40px;
+            text-align: center;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            animation: scaleIn 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .success-icon i {
+            font-size: 40px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #10b981;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .member-id-section {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+
+        .member-id-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .member-id {
+            font-size: 24px;
+            color: #6366f1;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .copy-btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #4f46e5;
+            transform: translateY(-1px);
+        }
+
+        .copy-btn i {
+            margin-right: 5px;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .warning-box p {
+            color: #92400e;
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .warning-box strong {
+            color: #78350f;
+        }
+
+        .next-steps {
+            text-align: left;
+            margin: 25px 0;
+        }
+
+        .next-steps h3 {
+            font-size: 16px;
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .step-icon {
+            width: 24px;
+            height: 24px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .step-icon i {
+            font-size: 12px;
+            color: white;
+        }
+
+        .step-text {
+            font-size: 13px;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #6366f1;
+            border: 2px solid #6366f1;
+        }
+
+        .btn-secondary:hover {
+            background: #f3f4f6;
+            transform: translateY(-2px);
+        }
+
+        .support-text {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .support-text a {
+            color: #6366f1;
+            text-decoration: none;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 40px 25px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .member-id {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">
+            <i class="fas fa-check"></i>
+        </div>
+
+        <h1>Registration Successful!</h1>
+        <p class="subtitle">Welcome to Waldaa Duuka Bu'ootaa (WDB)! Your account has been created successfully.</p>
+
+        <div class="member-id-section">
+            <div class="member-id-label">YOUR WDB MEMBER ID</div>
+            <div class="member-id" id="memberIdDisplay">Loading...</div>
+            <button class="copy-btn" onclick="copyMemberId()">
+                <i class="fas fa-copy"></i> Copy ID
+            </button>
+        </div>
+
+        <div class="warning-box">
+            <p><strong>Important:</strong> Please save your WDB Member ID. You will need it to complete your membership registration and for all future interactions with WDB.</p>
+        </div>
+
+        <div class="next-steps">
+            <h3>Next Steps:</h3>
+            <div class="step">
+                <div class="step-icon"><i class="fas fa-check"></i></div>
+                <div class="step-text">Save your WDB Member ID in a secure location</div>
+            </div>
+            <div class="step">
+                <div class="step-icon"><i class="fas fa-check"></i></div>
+                <div class="step-text">Complete your detailed membership registration form</div>
+            </div>
+            <div class="step">
+                <div class="step-icon"><i class="fas fa-check"></i></div>
+                <div class="step-text">Verify your email address (check your inbox)</div>
+            </div>
+            <div class="step">
+                <div class="step-icon"><i class="fas fa-check"></i></div>
+                <div class="step-text">Log in to your member dashboard to access WDB services</div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <a href="#" id="membershipFormBtn" class="btn btn-primary">
+                <i class="fas fa-file-alt"></i>
+                Complete Registration Form
+            </a>
+            <a href="#" id="dashboardBtn" class="btn btn-secondary">
+                <i class="fas fa-sign-in-alt"></i>
+                Login to Dashboard
+            </a>
+        </div>
+
+        <div class="support-text">
+            Already have a WDB account? You can log in and complete your registration from your dashboard.<br>
+            <a href="member-login.html">Login with existing account →</a>
+        </div>
+
+        <div class="support-text">
+            Need help? Contact WDB Support<br>
+            Email: support@wdb.org | Phone: +251-XXX-XXX-XXX
+        </div>
+    </div>
+
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const memberId = urlParams.get('member_id');
+        const userId = urlParams.get('user_id');
+        const username = urlParams.get('username');
+
+        // Display member ID
+        if (memberId) {
+            document.getElementById('memberIdDisplay').textContent = memberId;
+        } else {
+            document.getElementById('memberIdDisplay').textContent = 'ID not available';
+        }
+
+        // Set up button links
+        const membershipFormBtn = document.getElementById('membershipFormBtn');
+        const dashboardBtn = document.getElementById('dashboardBtn');
+
+        if (memberId && userId && username) {
+            membershipFormBtn.href = `wdb-membership-form.html?member_id=${memberId}&user_id=${userId}&username=${username}`;
+        } else {
+            membershipFormBtn.href = 'wdb-membership-form.html';
+        }
+
+        dashboardBtn.href = 'member-login.html';
+
+        // Copy member ID function
+        function copyMemberId() {
+            const memberIdText = document.getElementById('memberIdDisplay').textContent;
+            
+            if (navigator.clipboard && memberIdText !== 'Loading...' && memberIdText !== 'ID not available') {
+                navigator.clipboard.writeText(memberIdText).then(() => {
+                    const btn = document.querySelector('.copy-btn');
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    btn.style.background = '#10b981';
+                    
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.style.background = '#6366f1';
+                    }, 2000);
+                }).catch(err => {
+                    alert('Failed to copy: ' + err);
+                });
+            }
+        }
+
+        // Log for debugging
+        console.log('Member ID:', memberId);
+        console.log('User ID:', userId);
+        console.log('Username:', username);
+    </script>
+</body>
+</html>
