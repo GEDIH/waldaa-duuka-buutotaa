@@ -315,9 +315,9 @@
             
             <!-- Quick Access Links -->
             <div class="quick-access">
-                <a href="verify-photo-system.php" target="_blank">System Verification</a>
+                <a href="health-check.php" target="_blank">System Verification</a>
                 <span>•</span>
-                <a href="debug-photo-api.php" target="_blank">Debug Tools</a>
+                <a href="health-check.php" target="_blank">Debug Tools</a>
                 <span>•</span>
                 <a href="MEMBER-PHOTOS-MANAGEMENT-GUIDE.md" target="_blank">Documentation</a>
             </div>
@@ -491,7 +491,7 @@
                 
                 try {
                     // Check database
-                    const dbResponse = await fetch('verify-photo-system.php');
+                    const dbResponse = await fetch('health-check.php');
                     const dbStatus = document.getElementById('databaseStatus');
                     if (dbResponse.ok) {
                         dbStatus.style.background = '#10b981';
@@ -573,7 +573,7 @@
                 demoAlert.innerHTML = `
                     <div>
                         <strong>Development Mode:</strong> Use demo credentials or create test session via 
-                        <a href="quick-login-test.php" class="underline">quick-login-test.php</a>
+                        <a href="health-check.php" class="underline">health-check.php</a>
                     </div>
                 `;
                 alertContainer.appendChild(demoAlert);
