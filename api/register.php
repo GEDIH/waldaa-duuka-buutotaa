@@ -1,50 +1,116 @@
 <?php
 /**
  * Member Registration API Endpoint
+ * Handles direct member registration with immediate activation
+ * 
+ * CRITICAL: This file must output ONLY valid JSON
+ * Any PHP warnings, notices, or echo statements will break the frontend
  */
 
-// Define system constant
-define('WDB_SYSTEM', true);
+// CRITICAL: Disable ALL error display to prevent breaking JSON
+error_reporting(0);
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+ini_set('error_log', __DIR__ . '/logs/registration_errors.log');
 
-// Include configuration and classes
-require_once '../config.php';
-require_once '../classes/Member.php';
+// Start output buffering BEFORE any other code
+ob_start();
 
-// Set JSON header
-header('Content-Type: application/json');
+// Clean any previous output
+while (ob_get_level() > 1) {
+    ob_end_clean();
+}
+
+// Set headers AFTER starting output buffering
+header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
 // Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    while (ob_get_level() > 0) {
+        ob_end_clean();
+    }
     http_response_code(200);
-    exit;
+    exit(0);
 }
 
 // Only allow POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    jsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
+    while (ob_get_level() > 0) {
+        ob_end_clean();
+    }
+    ob_start();
+    http_response_code(405);
+    echo json_encode(['success' => false, 'error' => 'Method not allowed'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    ob_end_flush();
+    exit(0);
 }
 
+// Log the request for debugging
+error_log("Registration request received from: " . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
+
 try {
+    // Check if required files exist
+    $requiredFiles = [
+        __DIR__ . '/config/database.php',
+        __DIR__ . '/services/RegistrationService.php'
+    ];
+    
+    foreach ($requiredFiles as $file) {
+        if (!file_exists($file)) {
+            throw new Exception("Required file not found: " . basename($file));
+        }
+    }
+    
+    // Include required files
+    require_once __DIR__ . '/config/database.php';
+    require_once __DIR__ . '/services/RegistrationService.php';
+    
     // Get JSON input
-    $input = json_decode(file_get_contents('php://input'), true);
+    $rawInput = file_get_contents('php://input');
+    error_log("Raw input received: " . $rawInput);
     
-    // If no JSON input, try form data
-    if (!$input) {
-        $input = $_POST;
+    $input = json_decode($rawInput, true);
+    
+    if ($input === null) {
+        $jsonError = json_last_error_msg();
+        error_log("JSON decode error: " . $jsonError);
+        
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+        ob_start();
+        
+        http_response_code(400);
+        echo json_encode([
+            'success' => false, 
+            'error' => 'Invalid JSON input: ' . $jsonError,
+            'debug' => [
+                'raw_input' => substr($rawInput, 0, 200) . (strlen($rawInput) > 200 ? '...' : ''),
+                'json_error' => $jsonError
+            ]
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        
+        ob_end_flush();
+        exit(0);
     }
     
-    // Validate input
-    if (empty($input)) {
-        jsonResponse(['success' => false, 'message' => 'No data received'], 400);
+    error_log("Parsed input: " . json_encode($input));
+    
+    // Validate required fields based on registration type
+    $isQuickRegistration = isset($input['quickRegistration']) && $input['quickRegistration'];
+    
+    if ($isQuickRegistration) {
+        // Quick registration requires password
+        $requiredFields = ['fullName', 'password'];
+    } else {
+        // Comprehensive registration — only fullName is truly required
+        $requiredFields = ['fullName'];
     }
     
-    // Required fields validation
-    $requiredFields = ['fname', 'lname', 'gender', 'phone', 'address', 'baptized'];
     $missingFields = [];
-    
     foreach ($requiredFields as $field) {
         if (empty($input[$field])) {
             $missingFields[] = $field;
@@ -52,100 +118,99 @@ try {
     }
     
     if (!empty($missingFields)) {
-        jsonResponse([
-            'success' => false, 
-            'message' => 'Missing required fields: ' . implode(', ', $missingFields)
-        ], 400);
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+        ob_start();
+        
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'error' => 'Missing required fields: ' . implode(', ', $missingFields),
+            'missing_fields' => $missingFields,
+            'registration_type' => $isQuickRegistration ? 'quick' : 'comprehensive'
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        
+        ob_end_flush();
+        exit(0);
     }
     
-    // Validate phone number format
-    $phone = trim($input['phone']);
-    if (!preg_match('/^(\+251|0)?[79]\d{8}$/', $phone)) {
-        jsonResponse([
-            'success' => false, 
-            'message' => 'Invalid phone number format. Use Ethiopian format: +251XXXXXXXXX or 09XXXXXXXX'
-        ], 400);
+    // Test database connection
+    try {
+        $db = Database::getInstance()->getConnection();
+        error_log("Database connection successful");
+    } catch (Exception $e) {
+        error_log("Database connection failed: " . $e->getMessage());
+        throw new Exception("Database connection failed: " . $e->getMessage());
     }
     
-    // Validate email if provided
-    if (!empty($input['email']) && !filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
-        jsonResponse([
-            'success' => false, 
-            'message' => 'Invalid email format'
-        ], 400);
-    }
+    // Create registration service
+    $registrationService = new RegistrationService();
+    error_log("RegistrationService created successfully");
     
-    // Validate gender
-    $validGenders = ['Dhiira', 'Dubartii'];
-    if (!in_array($input['gender'], $validGenders)) {
-        jsonResponse([
-            'success' => false, 
-            'message' => 'Invalid gender selection'
-        ], 400);
-    }
-    
-    // Validate baptized status
-    $validBaptized = ['eeyyee', 'lakki'];
-    if (!in_array($input['baptized'], $validBaptized)) {
-        jsonResponse([
-            'success' => false, 
-            'message' => 'Invalid baptized status'
-        ], 400);
-    }
-    
-    // Prepare member data
-    $memberData = [
-        'first_name' => trim($input['fname']),
-        'last_name' => trim($input['lname']),
-        'gender' => $input['gender'],
-        'date_of_birth' => !empty($input['dob']) ? $input['dob'] : null,
-        'phone' => $phone,
-        'email' => !empty($input['email']) ? trim($input['email']) : null,
-        'address' => trim($input['address']),
-        'current_church' => !empty($input['currentChurch']) ? trim($input['currentChurch']) : null,
-        'baptized' => $input['baptized'],
-        'service_interest' => !empty($input['service']) ? trim($input['service']) : null,
-        'how_heard' => !empty($input['howHeard']) ? trim($input['howHeard']) : null,
-        'notes' => !empty($input['notes']) ? trim($input['notes']) : null
-    ];
-    
-    // Create member instance and register
-    $member = new Member();
-    $result = $member->register($memberData);
+    // Register member
+    $result = $registrationService->registerMember($input);
+    error_log("Registration result: " . json_encode($result));
     
     if ($result['success']) {
-        // Log successful registration
-        logActivity('member_registration_api', "Member registered via API: {$result['member_id']}");
+        // Clear ALL output buffers to ensure clean JSON
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+        ob_start();
         
-        jsonResponse([
+        http_response_code(201);
+        echo json_encode([
             'success' => true,
-            'message' => 'Galmaa\'inni milkaa\'inaan xumurame! Registration completed successfully!',
-            'member_id' => $result['member_id'],
-            'data' => [
-                'id' => $result['id'],
-                'member_id' => $result['member_id'],
-                'full_name' => $memberData['first_name'] . ' ' . $memberData['last_name'],
-                'status' => 'pending'
-            ]
-        ]);
-    } else {
-        // Log failed registration
-        logActivity('member_registration_failed', "Registration failed: " . $result['message']);
+            'data' => $result['data'],
+            'message' => 'Registration successful! You can now log in with your credentials.'
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         
-        jsonResponse([
+        ob_end_flush();
+        exit(0);
+    } else {
+        // Clear ALL output buffers to ensure clean JSON
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+        ob_start();
+        
+        http_response_code(400);
+        echo json_encode([
             'success' => false,
-            'message' => $result['message']
-        ], 400);
+            'errors' => $result['errors']
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        
+        ob_end_flush();
+        exit(0);
     }
     
 } catch (Exception $e) {
-    // Log error
-    error_log("Registration API error: " . $e->getMessage());
-    logActivity('member_registration_error', "API error: " . $e->getMessage());
+    $errorMessage = $e->getMessage();
+    $errorTrace = $e->getTraceAsString();
     
-    jsonResponse([
-        'success' => false,
-        'message' => 'Registration failed due to server error. Please try again.'
-    ], 500);
+    error_log("Registration error: " . $errorMessage);
+    error_log("Stack trace: " . $errorTrace);
+    
+    // Clear ALL output buffers to ensure clean JSON
+    while (ob_get_level() > 0) {
+        ob_end_clean();
+    }
+    ob_start();
+    
+    http_response_code(500);
+    echo json_encode([
+        'success' => false, 
+        'error' => 'Registration failed: ' . $errorMessage,
+        'debug' => [
+            'message' => $errorMessage,
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'trace' => explode("\n", $errorTrace)
+        ]
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    
+    ob_end_flush();
+    exit(1);
 }
 ?>
