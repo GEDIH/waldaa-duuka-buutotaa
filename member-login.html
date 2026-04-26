@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="or">
 <head>
     <meta charset="UTF-8">
@@ -382,7 +382,7 @@
         }
 
         // ── Register ──────────────────────────────────────────
-        function handleRegister() {
+        async function handleRegister() {
             ['regUsernameErr','regPhoneErr','regPasswordErr','regConfirmErr','regGeneralErr'].forEach(clearErr);
 
             const firstName = document.getElementById('regFirstName').value.trim();
@@ -401,16 +401,71 @@
             if (password !== confirm)              { showErr('regConfirmErr','Passwords do not match.'); valid = false; }
             if (!valid) return;
 
-            const accounts = getAccounts();
-            if (accounts.some(a => a.username === username)) {
-                showErr('regUsernameErr','Username already taken.'); return;
-            }
-
             const btn = document.getElementById('registerBtn');
             btn.innerHTML = '<div class="loading-spinner"></div> Creating account...';
             btn.disabled  = true;
 
-            setTimeout(() => {
+            try {
+                const payload = {
+                    fullName:    firstName + ' ' + lastName,
+                    username:    username,
+                    mobilePhone: phone,
+                    password:    password,
+                    // email not collected on this form — can be added later in membership form
+                    email:       username + '@wdb.local', // placeholder so API validation passes
+                    quickRegistration: true
+                };
+
+                const response = await fetch('api/register.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const newId = result.data.member_id;
+
+                    // Also persist locally so offline login still works
+                    const accounts = getAccounts();
+                    if (!accounts.some(a => a.username === username)) {
+                        accounts.push({
+                            username, password: btoa(password),
+                            memberId: newId, firstName, lastName, phone,
+                            createdAt: new Date().toISOString().split('T')[0]
+                        });
+                        saveAccounts(accounts);
+                    }
+
+                    // Mark membership form as pending
+                    localStorage.setItem('wdb_pending_member_id', newId);
+                    localStorage.setItem('wdb_membership_form_complete', 'false');
+
+                    btn.innerHTML = '✅ Account created! Redirecting...';
+                    setTimeout(() => {
+                        window.location.href = 'wdb-membership-form.html?member_id=' + encodeURIComponent(newId) + '&new_registration=true';
+                    }, 800);
+
+                } else {
+                    const msg = Array.isArray(result.errors) ? result.errors.join(' ') : (result.error || 'Registration failed.');
+                    showErr('regGeneralErr', '❌ ' + msg);
+                    btn.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Create Account';
+                    btn.disabled  = false;
+                }
+
+            } catch (networkErr) {
+                // API unreachable — fall back to localStorage-only registration
+                console.warn('API unavailable, using local registration:', networkErr);
+
+                const accounts = getAccounts();
+                if (accounts.some(a => a.username === username)) {
+                    showErr('regUsernameErr','Username already taken.');
+                    btn.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Create Account';
+                    btn.disabled  = false;
+                    return;
+                }
+
                 const newId = 'WDB-' + new Date().getFullYear() + '-' + String(accounts.length + 1).padStart(4,'0');
                 accounts.push({
                     username, password: btoa(password),
@@ -419,17 +474,14 @@
                 });
                 saveAccounts(accounts);
 
-                // Mark membership form as pending so login/dashboard guards enforce it
                 localStorage.setItem('wdb_pending_member_id', newId);
                 localStorage.setItem('wdb_membership_form_complete', 'false');
 
                 btn.innerHTML = '✅ Account created! Redirecting...';
-
-                // Redirect straight to the membership form
                 setTimeout(() => {
                     window.location.href = 'wdb-membership-form.html?member_id=' + encodeURIComponent(newId) + '&new_registration=true';
                 }, 800);
-            }, 1200);
+            }
         }
 
         // ── Forgot Password ───────────────────────────────────
@@ -507,7 +559,7 @@
                 const active = document.getElementById('loginForm').style.display !== 'none' ? 'login'
                              : document.getElementById('registerForm').style.display !== 'none' ? 'register' : null;
                 if (active === 'login')    handleLogin();
-                if (active === 'register') handleRegister();
+                if (active === 'register') handleRegister();  // async — fire and forget is fine
             }
         });
     </script>

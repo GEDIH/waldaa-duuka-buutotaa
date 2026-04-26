@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -3631,6 +3631,7 @@
                     // Include existing user information if available
                     email: formData.email || userData.email,
                     member_id: userData.member_id || memberId || null,
+                    existing_member_id: localStorage.getItem('wdb_pending_member_id') || userData.member_id || memberId || null,
                     
                     // Personal Information
                     fullName: formData.fullName,
@@ -3700,7 +3701,14 @@
                 submitBtn.disabled = true;
                 
                 try {
-                    const response = await fetch('api/register.php', {
+                    // If member already has an account (post-registration flow), update their record.
+                    // Otherwise do a full new registration.
+                    const existingMemberId = comprehensiveData.existing_member_id;
+                    const apiEndpoint = existingMemberId
+                        ? 'api/members/update-membership-form.php'
+                        : 'api/register.php';
+
+                    const response = await fetch(apiEndpoint, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
