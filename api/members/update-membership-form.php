@@ -138,7 +138,10 @@ try {
 
     $phone = $input['mobilePhone'] ?? $input['phone'] ?? null;
     $email = !empty($input['email']) ? strtolower(trim($input['email'])) : null;
-    if ($phone) $map['phone'] = $phone;
+    if ($phone) {
+        $map['mobile_phone'] = $phone;   // canonical column name
+        $map['phone']        = $phone;   // legacy alias
+    }
     if ($email) $map['email'] = $email;
 
     // Drop nulls — never overwrite existing data with null
@@ -147,6 +150,10 @@ try {
     if (empty($map)) {
         sendJson(['success' => false, 'error' => 'No data provided to update'], 400);
     }
+
+    // Only keep columns that actually exist in the table
+    $existingCols = $pdo->query("SHOW COLUMNS FROM members")->fetchAll(PDO::FETCH_COLUMN);
+    $map = array_filter($map, fn($k) => in_array($k, $existingCols), ARRAY_FILTER_USE_KEY);
 
     // Build parameterised query
     $setParts = [];
