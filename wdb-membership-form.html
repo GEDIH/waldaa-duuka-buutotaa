@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -4041,7 +4041,8 @@
                     result.data.forEach(center => {
                         const option = document.createElement('option');
                         option.value = center.id;
-                        option.textContent = `${center.name} - ${center.location || center.city || 'Location not specified'}`;
+                        const location = center.city || center.location || center.region || '';
+                        option.textContent = center.name + (location ? ' — ' + location : '');
                         centerSelect.appendChild(option);
                     });
                     
@@ -4053,19 +4054,20 @@
                 }
                 
             } catch (error) {
-                console.error('Error loading centers:', error);
-                
-                // Fallback: Add some default centers
+                console.warn('Could not load centers from API, using defaults:', error.message);
                 centerSelect.innerHTML = `
                     <option value="">Select a Center/Wiirtuu</option>
-                    <option value="addis_ababa">Wiirtuu Muummee</option>
-                    <option value="oromia">Wiirtuu Laga Xaafoo</option>
-                    <option value="amhara">Wiirtuu Sabbataa</option>
-                    <option value="other">Other Center</option>
+                    <option value="1">Wiirtuu Muummee — Addis Ababa</option>
+                    <option value="5">Wiirtuu Laga Xaafoo</option>
+                    <option value="6">Wiirtuu Sabbataa</option>
+                    <option value="7">Wiirtuu Adaamaa</option>
+                    <option value="8">Wiirtuu Jimma</option>
+                    <option value="9">Wiirtuu Dirre Dhawaa</option>
+                    <option value="10">Wiirtuu Naazareet</option>
+                    <option value="11">Wiirtuu Amboo</option>
+                    <option value="12">Wiirtuu Shaashamannee</option>
+                    <option value="17">Wiirtuu Kan Alaa (Diaspora)</option>
                 `;
-                
-                // Show error message to user
-                showMessage('Could not load centers list. Using default options.', 'error');
             }
         }
 
