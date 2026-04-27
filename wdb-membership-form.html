@@ -1324,6 +1324,24 @@
             transition: border-color 0.3s ease;
         }
         
+        /* Ensure selects are always fully visible and clickable */
+        .form-group select {
+            width: 100%;
+            appearance: auto;
+            -webkit-appearance: auto;
+            -moz-appearance: auto;
+            background-color: #ffffff;
+            color: #1a202c;
+            cursor: pointer;
+            min-height: 44px;
+        }
+
+        .form-group select option {
+            background-color: #ffffff;
+            color: #1a202c;
+            padding: 8px;
+        }
+        
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
@@ -1754,6 +1772,31 @@
             font-family: inherit;
             position: relative;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            width: 100%;
+            color: #1a202c;
+        }
+
+        /* Select-specific overrides — ensure dropdown is always visible */
+        .form-group select {
+            appearance: auto;
+            -webkit-appearance: auto;
+            -moz-appearance: auto;
+            background-color: #ffffff;
+            color: #1a202c;
+            cursor: pointer;
+            min-height: 44px;
+            padding-right: 2rem;
+        }
+
+        .form-group select option {
+            background-color: #ffffff;
+            color: #1a202c;
+            padding: 8px 12px;
+        }
+
+        /* Remove the shake animation from selects — it prevents clicking */
+        .form-group select:invalid:not(:focus) {
+            animation: none !important;
         }
 
         .form-group input::placeholder,
@@ -1774,11 +1817,16 @@
         }
 
         .form-group input:invalid:not(:focus):not(:placeholder-shown),
-        .form-group select:invalid:not(:focus),
         .form-group textarea:invalid:not(:focus):not(:placeholder-shown) {
             border-color: var(--error-color);
             box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
             animation: shake 0.5s ease-in-out;
+        }
+
+        .form-group select:invalid:not(:focus) {
+            border-color: #e5e7eb;
+            box-shadow: none;
+            animation: none;
         }
 
         @keyframes shake {
