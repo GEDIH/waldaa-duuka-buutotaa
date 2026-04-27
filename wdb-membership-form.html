@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -3422,6 +3422,11 @@
             const inputs = currentSection.querySelectorAll('input, select, textarea');
             
             inputs.forEach(input => {
+                // Skip file inputs — they can't be serialized to JSON
+                if (input.type === 'file') return;
+                // Skip inputs with no name
+                if (!input.name) return;
+
                 if (input.type === 'checkbox') {
                     if (input.name === 'serviceAreas') {
                         if (!formData.serviceAreas) formData.serviceAreas = [];
@@ -3782,10 +3787,15 @@
                     console.log('[Submit] endpoint:', apiEndpoint);
                     console.log('[Submit] existing_member_id:', existingMemberId);
 
-                    // Safely serialize — catch circular reference or other JSON errors
+                    // Safely serialize — strip non-serializable values, catch errors
                     let bodyStr;
                     try {
-                        bodyStr = JSON.stringify(comprehensiveData);
+                        // Sanitize: replace undefined/FileList/DOM objects with null
+                        const sanitized = JSON.parse(JSON.stringify(comprehensiveData, (key, val) => {
+                            if (val instanceof FileList || val instanceof File || val instanceof Element) return undefined;
+                            return val;
+                        }));
+                        bodyStr = JSON.stringify(sanitized);
                     } catch (jsonErr) {
                         console.error('[Submit] JSON.stringify failed:', jsonErr);
                         showMessage('❌ Failed to serialize form data: ' + jsonErr.message, 'error');
