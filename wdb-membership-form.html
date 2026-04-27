@@ -718,8 +718,8 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="email">Email Address <span style="color:#64748b;font-weight:400;font-size:0.85em">(optional)</span></label>
-                        <input type="email" id="email" name="email"
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required 
                                placeholder="your.email@example.com">
                     </div>
                     <div class="form-group full-width">
@@ -1324,24 +1324,6 @@
             transition: border-color 0.3s ease;
         }
         
-        /* Ensure selects are always fully visible and clickable */
-        .form-group select {
-            width: 100%;
-            appearance: auto;
-            -webkit-appearance: auto;
-            -moz-appearance: auto;
-            background-color: #ffffff;
-            color: #1a202c;
-            cursor: pointer;
-            min-height: 44px;
-        }
-
-        .form-group select option {
-            background-color: #ffffff;
-            color: #1a202c;
-            padding: 8px;
-        }
-        
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
@@ -1772,31 +1754,6 @@
             font-family: inherit;
             position: relative;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-            width: 100%;
-            color: #1a202c;
-        }
-
-        /* Select-specific overrides — ensure dropdown is always visible */
-        .form-group select {
-            appearance: auto;
-            -webkit-appearance: auto;
-            -moz-appearance: auto;
-            background-color: #ffffff;
-            color: #1a202c;
-            cursor: pointer;
-            min-height: 44px;
-            padding-right: 2rem;
-        }
-
-        .form-group select option {
-            background-color: #ffffff;
-            color: #1a202c;
-            padding: 8px 12px;
-        }
-
-        /* Remove the shake animation from selects — it prevents clicking */
-        .form-group select:invalid:not(:focus) {
-            animation: none !important;
         }
 
         .form-group input::placeholder,
@@ -1817,16 +1774,11 @@
         }
 
         .form-group input:invalid:not(:focus):not(:placeholder-shown),
+        .form-group select:invalid:not(:focus),
         .form-group textarea:invalid:not(:focus):not(:placeholder-shown) {
             border-color: var(--error-color);
             box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
             animation: shake 0.5s ease-in-out;
-        }
-
-        .form-group select:invalid:not(:focus) {
-            border-color: #e5e7eb;
-            box-shadow: none;
-            animation: none;
         }
 
         @keyframes shake {
@@ -2702,95 +2654,13 @@
         
         // Initialize form
         document.addEventListener('DOMContentLoaded', function() {
-            handleNewRegistrationFlow();
             checkAuthentication();
             initializeForm();
             setupEventListeners();
             loadDraftData();
             loadCenters(); // Load centers for the dropdown
         });
-
-        // Handle post-registration mandatory form flow
-        function handleNewRegistrationFlow() {
-            const params = new URLSearchParams(window.location.search);
-            const memberIdFromUrl = params.get('member_id');
-            const isNewRegistration = params.get('new_registration') === 'true';
-
-            if (isNewRegistration && memberIdFromUrl) {
-                // Store member_id so the form can use it
-                localStorage.setItem('wdb_pending_member_id', memberIdFromUrl);
-                localStorage.setItem('wdb_membership_form_complete', 'false');
-
-                // Show mandatory banner
-                showNewRegistrationBanner(memberIdFromUrl);
-
-                // Pre-fill member ID field
-                const memberIdInput = document.getElementById('userMemberId');
-                if (memberIdInput) memberIdInput.value = memberIdFromUrl;
-                showMemberIdDisplay(memberIdFromUrl);
-            } else {
-                // Check if there's a pending member_id from a previous registration
-                const pendingId = localStorage.getItem('wdb_pending_member_id');
-                if (pendingId && localStorage.getItem('wdb_membership_form_complete') === 'false') {
-                    showNewRegistrationBanner(pendingId);
-                    const memberIdInput = document.getElementById('userMemberId');
-                    if (memberIdInput) memberIdInput.value = pendingId;
-                    showMemberIdDisplay(pendingId);
-                }
-            }
-
-            // Pre-fill known data from localStorage account record
-            prefillFromLocalStorage();
-        }
-
-        function prefillFromLocalStorage() {
-            try {
-                const pendingId = localStorage.getItem('wdb_pending_member_id');
-                const accounts  = JSON.parse(localStorage.getItem('wdb_member_accounts') || '[]');
-                const account   = accounts.find(a => a.memberId === pendingId) || accounts[0];
-                if (!account) return;
-
-                const set = (id, val) => {
-                    if (!val) return;
-                    const el = document.getElementById(id);
-                    if (el && !el.value) el.value = val;
-                };
-
-                // Name — split stored firstName + lastName back into fullName
-                const fullName = [account.firstName, account.lastName].filter(Boolean).join(' ');
-                set('fullName', fullName);
-                set('mobilePhone', account.phone);
-                set('email', account.email && !account.email.includes('@wdb.local') ? account.email : '');
-            } catch(e) { /* ignore */ }
-        }
-
-        function showNewRegistrationBanner(memberId) {
-            // Remove existing banner if any
-            const existing = document.getElementById('newRegistrationBanner');
-            if (existing) existing.remove();
-
-            const banner = document.createElement('div');
-            banner.id = 'newRegistrationBanner';
-            banner.style.cssText = `
-                position: sticky; top: 0; z-index: 1000;
-                background: linear-gradient(135deg, #059669, #047857);
-                color: white; padding: 1rem 1.5rem;
-                display: flex; align-items: center; gap: 1rem;
-                box-shadow: 0 4px 12px rgba(5,150,105,0.4);
-                font-family: 'Inter', sans-serif;
-            `;
-            banner.innerHTML = `
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                <div>
-                    <div style="font-weight:700;font-size:1rem;">Account Created — Complete Your Membership Form</div>
-                    <div style="font-size:0.85rem;opacity:0.9;">Your Member ID is <strong>${memberId}</strong>. Please fill in all required fields below to activate your membership.</div>
-                </div>
-            `;
-            document.body.insertBefore(banner, document.body.firstChild);
-        }
-
+        
         // Check if user is authenticated and has a member ID
         function checkAuthentication() {
             const userData = localStorage.getItem('wdb_user_data');
@@ -3353,21 +3223,16 @@
             const currentSection = document.getElementById(`section-${currentStep}`);
             const requiredFields = currentSection.querySelectorAll('[required]');
             let isValid = true;
-            let firstInvalid = null;
-
+            
             requiredFields.forEach(field => {
-                const empty = !field.value.trim();
-                if (empty) {
+                if (!field.value.trim()) {
                     field.style.borderColor = '#e53e3e';
-                    field.style.boxShadow   = '0 0 0 3px rgba(229,62,62,0.15)';
-                    if (!firstInvalid) firstInvalid = field;
                     isValid = false;
                 } else {
-                    field.style.borderColor = '';
-                    field.style.boxShadow   = '';
+                    field.style.borderColor = '#e2e8f0';
                 }
             });
-
+            
             // Special validation for service areas (step 5)
             if (currentStep === 5) {
                 const selectedServices = document.querySelectorAll('input[name="serviceAreas"]:checked');
@@ -3379,41 +3244,44 @@
                     isValid = false;
                 }
             }
-
-            // Photo upload — recommended but not blocking
+            
+            // Special validation for photo upload (step 7) - MANDATORY
             if (currentStep === 7) {
                 const photoInput = document.getElementById('memberPhoto');
-                const uploadArea = document.getElementById('photoUploadArea');
-                if (uploadArea) {
+                const photoPreview = document.getElementById('photoPreview');
+                
+                if (!photoInput.files || photoInput.files.length === 0) {
+                    showMessage('❌ Photo upload is mandatory! Please upload your photo to continue.', 'error');
+                    
+                    // Highlight the upload area
+                    const uploadArea = document.getElementById('photoUploadArea');
+                    uploadArea.style.borderColor = '#ef4444';
+                    uploadArea.style.backgroundColor = '#fee2e2';
+                    
+                    // Show error message
+                    const errorDiv = document.getElementById('memberPhotoError');
+                    errorDiv.textContent = 'Photo upload is required for membership registration';
+                    errorDiv.style.display = 'block';
+                    errorDiv.style.color = '#ef4444';
+                    errorDiv.style.marginTop = '10px';
+                    errorDiv.style.fontWeight = '600';
+                    
+                    isValid = false;
+                } else {
+                    // Reset error styling if photo is uploaded
+                    const uploadArea = document.getElementById('photoUploadArea');
                     uploadArea.style.borderColor = '#d1d5db';
                     uploadArea.style.backgroundColor = '';
+                    
+                    const errorDiv = document.getElementById('memberPhotoError');
+                    errorDiv.style.display = 'none';
                 }
-                const errorDiv = document.getElementById('memberPhotoError');
-                if (errorDiv) errorDiv.style.display = 'none';
             }
-
+            
             if (!isValid) {
-                // Build a helpful message listing which fields are missing
-                const missingLabels = [];
-                requiredFields.forEach(field => {
-                    if (!field.value.trim()) {
-                        const label = field.closest('.form-group')?.querySelector('label');
-                        const name  = label ? label.textContent.replace('*','').trim() : (field.name || field.id);
-                        missingLabels.push(name);
-                    }
-                });
-                const msg = missingLabels.length
-                    ? `Please fill in: ${missingLabels.join(', ')}`
-                    : 'Please fill in all required fields.';
-                showMessage(msg, 'error');
-
-                // Scroll to first invalid field
-                if (firstInvalid) {
-                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    firstInvalid.focus();
-                }
+                showMessage('Please fill in all required fields.', 'error');
             }
-
+            
             return isValid;
         }
         
@@ -3642,9 +3510,7 @@
                     <h1>WDB Membership Application Preview</h1>
                     ${generatePreviewContent()}
                     <button onclick="window.close()">Close Preview</button>
-                
-    <div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;gap:12px;"><a href="member-login.html" style="background:rgba(255,255,255,0.92);color:#1a3b5c;padding:8px 18px;border-radius:20px;font-size:0.82rem;font-weight:600;text-decoration:none;box-shadow:0 4px 15px rgba(0,0,0,0.2);">← Login</a><a href="index.html" style="background:rgba(212,175,55,0.92);color:#1a3b5c;padding:8px 18px;border-radius:20px;font-size:0.82rem;font-weight:600;text-decoration:none;box-shadow:0 4px 15px rgba(0,0,0,0.2);">WDB Website</a></div>
-</body>
+                </body>
                 </html>
             `;
         }
@@ -3676,11 +3542,21 @@
                 return;
             }
             
-            // Photo upload is recommended but not blocking — member can add later
+            // MANDATORY: Check if photo is uploaded before final submission
             const photoInput = document.getElementById('memberPhoto');
-            const hasPhoto = photoInput && photoInput.files && photoInput.files.length > 0;
-            if (!hasPhoto) {
-                console.log('[Submit] No photo selected — proceeding without photo');
+            if (!photoInput.files || photoInput.files.length === 0) {
+                showMessage('❌ PHOTO UPLOAD IS MANDATORY! Please go back to Step 7 and upload your photo.', 'error');
+                
+                // Navigate back to photo upload step
+                currentStep = 7;
+                showStep(currentStep);
+                
+                // Highlight the upload area
+                const uploadArea = document.getElementById('photoUploadArea');
+                uploadArea.style.borderColor = '#ef4444';
+                uploadArea.style.backgroundColor = '#fee2e2';
+                
+                return;
             }
             
             saveCurrentStepData();
@@ -3695,7 +3571,6 @@
                     // Include existing user information if available
                     email: formData.email || userData.email,
                     member_id: userData.member_id || memberId || null,
-                    existing_member_id: localStorage.getItem('wdb_pending_member_id') || userData.member_id || memberId || null,
                     
                     // Personal Information
                     fullName: formData.fullName,
@@ -3764,93 +3639,40 @@
                 submitBtn.textContent = 'Submitting...';
                 submitBtn.disabled = true;
                 
+                const response = await fetch('api/register.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(comprehensiveData)
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                // Get response text first to check if it's valid JSON
+                const responseText = await response.text();
+                console.log('Response text:', responseText);
+                
+                // Try to parse as JSON
+                let result;
                 try {
-                    // If member already has an account (post-registration flow), update their record.
-                    // Otherwise do a full new registration.
-                    const existingMemberId = comprehensiveData.existing_member_id;
-                    const apiEndpoint = existingMemberId
-                        ? 'api/members/update-membership-form.php'
-                        : 'api/register.php';
-
-                    const response = await fetch(apiEndpoint, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify(comprehensiveData)
-                    });
-
-                    console.log('Response status:', response.status);
-                    console.log('Response headers:', response.headers);
-
-                    // Get response text first to check if it's valid JSON
-                    const responseText = await response.text();
-                    console.log('Response text:', responseText);
-
-                    // Try to parse as JSON
-                    let result;
-                    try {
-                        result = JSON.parse(responseText);
-                    } catch (jsonError) {
-                        console.error('JSON parse error:', jsonError);
-                        console.error('Response was not valid JSON:', responseText);
-                        showMessage('Server error: Invalid response format. Please contact support.\n\nResponse: ' + responseText.substring(0, 200), 'error');
-                        submitBtn.textContent = originalText;
-                        submitBtn.disabled = false;
-                        return;
-                    }
-
-                    console.log('Parsed result:', result);
-
-                    if (result.success) {
-                    //  Also save to localStorage so admin dashboard sees it ─
-                    try {
-                        const STORE = 'wdb_member_accounts';
-                        const accounts = JSON.parse(localStorage.getItem(STORE) || '[]');
-                        const newMemberId = result.data?.member_id || ('WDB-' + new Date().getFullYear() + '-' + String(accounts.length + 1).padStart(4,'0'));
-                        const nameParts = (comprehensiveData.fullName || '').trim().split(' ');
-                        const alreadyExists = accounts.some(a => a.phone === comprehensiveData.mobilePhone);
-                        if (!alreadyExists) {
-                            accounts.unshift({
-                                memberId:   newMemberId,
-                                firstName:  nameParts[0] || '',
-                                lastName:   nameParts.slice(1).join(' ') || '',
-                                username:   (comprehensiveData.fullName || '').toLowerCase().replace(/\s+/g,'.'),
-                                phone:      comprehensiveData.mobilePhone || '',
-                                email:      comprehensiveData.email || '',
-                                address:    comprehensiveData.currentAddress || '',
-                                gender:     comprehensiveData.gender || '',
-                                dob:        comprehensiveData.dateOfBirth || '',
-                                church:     comprehensiveData.currentChurch || '',
-                                baptized:   'Yes',
-                                service:    (comprehensiveData.serviceAreas || []).join(', '),
-                                howHeard:   '',
-                                notes:      comprehensiveData.notes || '',
-                                status:     'pending',
-                                createdAt:  new Date().toISOString().split('T')[0],
-                                password:   '',
-                                // Extended fields from full membership form
-                                baptismName:    comprehensiveData.baptismName || '',
-                                maritalStatus:  comprehensiveData.maritalStatus || '',
-                                occupation:     comprehensiveData.occupation || '',
-                                membershipPlan: comprehensiveData.membershipPlan || '',
-                                preferredCenter:comprehensiveData.preferredCenter || ''
-                            });
-                            localStorage.setItem(STORE, JSON.stringify(accounts));
-                        }
-                    } catch(e) { console.warn('localStorage save failed:', e); }
+                    result = JSON.parse(responseText);
+                } catch (jsonError) {
+                    console.error('JSON parse error:', jsonError);
+                    console.error('Response was not valid JSON:', responseText);
+                    showMessage('Server error: Invalid response format. Please contact support.\n\nResponse: ' + responseText.substring(0, 200), 'error');
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                    return;
+                }
+                
+                console.log('Parsed result:', result);
+                
+                if (result.success) {
                     showMessage('✅ Registration completed successfully! Your membership profile has been updated.', 'success');
                     localStorage.removeItem('wdb_membership_draft');
-                    
-                    // Mark membership form as complete
-                    localStorage.setItem('wdb_membership_form_complete', 'true');
-                    localStorage.removeItem('wdb_pending_member_id');
-
-                    // Fire photo upload event
-                    document.dispatchEvent(new CustomEvent('wdb:registrationSuccess', {
-                        detail: { member_id: result.data.member_id, member_record_id: result.data.member_record_id }
-                    }));
                     
                     // Update user data with member ID if provided
                     if (result.data.member_id) {
@@ -3873,41 +3695,6 @@
                 } else {
                     const errorMessage = Array.isArray(result.errors) ? result.errors.join(', ') : (result.error || 'Unknown error');
                     showMessage('❌ Registration failed: ' + errorMessage, 'error');
-                }
-                } catch (fetchError) {
-                    // PHP backend not available (static hosting) — save locally and succeed
-                    console.warn('API not available, saving locally:', fetchError);
-                    const STORE = 'wdb_member_accounts';
-                    const accounts = JSON.parse(localStorage.getItem(STORE) || '[]');
-                    const newMemberId = 'WDB-' + new Date().getFullYear() + '-' + String(accounts.length + 1).padStart(4,'0');
-                    const nameParts = (comprehensiveData.fullName || '').trim().split(' ');
-                    const alreadyExists = accounts.some(a => a.phone === comprehensiveData.mobilePhone);
-                    if (!alreadyExists) {
-                        accounts.unshift({
-                            memberId: newMemberId, firstName: nameParts[0]||'', lastName: nameParts.slice(1).join(' ')||'',
-                            username: (comprehensiveData.fullName||'').toLowerCase().replace(/\s+/g,'.'),
-                            phone: comprehensiveData.mobilePhone||'', email: comprehensiveData.email||'',
-                            address: comprehensiveData.currentAddress||'', gender: comprehensiveData.gender||'',
-                            dob: comprehensiveData.dateOfBirth||'', church: comprehensiveData.currentChurch||'',
-                            baptized:'Yes', service:(comprehensiveData.serviceAreas||[]).join(', '),
-                            notes: comprehensiveData.notes||'', status:'pending',
-                            createdAt: new Date().toISOString().split('T')[0], password:'',
-                            baptismName: comprehensiveData.baptismName||'',
-                            maritalStatus: comprehensiveData.maritalStatus||'',
-                            occupation: comprehensiveData.occupation||'',
-                            membershipPlan: comprehensiveData.membershipPlan||'',
-                            preferredCenter: comprehensiveData.preferredCenter||''
-                        });
-                        localStorage.setItem(STORE, JSON.stringify(accounts));
-                        localStorage.setItem('wdb_member_id', newMemberId);
-                    }
-                    showMessage('✅ Registration saved successfully! Your Member ID: ' + newMemberId, 'success');
-                    localStorage.removeItem('wdb_membership_draft');
-                    localStorage.setItem('wdb_membership_form_complete', 'true');
-                    localStorage.removeItem('wdb_pending_member_id');
-                    const submitBtn2 = document.getElementById('submitBtn');
-                    if (submitBtn2) { submitBtn2.textContent = 'Submitted ✅'; submitBtn2.disabled = true; }
-                    setTimeout(() => { window.location.href = 'registration-success.html?member_id=' + newMemberId; }, 2000);
                 }
             } catch (error) {
                 console.error('Registration error:', error);
@@ -4041,8 +3828,7 @@
                     result.data.forEach(center => {
                         const option = document.createElement('option');
                         option.value = center.id;
-                        const location = center.city || center.location || center.region || '';
-                        option.textContent = center.name + (location ? ' — ' + location : '');
+                        option.textContent = `${center.name} - ${center.location || center.city || 'Location not specified'}`;
                         centerSelect.appendChild(option);
                     });
                     
@@ -4054,20 +3840,19 @@
                 }
                 
             } catch (error) {
-                console.warn('Could not load centers from API, using defaults:', error.message);
+                console.error('Error loading centers:', error);
+                
+                // Fallback: Add some default centers
                 centerSelect.innerHTML = `
                     <option value="">Select a Center/Wiirtuu</option>
-                    <option value="1">Wiirtuu Muummee — Addis Ababa</option>
-                    <option value="5">Wiirtuu Laga Xaafoo</option>
-                    <option value="6">Wiirtuu Sabbataa</option>
-                    <option value="7">Wiirtuu Adaamaa</option>
-                    <option value="8">Wiirtuu Jimma</option>
-                    <option value="9">Wiirtuu Dirre Dhawaa</option>
-                    <option value="10">Wiirtuu Mojo</option>
-                    <option value="11">Wiirtuu Amboo</option>
-                    <option value="12">Wiirtuu Shaashamannee</option>
-                    <option value="17">Wiirtuu Kan Alaa (Diaspora)</option>
+                    <option value="addis_ababa">Wiirtuu Muummee</option>
+                    <option value="oromia">Wiirtuu Laga Xaafoo</option>
+                    <option value="amhara">Wiirtuu Sabbataa</option>
+                    <option value="other">Other Center</option>
                 `;
+                
+                // Show error message to user
+                showMessage('Could not load centers list. Using default options.', 'error');
             }
         }
 
@@ -4102,30 +3887,49 @@
 
     <!-- Photo Upload Integration -->
     <script src="js/member-photo-handler.js"></script>
+    <script src="fix-photo-upload-complete-system.js"></script>
     <script>
-    // Photo upload runs after the main form submission succeeds.
-    // We hook into the success path inside submitForm via a custom event.
-    document.addEventListener('wdb:registrationSuccess', async function(e) {
-        const memberRecordId = e.detail?.member_record_id;
-        const photoInput = document.getElementById('memberPhoto');
-
-        if (!memberRecordId || !photoInput || !photoInput.files.length) return;
-
-        try {
-            if (typeof photoHandler !== 'undefined' && photoHandler.uploadPhoto) {
-                await photoHandler.uploadPhoto(
-                    photoInput.files[0],
-                    null, null,
-                    memberRecordId,
-                    true
-                );
-                console.log('[Photo] Uploaded successfully');
+    // Add photo upload to form submission
+    const originalHandleFormSubmit = window.handleFormSubmit;
+    window.handleFormSubmit = async function(e) {
+        if (originalHandleFormSubmit) {
+            const result = await originalHandleFormSubmit(e);
+            
+            if (result && result.success && result.data.member_record_id) {
+                console.log('[Registration] Form submitted successfully, member_record_id:', result.data.member_record_id);
+                
+                // Upload photo if selected
+                const photoInput = document.getElementById('memberPhoto');
+                if (photoInput && photoInput.files.length > 0) {
+                    console.log('[Registration] Photo selected, uploading...');
+                    try {
+                        const photoResult = await photoHandler.uploadPhoto(
+                            photoInput.files[0],
+                            null, // memberId
+                            null, // userId
+                            result.data.member_record_id, // memberRecordId
+                            true  // isRegistration
+                        );
+                        console.log('[Registration] Photo uploaded successfully:', photoResult);
+                        
+                        // Show success message
+                        if (window.showMessage) {
+                            showMessage('✅ Registration and photo upload completed successfully!', 'success');
+                        }
+                    } catch (photoError) {
+                        console.error('[Registration] Photo upload failed:', photoError);
+                        if (window.showMessage) {
+                            showMessage('⚠️ Registration completed but photo upload failed: ' + photoError.message, 'warning');
+                        }
+                    }
+                } else {
+                    console.log('[Registration] No photo selected');
+                }
             }
-        } catch (err) {
-            console.warn('[Photo] Upload failed (non-fatal):', err.message);
+            
+            return result;
         }
-    });
+    };
     </script>
-    <div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;gap:12px;"><a href="member-login.html" style="background:rgba(255,255,255,0.92);color:#1a3b5c;padding:8px 18px;border-radius:20px;font-size:0.82rem;font-weight:600;text-decoration:none;box-shadow:0 4px 15px rgba(0,0,0,0.2);">← Login</a><a href="index.html" style="background:rgba(212,175,55,0.92);color:#1a3b5c;padding:8px 18px;border-radius:20px;font-size:0.82rem;font-weight:600;text-decoration:none;box-shadow:0 4px 15px rgba(0,0,0,0.2);">WDB Website</a></div>
 </body>
 </html>
