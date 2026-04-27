@@ -5,36 +5,47 @@
  * and marks membership_form_complete = 1.
  */
 
-// Must be first — capture everything so nothing leaks before our JSON
+// ob_start MUST be the very first statement — before ANY output including errors
 ob_start();
 
-// Suppress display errors; log them instead
+// Now safe to configure error handling
 error_reporting(E_ALL);
 ini_set('display_errors', '0');
 ini_set('log_errors', '1');
-ini_set('error_log', dirname(__DIR__, 2) . '/logs/php_errors.log');
+// Use XAMPP's own error log — always writable
+ini_set('error_log', 'C:/xampp/apache/logs/php_errors.log');
 
-// Always respond with JSON
+// Guarantee JSON output even if something goes wrong
+function sendJson(array $payload, int $status = 200): void {
+    while (ob_get_level()) ob_end_clean();
+    http_response_code($status);
+    header('Content-Type: application/json; charset=utf-8');
+    header('Access-Control-Allow-Origin: *');
+    echo json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit(0);
+}
+
+// Catch fatal errors that bypass try/catch
+register_shutdown_function(function () {
+    $err = error_get_last();
+    if ($err && in_array($err['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+        sendJson(['success' => false, 'error' => 'Fatal: ' . $err['message']], 500);
+    }
+    // If nothing was sent yet, send empty-body protection
+    if (ob_get_level() > 0 && ob_get_length() === 0) {
+        sendJson(['success' => false, 'error' => 'No output generated'], 500);
+    }
+});
+
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Headers: Content-Type');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     ob_end_clean();
     http_response_code(200);
-    exit(0);
-}
-
-/**
- * Send a JSON response and exit.
- * Clears the output buffer so no stray output contaminates the JSON.
- */
-function sendJson(array $payload, int $status = 200): void {
-    ob_end_clean();          // discard anything buffered so far
-    http_response_code($status);
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit(0);
 }
 
@@ -169,6 +180,38 @@ try {
     $stmt->execute($params);
 
     $updated = $stmt->rowCount() > 0;
+
+    // If member not in DB yet (localStorage-only account), INSERT them now
+    if (!$updated) {
+        try {
+            // Check if members table has mobile_phone or phone column
+            $cols = $pdo->query("SHOW COLUMNS FROM members")->fetchAll(PDO::FETCH_COLUMN);
+            $phoneCol = in_array('mobile_phone', $cols) ? 'mobile_phone' : 'phone';
+
+            $insertMap = array_merge($map, [
+                'member_id' => $memberId,
+                'status'    => 'pending',
+            ]);
+            // Remove membership_form_complete from map temporarily to add it back
+            $insertMap['membership_form_complete'] = 1;
+
+            // Only keep columns that exist
+            $insertMap = array_filter($insertMap, fn($k) => in_array($k, $cols), ARRAY_FILTER_USE_KEY);
+
+            $insertCols   = array_keys($insertMap);
+            $insertParams = array_map(fn($k) => ':ins_' . $k, $insertCols);
+            $insertBinds  = [];
+            foreach ($insertCols as $col) {
+                $insertBinds[':ins_' . $col] = $insertMap[$col];
+            }
+
+            $insertSql = 'INSERT IGNORE INTO members (' . implode(', ', $insertCols) . ') VALUES (' . implode(', ', $insertParams) . ')';
+            $pdo->prepare($insertSql)->execute($insertBinds);
+            $updated = $pdo->lastInsertId() > 0;
+        } catch (PDOException $insertErr) {
+            error_log('update-membership-form INSERT fallback error: ' . $insertErr->getMessage());
+        }
+    }
 
     // Sync email to users table too
     if ($email) {
