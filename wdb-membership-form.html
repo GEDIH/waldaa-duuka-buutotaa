@@ -3305,16 +3305,21 @@
             const currentSection = document.getElementById(`section-${currentStep}`);
             const requiredFields = currentSection.querySelectorAll('[required]');
             let isValid = true;
-            
+            let firstInvalid = null;
+
             requiredFields.forEach(field => {
-                if (!field.value.trim()) {
+                const empty = !field.value.trim();
+                if (empty) {
                     field.style.borderColor = '#e53e3e';
+                    field.style.boxShadow   = '0 0 0 3px rgba(229,62,62,0.15)';
+                    if (!firstInvalid) firstInvalid = field;
                     isValid = false;
                 } else {
-                    field.style.borderColor = '#e2e8f0';
+                    field.style.borderColor = '';
+                    field.style.boxShadow   = '';
                 }
             });
-            
+
             // Special validation for service areas (step 5)
             if (currentStep === 5) {
                 const selectedServices = document.querySelectorAll('input[name="serviceAreas"]:checked');
@@ -3326,44 +3331,53 @@
                     isValid = false;
                 }
             }
-            
+
             // Special validation for photo upload (step 7) - MANDATORY
             if (currentStep === 7) {
                 const photoInput = document.getElementById('memberPhoto');
-                const photoPreview = document.getElementById('photoPreview');
-                
                 if (!photoInput.files || photoInput.files.length === 0) {
                     showMessage('❌ Photo upload is mandatory! Please upload your photo to continue.', 'error');
-                    
-                    // Highlight the upload area
                     const uploadArea = document.getElementById('photoUploadArea');
                     uploadArea.style.borderColor = '#ef4444';
                     uploadArea.style.backgroundColor = '#fee2e2';
-                    
-                    // Show error message
                     const errorDiv = document.getElementById('memberPhotoError');
-                    errorDiv.textContent = 'Photo upload is required for membership registration';
-                    errorDiv.style.display = 'block';
-                    errorDiv.style.color = '#ef4444';
-                    errorDiv.style.marginTop = '10px';
-                    errorDiv.style.fontWeight = '600';
-                    
+                    if (errorDiv) {
+                        errorDiv.textContent = 'Photo upload is required for membership registration';
+                        errorDiv.style.display = 'block';
+                        errorDiv.style.color = '#ef4444';
+                    }
                     isValid = false;
                 } else {
-                    // Reset error styling if photo is uploaded
                     const uploadArea = document.getElementById('photoUploadArea');
                     uploadArea.style.borderColor = '#d1d5db';
                     uploadArea.style.backgroundColor = '';
-                    
                     const errorDiv = document.getElementById('memberPhotoError');
-                    errorDiv.style.display = 'none';
+                    if (errorDiv) errorDiv.style.display = 'none';
                 }
             }
-            
+
             if (!isValid) {
-                showMessage('Please fill in all required fields.', 'error');
+                // Build a helpful message listing which fields are missing
+                const missingLabels = [];
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        const label = field.closest('.form-group')?.querySelector('label');
+                        const name  = label ? label.textContent.replace('*','').trim() : (field.name || field.id);
+                        missingLabels.push(name);
+                    }
+                });
+                const msg = missingLabels.length
+                    ? `Please fill in: ${missingLabels.join(', ')}`
+                    : 'Please fill in all required fields.';
+                showMessage(msg, 'error');
+
+                // Scroll to first invalid field
+                if (firstInvalid) {
+                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstInvalid.focus();
+                }
             }
-            
+
             return isValid;
         }
         
