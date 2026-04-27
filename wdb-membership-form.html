@@ -3332,28 +3332,16 @@
                 }
             }
 
-            // Special validation for photo upload (step 7) - MANDATORY
+            // Photo upload — recommended but not blocking
             if (currentStep === 7) {
                 const photoInput = document.getElementById('memberPhoto');
-                if (!photoInput.files || photoInput.files.length === 0) {
-                    showMessage('❌ Photo upload is mandatory! Please upload your photo to continue.', 'error');
-                    const uploadArea = document.getElementById('photoUploadArea');
-                    uploadArea.style.borderColor = '#ef4444';
-                    uploadArea.style.backgroundColor = '#fee2e2';
-                    const errorDiv = document.getElementById('memberPhotoError');
-                    if (errorDiv) {
-                        errorDiv.textContent = 'Photo upload is required for membership registration';
-                        errorDiv.style.display = 'block';
-                        errorDiv.style.color = '#ef4444';
-                    }
-                    isValid = false;
-                } else {
-                    const uploadArea = document.getElementById('photoUploadArea');
+                const uploadArea = document.getElementById('photoUploadArea');
+                if (uploadArea) {
                     uploadArea.style.borderColor = '#d1d5db';
                     uploadArea.style.backgroundColor = '';
-                    const errorDiv = document.getElementById('memberPhotoError');
-                    if (errorDiv) errorDiv.style.display = 'none';
                 }
+                const errorDiv = document.getElementById('memberPhotoError');
+                if (errorDiv) errorDiv.style.display = 'none';
             }
 
             if (!isValid) {
@@ -3640,21 +3628,11 @@
                 return;
             }
             
-            // MANDATORY: Check if photo is uploaded before final submission
+            // Photo upload is recommended but not blocking — member can add later
             const photoInput = document.getElementById('memberPhoto');
-            if (!photoInput.files || photoInput.files.length === 0) {
-                showMessage('❌ PHOTO UPLOAD IS MANDATORY! Please go back to Step 7 and upload your photo.', 'error');
-                
-                // Navigate back to photo upload step
-                currentStep = 7;
-                showStep(currentStep);
-                
-                // Highlight the upload area
-                const uploadArea = document.getElementById('photoUploadArea');
-                uploadArea.style.borderColor = '#ef4444';
-                uploadArea.style.backgroundColor = '#fee2e2';
-                
-                return;
+            const hasPhoto = photoInput && photoInput.files && photoInput.files.length > 0;
+            if (!hasPhoto) {
+                console.log('[Submit] No photo selected — proceeding without photo');
             }
             
             saveCurrentStepData();
@@ -3820,6 +3798,11 @@
                     // Mark membership form as complete
                     localStorage.setItem('wdb_membership_form_complete', 'true');
                     localStorage.removeItem('wdb_pending_member_id');
+
+                    // Fire photo upload event
+                    document.dispatchEvent(new CustomEvent('wdb:registrationSuccess', {
+                        detail: { member_id: result.data.member_id, member_record_id: result.data.member_record_id }
+                    }));
                     
                     // Update user data with member ID if provided
                     if (result.data.member_id) {
@@ -4069,51 +4052,30 @@
 
     <!-- Photo Upload Integration -->
     <script src="js/member-photo-handler.js"></script>
-    <script src="fix-photo-upload-complete-system.js"></script>
     <script>
-    // Add photo upload to form submission
-    const originalHandleFormSubmit = window.handleFormSubmit;
-    window.handleFormSubmit = async function(e) {
-        if (originalHandleFormSubmit) {
-            const result = await originalHandleFormSubmit(e);
-            
-            if (result && result.success && result.data.member_record_id) {
-                console.log('[Registration] Form submitted successfully, member_record_id:', result.data.member_record_id);
-                
-                // Upload photo if selected
-                const photoInput = document.getElementById('memberPhoto');
-                if (photoInput && photoInput.files.length > 0) {
-                    console.log('[Registration] Photo selected, uploading...');
-                    try {
-                        const photoResult = await photoHandler.uploadPhoto(
-                            photoInput.files[0],
-                            null, // memberId
-                            null, // userId
-                            result.data.member_record_id, // memberRecordId
-                            true  // isRegistration
-                        );
-                        console.log('[Registration] Photo uploaded successfully:', photoResult);
-                        
-                        // Show success message
-                        if (window.showMessage) {
-                            showMessage('✅ Registration and photo upload completed successfully!', 'success');
-                        }
-                    } catch (photoError) {
-                        console.error('[Registration] Photo upload failed:', photoError);
-                        if (window.showMessage) {
-                            showMessage('⚠️ Registration completed but photo upload failed: ' + photoError.message, 'warning');
-                        }
-                    }
-                } else {
-                    console.log('[Registration] No photo selected');
-                }
-            }
-            
-            return result;
-        }
-    };
-    </script>
+    // Photo upload runs after the main form submission succeeds.
+    // We hook into the success path inside submitForm via a custom event.
+    document.addEventListener('wdb:registrationSuccess', async function(e) {
+        const memberRecordId = e.detail?.member_record_id;
+        const photoInput = document.getElementById('memberPhoto');
 
+        if (!memberRecordId || !photoInput || !photoInput.files.length) return;
+
+        try {
+            if (typeof photoHandler !== 'undefined' && photoHandler.uploadPhoto) {
+                await photoHandler.uploadPhoto(
+                    photoInput.files[0],
+                    null, null,
+                    memberRecordId,
+                    true
+                );
+                console.log('[Photo] Uploaded successfully');
+            }
+        } catch (err) {
+            console.warn('[Photo] Upload failed (non-fatal):', err.message);
+        }
+    });
+    </script>
     <div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;gap:12px;"><a href="member-login.html" style="background:rgba(255,255,255,0.92);color:#1a3b5c;padding:8px 18px;border-radius:20px;font-size:0.82rem;font-weight:600;text-decoration:none;box-shadow:0 4px 15px rgba(0,0,0,0.2);">← Login</a><a href="index.html" style="background:rgba(212,175,55,0.92);color:#1a3b5c;padding:8px 18px;border-radius:20px;font-size:0.82rem;font-weight:600;text-decoration:none;box-shadow:0 4px 15px rgba(0,0,0,0.2);">WDB Website</a></div>
 </body>
 </html>
