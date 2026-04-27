@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -718,8 +718,8 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="email">Email Address *</label>
-                        <input type="email" id="email" name="email" required 
+                        <label for="email">Email Address <span style="color:#64748b;font-weight:400;font-size:0.85em">(optional)</span></label>
+                        <input type="email" id="email" name="email"
                                placeholder="your.email@example.com">
                     </div>
                     <div class="form-group full-width">
@@ -2690,6 +2690,30 @@
                     showMemberIdDisplay(pendingId);
                 }
             }
+
+            // Pre-fill known data from localStorage account record
+            prefillFromLocalStorage();
+        }
+
+        function prefillFromLocalStorage() {
+            try {
+                const pendingId = localStorage.getItem('wdb_pending_member_id');
+                const accounts  = JSON.parse(localStorage.getItem('wdb_member_accounts') || '[]');
+                const account   = accounts.find(a => a.memberId === pendingId) || accounts[0];
+                if (!account) return;
+
+                const set = (id, val) => {
+                    if (!val) return;
+                    const el = document.getElementById(id);
+                    if (el && !el.value) el.value = val;
+                };
+
+                // Name — split stored firstName + lastName back into fullName
+                const fullName = [account.firstName, account.lastName].filter(Boolean).join(' ');
+                set('fullName', fullName);
+                set('mobilePhone', account.phone);
+                set('email', account.email && !account.email.includes('@wdb.local') ? account.email : '');
+            } catch(e) { /* ignore */ }
         }
 
         function showNewRegistrationBanner(memberId) {
