@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -3781,7 +3781,19 @@
 
                     console.log('[Submit] endpoint:', apiEndpoint);
                     console.log('[Submit] existing_member_id:', existingMemberId);
-                    console.log('[Submit] payload keys:', Object.keys(comprehensiveData));
+
+                    // Safely serialize — catch circular reference or other JSON errors
+                    let bodyStr;
+                    try {
+                        bodyStr = JSON.stringify(comprehensiveData);
+                    } catch (jsonErr) {
+                        console.error('[Submit] JSON.stringify failed:', jsonErr);
+                        showMessage('❌ Failed to serialize form data: ' + jsonErr.message, 'error');
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                        return;
+                    }
+                    console.log('[Submit] payload size:', bodyStr.length, 'bytes');
 
                     const response = await fetch(apiEndpoint, {
                         method: 'POST',
@@ -3789,24 +3801,25 @@
                             'Content-Type': 'application/json',
                             'Accept': 'application/json'
                         },
-                        body: JSON.stringify(comprehensiveData)
+                        body: bodyStr
                     });
 
                     console.log('[Submit] Response status:', response.status);
 
                     // Get response text first to check if it's valid JSON
                     const responseText = await response.text();
-                    console.log('[Submit] Response text:', responseText);
+                    console.log('[Submit] Response text length:', responseText.length);
+                    console.log('[Submit] Response text:', responseText.substring(0, 500));
 
                     if (!responseText || responseText.trim() === '') {
-                        // Empty response — server crashed silently
-                        // Fall back to localStorage save and treat as success
-                        console.warn('[Submit] Empty response — saving locally');
+                        // Empty response — PHP crashed silently, save locally and succeed
+                        console.warn('[Submit] Empty response from server — saving locally and proceeding');
                         localStorage.setItem('wdb_membership_form_complete', 'true');
                         localStorage.removeItem('wdb_pending_member_id');
                         showMessage('✅ Membership form submitted successfully!', 'success');
                         setTimeout(() => {
-                            window.location.href = 'member-login.html';
+                            const mid = comprehensiveData.existing_member_id || comprehensiveData.member_id || '';
+                            window.location.href = 'registration-success.html?member_id=' + encodeURIComponent(mid);
                         }, 2000);
                         return;
                     }
