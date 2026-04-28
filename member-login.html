@@ -429,8 +429,9 @@
 
                 const response = await fetch(API_BASE + 'api/register.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                    body: JSON.stringify(payload),
+                    cache: 'no-store'
                 });
 
                 // Use text() first — response.json() throws on empty body
