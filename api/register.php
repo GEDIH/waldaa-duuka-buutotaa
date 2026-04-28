@@ -7,7 +7,7 @@ ob_start();
 error_reporting(E_ALL);
 ini_set('display_errors', '0');
 ini_set('log_errors', '1');
-ini_set('error_log', dirname(__DIR__) . '/logs/php_errors.log');
+ini_set('error_log', 'C:/xampp/apache/logs/php_errors.log');
 
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
@@ -23,23 +23,27 @@ function sendJsonResponse(array $payload, int $code = 200): void {
     while (ob_get_level()) ob_end_clean();
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');
+    header('Access-Control-Allow-Origin: *');
     echo json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit(0);
 }
 
-// Register a shutdown handler to catch fatal errors
 register_shutdown_function(function () {
     $err = error_get_last();
     if ($err && in_array($err['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
         while (ob_get_level()) ob_end_clean();
         http_response_code(500);
         header('Content-Type: application/json; charset=utf-8');
-        echo json_encode([
-            'success' => false,
-            'error'   => 'Fatal error: ' . $err['message'],
-            'file'    => basename($err['file']),
-            'line'    => $err['line'],
-        ]);
+        header('Access-Control-Allow-Origin: *');
+        echo json_encode(['success' => false, 'error' => 'Fatal: ' . $err['message']]);
+        exit(0);
+    }
+    if (ob_get_level() > 0 && ob_get_length() === 0) {
+        while (ob_get_level()) ob_end_clean();
+        http_response_code(500);
+        header('Content-Type: application/json; charset=utf-8');
+        header('Access-Control-Allow-Origin: *');
+        echo json_encode(['success' => false, 'error' => 'No output generated — check server logs']);
     }
 });
 
