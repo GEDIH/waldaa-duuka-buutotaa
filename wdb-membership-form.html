@@ -3774,15 +3774,15 @@
                 submitBtn.disabled = true;
                 
                 try {
-                    // Resolve API base path from current page location
-                    const basePath = window.location.pathname.replace(/\/[^/]*$/, '/');
-                    
-                    // If member already has an account (post-registration flow), update their record.
-                    // Otherwise do a full new registration.
+                    // Resolve API base path — robust against URLs with/without .html
+                    const _p   = window.location.pathname;
+                    const _dir = _p.endsWith('/') ? _p : _p.substring(0, _p.lastIndexOf('/') + 1);
+                    const API_BASE = window.location.origin + _dir;
+
                     const existingMemberId = comprehensiveData.existing_member_id;
-                    const apiEndpoint = (existingMemberId
-                        ? basePath + 'api/members/update-membership-form.php'
-                        : basePath + 'api/register.php');
+                    const apiEndpoint = existingMemberId
+                        ? API_BASE + 'api/members/update-membership-form.php'
+                        : API_BASE + 'api/register.php';
 
                     console.log('[Submit] endpoint:', apiEndpoint);
                     console.log('[Submit] existing_member_id:', existingMemberId);
