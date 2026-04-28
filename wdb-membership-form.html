@@ -2696,6 +2696,15 @@
 
     <script src="js/auth.js"></script>
     <script>
+        // ── API base — absolute URL, works from any page URL ─────────────────
+        const API_BASE = (function() {
+            const base = document.querySelector('base');
+            if (base && base.href) return base.href;
+            const p = window.location.pathname;
+            const dir = p.endsWith('/') ? p : p.substring(0, p.lastIndexOf('/') + 1);
+            return window.location.origin + dir;
+        })();
+
         // Form state management
         let currentStep = 1;
         const totalSteps = 7; // Updated to include photo upload section
@@ -3777,8 +3786,8 @@
                 try {
                     const existingMemberId = comprehensiveData.existing_member_id;
                     const apiEndpoint = existingMemberId
-                        ? 'api/members/update-membership-form.php'
-                        : 'api/register.php';
+                        ? API_BASE + 'api/members/update-membership-form.php'
+                        : API_BASE + 'api/register.php';
 
                     console.log('[Submit] endpoint:', apiEndpoint);
                     console.log('[Submit] existing_member_id:', existingMemberId);
@@ -4050,22 +4059,16 @@
                 // Show loading state
                 centerSelect.innerHTML = '<option value="">Loading centers...</option>';
                 
-                // Try multiple endpoints
                 let response;
                 try {
-                    response = await fetch('api/public/centers-list.php', {
+                    response = await fetch(API_BASE + 'api/public/centers-list.php', {
                         method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
+                        headers: { 'Content-Type': 'application/json' }
                     });
                 } catch (e) {
-                    // Fallback to test-centers
-                    response = await fetch('api/test-centers.php', {
+                    response = await fetch(API_BASE + 'api/test-centers.php', {
                         method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
+                        headers: { 'Content-Type': 'application/json' }
                     });
                 }
                 
