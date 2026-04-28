@@ -263,15 +263,16 @@
     </div>
 
     <script>
-        // ── API base path — works regardless of .html extension or subfolder ──
-        // Finds the directory containing this page, even if URL has no extension
-        const _loc = window.location;
-        const _path = _loc.pathname;
-        // If path ends with a known page name (with or without .html), strip it
-        const _dir = _path.endsWith('/') ? _path
-                   : _path.substring(0, _path.lastIndexOf('/') + 1);
-        // Ensure we're in the right subfolder (handles /wdb/ prefix)
-        const API_BASE = _loc.origin + _dir;
+        // ── API base — absolute URL, works from any page URL ─────────────────
+        // document.baseURI respects the <base> tag, so this always resolves correctly
+        const API_BASE = (function() {
+            // Use the <base> href if set, otherwise derive from current URL
+            const base = document.querySelector('base');
+            if (base && base.href) return base.href;
+            const p = window.location.pathname;
+            const dir = p.endsWith('/') ? p : p.substring(0, p.lastIndexOf('/') + 1);
+            return window.location.origin + dir;
+        })();
 
         // ── Storage key ───────────────────────────────────────
         const MEMBERS_STORE = 'wdb_member_accounts';
@@ -426,7 +427,7 @@
                     quickRegistration: true
                 };
 
-                const response = await fetch('api/register.php', {
+                const response = await fetch(API_BASE + 'api/register.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
