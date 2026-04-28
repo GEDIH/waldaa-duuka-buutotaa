@@ -107,42 +107,77 @@ try {
 
     // ── Build UPDATE fields ───────────────────────────────────────────────────
     $map = [
-        'marital_status'           => $input['maritalStatus']    ?? null,
-        'education_level'          => $input['educationLevel']   ?? null,
-        'profession'               => $input['occupation']       ?? null,
-        'country'                  => $input['country']          ?? null,
-        'state_region'             => $input['region']           ?? null,
-        'city'                     => $input['subCity']          ?? null,
-        'center'                   => $input['preferredCenter']  ?? null,
-        'baptism_name'             => $input['baptismName']      ?? null,
-        'facebook_name'            => $input['facebookName']     ?? null,
-        'spouse_name'              => $input['spouseName']       ?? null,
-        'spouse_phone'             => $input['spousePhone']      ?? null,
-        'confession_father'        => $input['confessionFather'] ?? null,
-        'field_of_study'           => $input['fieldOfStudy']     ?? null,
-        'university'               => $input['university']       ?? null,
-        'graduation_year'          => $input['graduationYear']   ?? null,
-        'organization'             => $input['organization']     ?? null,
-        'current_church'           => $input['currentChurch']    ?? null,
-        'current_service'          => $input['currentService']   ?? null,
-        'church_woreda'            => $input['churchWoreda']     ?? null,
-        'service_areas'            => is_array($input['serviceAreas'] ?? null)
-                                        ? implode(',', $input['serviceAreas']) : null,
-        'membership_plan'          => $input['membershipPlan']   ?? null,
-        'center_role'              => $input['centerRole']       ?? null,
-        'region'                   => $input['region']           ?? null,
-        'notes'                    => $input['notes']            ?? null,
-        'address'                  => $input['currentAddress']   ?? null,
-        'gender'                   => $input['gender']           ?? null,
-        'date_of_birth'            => $input['dateOfBirth']      ?? null,
+        // Personal
+        'marital_status'    => $input['maritalStatus']    ?? null,
+        'gender'            => $input['gender']           ?? null,
+        'date_of_birth'     => $input['dateOfBirth']      ?? null,
+        'address'           => $input['currentAddress']   ?? null,
+        'baptism_name'      => $input['baptismName']      ?? null,
+        'facebook_name'     => $input['facebookName']     ?? null,
+        'spouse_name'       => $input['spouseName']       ?? null,
+        'spouse_phone'      => $input['spousePhone']      ?? null,
+        'confession_father' => $input['confessionFather'] ?? null,
+
+        // Education & Occupation
+        'education_level'   => $input['educationLevel']   ?? null,
+        'field_of_study'    => $input['fieldOfStudy']     ?? null,
+        'university'        => $input['university']       ?? null,
+        'graduation_year'   => $input['graduationYear']   ?? null,
+        'occupation'        => $input['occupation']       ?? null,
+        'profession'        => $input['occupation']       ?? $input['profession'] ?? null,
+        'organization'      => $input['organization']     ?? null,
+
+        // Clergy
+        'diaconate_year'    => $input['diaconateYear']    ?? null,
+        'diaconate_church'  => $input['diaconateChurch']  ?? null,
+        'diaconate_father'  => $input['diaconateFather']  ?? null,
+        'priesthood_year'   => $input['priesthoodYear']   ?? null,
+        'priesthood_church' => $input['priesthoodChurch'] ?? null,
+        'priesthood_father' => $input['priesthoodFather'] ?? null,
+        'monastic_year'     => $input['monasticYear']     ?? null,
+        'monastic_monastery'=> $input['monasticMonastery']?? null,
+        'monastic_father'   => $input['monasticFather']   ?? null,
+
+        // Location
+        'country'           => $input['country']          ?? null,
+        'region'            => $input['region']           ?? null,
+        'state_region'      => $input['region']           ?? null,
+        'sub_city'          => $input['subCity']          ?? null,
+        'city'              => $input['subCity']          ?? $input['city'] ?? null,
+        'postal_code'       => $input['postalCode']       ?? null,
+
+        // Church
+        'current_church'    => $input['currentChurch']    ?? null,
+        'church_woreda'     => $input['churchWoreda']     ?? null,
+        'current_service'   => $input['currentService']   ?? null,
+
+        // Service areas
+        'service_areas'     => is_array($input['serviceAreas'] ?? null)
+                                ? implode(',', $input['serviceAreas']) : null,
+        'service_interest'  => is_array($input['serviceAreas'] ?? null)
+                                ? implode(',', $input['serviceAreas']) : null,
+
+        // Membership
+        'membership_plan'   => $input['membershipPlan']   ?? null,
+        'center'            => $input['preferredCenter']  ?? null,
+        'center_role'       => $input['centerRole']       ?? null,
+        'notes'             => $input['notes']            ?? null,
+
+        // Consent
+        'terms_accepted'    => !empty($input['agreeTerms'])   ? 1 : null,
+        'privacy_consent'   => !empty($input['agreeContact']) ? 1 : null,
+
+        // Workflow
         'membership_form_complete' => 1,
-        'status'                   => 'pending',
+        'status'            => 'pending',
+        'registration_date' => date('Y-m-d H:i:s'),
     ];
 
     // Parse full name
     $fullName = trim($input['fullName'] ?? '');
     if ($fullName !== '') {
         $parts = explode(' ', $fullName, 2);
+        $map['full_name']  = $fullName;
         $map['first_name'] = $parts[0];
         $map['last_name']  = $parts[1] ?? '';
     }
@@ -150,8 +185,8 @@ try {
     $phone = $input['mobilePhone'] ?? $input['phone'] ?? null;
     $email = !empty($input['email']) ? strtolower(trim($input['email'])) : null;
     if ($phone) {
-        $map['mobile_phone'] = $phone;   // canonical column name
-        $map['phone']        = $phone;   // legacy alias
+        $map['mobile_phone'] = $phone;
+        $map['phone']        = $phone;
     }
     if ($email) $map['email'] = $email;
 
