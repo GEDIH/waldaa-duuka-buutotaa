@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="or">
 <head>
     <meta charset="UTF-8">
@@ -411,7 +411,7 @@
                     username:    username,
                     mobilePhone: phone,
                     password:    password,
-                    email:       '',   // collected later in the membership form
+                    email:       '',
                     quickRegistration: true
                 };
 
@@ -421,7 +421,15 @@
                     body: JSON.stringify(payload)
                 });
 
-                const result = await response.json();
+                // Use text() first — response.json() throws on empty body
+                const rawText = await response.text();
+                console.log('[Register] status:', response.status, 'body:', rawText);
+
+                if (!rawText || rawText.trim() === '') {
+                    throw new Error('Server returned empty response (HTTP ' + response.status + ')');
+                }
+
+                const result = JSON.parse(rawText);
 
                 if (result.success) {
                     const newId = result.data.member_id;
@@ -437,7 +445,6 @@
                         saveAccounts(accounts);
                     }
 
-                    // Mark membership form as pending
                     localStorage.setItem('wdb_pending_member_id', newId);
                     localStorage.setItem('wdb_membership_form_complete', 'false');
 
@@ -454,8 +461,16 @@
                 }
 
             } catch (networkErr) {
-                // API unreachable — fall back to localStorage-only registration
-                console.warn('API unavailable, using local registration:', networkErr);
+                console.error('[Register] API error:', networkErr.message);
+                // Only fall back to localStorage if it's a genuine network failure
+                // (fetch throws TypeError for network errors, not for bad HTTP responses)
+                if (!(networkErr instanceof TypeError)) {
+                    // Server responded but with an error — show it, don't silently save locally
+                    showErr('regGeneralErr', '❌ Server error: ' + networkErr.message);
+                    btn.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Create Account';
+                    btn.disabled  = false;
+                    return;
+                }
 
                 const accounts = getAccounts();
                 if (accounts.some(a => a.username === username)) {
